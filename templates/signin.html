@@ -1,0 +1,75 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{% static 'assets/img/favicon.png' %}">
+
+    <title>Login</title>
+
+    <link rel="canonical" href="{% url 'signin' %}">
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'assets/css/login.css' %}" rel="stylesheet">
+  </head>
+
+  <body class="text-center">
+    <form action="{% url 'submit-signin' %}" class="form-signin" method="POST">
+      {% csrf_token %}
+      <img class="mb-4" src="{% static 'assets/img/apple-touch-icon.png' %}" alt="" width="72" height="72">
+      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+      <div class="form-group">
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email address" data-rule="email" data-msg="Please enter valid email" required autofocus>
+        <div class="validate"></div>
+      </div>
+      <div class="form-group">
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Password" required>
+        <div class="checkbox mt-2 d-flex justify-content-start">
+          <label>
+            <input type="checkbox" onclick="show_pass();">&nbsp;&nbsp;Show password
+          </label>
+        </div>
+      </div>
+      <button class="btn-signin mt-3" type="submit">Sign in</button>
+      <div class="mb-3 mt-3">
+        <div class="loading">Loading</div>
+        <div class="error-message">This division is empty</div>
+      </div>
+      <div class="mt-4">
+        <small>Forgot your password <a href="#">click here</a></small>
+        <br>
+        <small>Not registered? <a href="{% url 'institute-signup' %}">Sign up</a></small>
+      </div>
+      <p class="mt-5 mb-3 text-muted">&copy; 2021</p>
+    </form>
+
+    <!-- Vendor JS Files -->
+    <script src="{% static 'assets/vendor/jquery/jquery.min.js' %}"></script>
+
+    <!-- Sign in Form Validation JS File -->
+    <script src="{% static 'assets/vendor/form/validate-signin.js' %}"></script>
+
+    <!-- Show password JS script -->
+    <script>
+      function show_pass()
+      {
+        var x = document.getElementById('inputPassword');
+        if(x.type === 'password')
+        {
+          x.type = 'text';
+        }
+        else{
+          x.type = 'password';
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,450 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock title %}
+
+{% block menu %}
+<li class="active"><a href="{% url 'home' %}">Home</a></li>
+<li><a href="{% url 'about' %}">About</a></li>
+<li><a href="{% url 'contact' %}">Contact</a></li>
+{% endblock menu %}
+
+{% block body %}
+  <!-- ======= Hero Section ======= -->
+  <section id="hero" class="d-flex justify-content-center align-items-center">
+    <div class="container position-relative" data-aos="zoom-in" data-aos-delay="100">
+      <h1>Change Your Life.<br>Start Here.</h1>
+      <h2>Know about your favourite institute and many more...</h2>
+      <a href="{% url 'signin' %}" class="btn-get-started">Sign-in</a>
+    </div>
+  </section><!-- End Hero -->
+
+  <main id="main">
+
+    <!-- ======= Popular Colleges Section ======= -->
+    <section id="popular-colleges" class="colleges">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Colleges</h2>
+          <p>Featured Colleges</p>
+        </div>
+
+        <div class="row" data-aos="zoom-in" data-aos-delay="100">
+
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+            <!-- College item -->
+            <div class="college-item">
+              <img src="{% static 'assets/img/course-1.jpg' %}" class="img-fluid college-img" alt="">
+              <div class="college-content">
+
+                <div class="d-flex justify-content-around align-items-center mb-3">
+                  <a href="#" class="btn btn-follow btn-sm">Follow</a>
+                  <div class="rating">
+                    <p>Rating</p>
+                    <p class="star">
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                    </p>
+                  </div>
+                </div>
+
+                <h3>
+                  <a href="#gpa">Government Polytechnic, Amravati</a> 
+                    <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
+                    <span class="badge badge-warning">#1</span>
+                </h3>
+
+                <h6>
+                  <a href="#cm"><span class="badge badge-pill badge-outline-info">Computer Engineering</span></a>
+                  <a href="#civil"><span class="badge badge-pill badge-outline-info">Civil Engineering</span></a>
+                  <a href="#civil"><span class="badge badge-pill badge-outline-info">more</span></a>
+                </h6>
+                
+                <div class="college d-flex justify-content-between align-items-center">
+                  <div class="college-profile d-flex align-items-center">
+                    <img src="{% static 'assets/img/trainers/siddhesh2.jpg' %}" class="img-fluid" alt="">
+                    <span>GPA</span>
+                  </div>
+                  <div class="college-rank d-flex align-items-center">
+                    <i class="bx bx-user"></i>&nbsp;50
+                    &nbsp;&nbsp;
+                    <i class="bx bx-heart"></i>&nbsp;65
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> <!-- End College Item-->
+
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
+            <div class="college-item">
+              <img src="{% static 'assets/img/course-2.jpg' %}" class="img-fluid" alt="">
+              <div class="college-content">
+                <div class="d-flex justify-content-around align-items-center mb-3">
+                  <a href="#" class="btn btn-follow btn-sm">Follow</a>
+                  <div class="rating">
+                    <p>Rating</p>
+                    <p class="star">
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                    </p>
+                  </div>
+                </div>
+
+                <h3>
+                  <a href="#">College of Engineering Amravati</a> 
+                    <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
+                    <span class="badge badge-warning">#2</span>
+                </h3>
+
+                <h6>
+                  <a href="#cm"><span class="badge badge-pill badge-outline-info">Computer Engineering</span></a>
+                  <a href="#civil"><span class="badge badge-pill badge-outline-info">Civil Engineering</span></a>
+                  <a href="#civil"><span class="badge badge-pill badge-outline-info">more</span></a>
+                </h6>
+                
+                <div class="college d-flex justify-content-between align-items-center">
+                  <div class="college-profile d-flex align-items-center">
+                    <img src="{% static 'assets/img/trainers/vaishnav2.jpeg' %}" class="img-fluid" alt="">
+                    <span>COEA</span>
+                  </div>
+                  <div class="college-rank d-flex align-items-center">
+                    <i class="bx bx-user"></i>&nbsp;35
+                    &nbsp;&nbsp;
+                    <i class="bx bx-heart"></i>&nbsp;42
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> <!-- End College Item-->
+
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0">
+            <div class="college-item">
+              <img src="{% static 'assets/img/course-3.jpg' %}" class="img-fluid" alt="">
+              <div class="college-content">
+                <div class="d-flex justify-content-around align-items-center mb-3">
+                  <a href="#" class="btn btn-follow btn-sm">Follow</a>
+                  <div class="rating">
+                    <p>Rating</p>
+                    <p class="star">
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                    </p>
+                  </div>
+                </div>
+
+                <h3>
+                  <a href="#">Punjabrao Polytechnic, Amravati </a>
+                    <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
+                    <span class="badge badge-warning">#3</span>
+                </h3>
+
+                <h6>
+                  <a href="#cm"><span class="badge badge-pill badge-outline-info">Computer Engineering</span></a>
+                  <a href="#civil"><span class="badge badge-pill badge-outline-info">Civil Engineering</span></a>
+                  <a href="#civil"><span class="badge badge-pill badge-outline-info">more</span></a>
+                </h6>
+
+                <div class="college d-flex justify-content-between align-items-center">
+                  <div class="college-profile d-flex align-items-center">
+                    <img src="{% static 'assets/img/trainers/parth2.jpg' %}" class="img-fluid" alt="">
+                    <span>PPA</span>
+                  </div>
+                  <div class="college-rank d-flex align-items-center">
+                    <i class="bx bx-user"></i>&nbsp;20
+                    &nbsp;&nbsp;
+                    <i class="bx bx-heart"></i>&nbsp;85
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> <!-- End College Item-->
+
+
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0">
+            <div class="college-item">
+              <img src="{% static 'assets/img/course-3.jpg' %}" class="img-fluid" alt="">
+              <div class="college-content">
+                <div class="d-flex justify-content-around align-items-center mb-3">
+                  <a href="#" class="btn btn-follow btn-sm">Follow</a>
+                  <div class="rating">
+                    <p>Rating</p>
+                    <p class="star">
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                    </p>
+                  </div>
+                </div>
+
+                <h3>
+                  <a href="#">Punjabrao Polytechnic, Amravati </a>
+                    <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
+                    <span class="badge badge-warning">#4</span>
+                </h3>
+
+                <h6>
+                  <a href="#cm"><span class="badge badge-pill badge-outline-info">Computer Engineering</span></a>
+                  <a href="#civil"><span class="badge badge-pill badge-outline-info">Civil Engineering</span></a>
+                  <a href="#civil"><span class="badge badge-pill badge-outline-info">more</span></a>
+                </h6>
+
+                <div class="college d-flex justify-content-between align-items-center">
+                  <div class="college-profile d-flex align-items-center">
+                    <img src="{% static 'assets/img/trainers/parth2.jpg' %}" class="img-fluid" alt="">
+                    <span>PPA</span>
+                  </div>
+                  <div class="college-rank d-flex align-items-center">
+                    <i class="bx bx-user"></i>&nbsp;20
+                    &nbsp;&nbsp;
+                    <i class="bx bx-heart"></i>&nbsp;85
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> <!-- End College Item-->
+        </div>
+
+      </div>
+    </section><!-- End Popular Collges Section -->
+
+    <!-- ======= Popular Courses Section ======= -->
+    <section id="features" class="features">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Courses</h2>
+          <p>Popular courses</p>
+        </div>
+
+        <div class="row" data-aos="zoom-in" data-aos-delay="100">
+          <div class="col-lg-3 col-md-4">
+            <div class="icon-box">
+              <i class="ri-store-line" style="color: #ffbb2c;"></i>
+              <h3><a href="#">Computer Eng.</a></h3>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-4 mt-md-0">
+            <div class="icon-box">
+              <i class="ri-bar-chart-box-line" style="color: #5578ff;"></i>
+              <h3><a href="#">IT Eng.</a></h3>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-4 mt-md-0">
+            <div class="icon-box">
+              <i class="ri-calendar-todo-line" style="color: #e80368;"></i>
+              <h3><a href="#">Mechanical Eng.</a></h3>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-4 mt-lg-0">
+            <div class="icon-box">
+              <i class="ri-paint-brush-line" style="color: #e361ff;"></i>
+              <h3><a href="#">Civil Engineering</a></h3>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-4">
+            <div class="icon-box">
+              <i class="ri-database-2-line" style="color: #47aeff;"></i>
+              <h3><a href="#">Electrical Eng.</a></h3>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-4">
+            <div class="icon-box">
+              <i class="ri-gradienter-line" style="color: #ffa76e;"></i>
+              <h3><a href="#">EXTC Eng.</a></h3>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-4">
+            <div class="icon-box">
+              <i class="ri-file-list-3-line" style="color: #11dbcf;"></i>
+              <h3><a href="#">Plastic Polymer Eng.</a></h3>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-4">
+            <div class="icon-box">
+              <i class="ri-price-tag-2-line" style="color: #4233ff;"></i>
+              <h3><a href="#">Metal Engineering</a></h3>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-4">
+            <div class="icon-box">
+              <i class="ri-anchor-line" style="color: #b2904f;"></i>
+              <h3><a href="#">MBBS</a></h3>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-4">
+            <div class="icon-box">
+              <i class="ri-disc-line" style="color: #b20969;"></i>
+              <h3><a href="#">Diploma</a></h3>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-4">
+            <div class="icon-box">
+              <i class="ri-base-station-line" style="color: #ff5828;"></i>
+              <h3><a href="#">BSE agriculture</a></h3>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 mt-4">
+            <div class="icon-box">
+              <i class="ri-fingerprint-line" style="color: #29cc61;"></i>
+              <h3><a href="#">11th 12th</a></h3>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End Features Section -->
+
+    <!-- ======= About Section ======= -->
+    <section id="about" class="about">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>About</h2>
+          <p>About Us</p>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left" data-aos-delay="100">
+            <img src="{% static 'assets/img/about.jpg' %}" class="img-fluid" alt="">
+          </div>
+          <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1 content">
+            <h3>We help students from getting them know about their favourite institutes.</h3>
+            <p class="font-italic">
+              If you are searching for best institutes then this website is for you. You're just few tap away from it.
+            </p>
+            <ul>
+              <li><i class="icofont-check-circled"></i> Best colleges from all over india.</li>
+              <li><i class="icofont-check-circled"></i> Personalized teqniques for identification of institutes.</li>
+              <li><i class="icofont-check-circled"></i> Help other students by contributing reviews to this platform. So other users can also get benefit from it.</li>
+            </ul>
+            <p>
+              Contribute to this college-guide community to help others.
+            </p>
+            <a href="{% url 'about' %}" class="learn-more-btn">Learn More</a>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End About Section -->
+
+    <!-- ======= Counts Section ======= -->
+    <section id="counts" class="counts section-bg">
+      <div class="container">
+
+        <div class="row counters">
+
+          <div class="col-lg-3 col-6 text-center">
+            <span data-toggle="counter-up">1232</span>
+            <p>Students</p>
+          </div>
+
+          <div class="col-lg-3 col-6 text-center">
+            <span data-toggle="counter-up">64</span>
+            <p>Institutions</p>
+          </div>
+
+          <div class="col-lg-3 col-6 text-center">
+            <span data-toggle="counter-up">42</span>
+            <p>Courses</p>
+          </div>
+
+          <div class="col-lg-3 col-6 text-center">
+            <span data-toggle="counter-up">1505</span>
+            <p>Daily visitors</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Counts Section -->
+
+    <section id="founders" class="founders">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Creators</h2>
+          <p>Website Founders</p>
+        </div>
+
+        <div class="row" data-aos="zoom-in" data-aos-delay="100">
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
+            <div class="member">
+              <img src="{% static 'assets/img/trainers/siddhesh2.jpg' %}" class="img-fluid" alt="">
+              <div class="member-content">
+                <h4>Siddhesh Sambe</h4>
+                <span>Group Leader</span>
+                <p>
+                  Join us to contribute to this great community and also get benefits of being in this community
+                </p>
+                <div class="social">
+                  <a href="#"><i class="icofont-twitter"></i></a>
+                  <a href="#"><i class="icofont-facebook"></i></a>
+                  <a href="#"><i class="icofont-instagram"></i></a>
+                  <a href="#"><i class="icofont-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
+            <div class="member">
+              <img src="{% static 'assets/img/trainers/vaishnav2.jpeg' %}" class="img-fluid" alt="">
+              <div class="member-content">
+                <h4>Vaishnav Ghenge</h4>
+                <span>Group Member</span>
+                <p>
+                  Join us to contribute to this great community and also get benefits of being in this community
+                </p>
+                <div class="social">
+                  <a href="#"><i class="icofont-twitter"></i></a>
+                  <a href="#"><i class="icofont-facebook"></i></a>
+                  <a href="#"><i class="icofont-instagram"></i></a>
+                  <a href="#"><i class="icofont-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
+            <div class="member">
+              <img src="{% static 'assets/img/trainers/parth2.jpg' %}" class="img-fluid" alt="">
+              <div class="member-content">
+                <h4>Parth Bamnote</h4>
+                <span>Group Member</span>
+                <p>
+                  Join us to contribute to this great community and also get benefits of being in this community
+                </p>
+                <div class="social">
+                  <a href="#"><i class="icofont-twitter"></i></a>
+                  <a href="#"><i class="icofont-facebook"></i></a>
+                  <a href="#"><i class="icofont-instagram"></i></a>
+                  <a href="#"><i class="icofont-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Founders Section -->
+
+  </main><!-- End #main -->
+
+{% endblock body %}
+
+{% block email-form-token %}
+{% csrf_token %}
+{% endblock email-form-token %}

@@ -1,0 +1,62 @@
+# class InstituteUserForm(forms.ModelForm):
+#     class Meta:
+#         model = Institute
+#         fields = ['instName', 'instEmail', 'instProfile', 'instStudentCap', 'instType', 'instAvgFee', 'instDescription', 'instLocation', 'instPin', 'instNearCity', 'instCoursesOffered', 'instStaffCount',]
+#         widgets = {
+#             'instName': forms.TextInput(attrs={
+#                 'title': 'Institute Name',
+#                 'class': 'form-control',
+#                 'placeholder': 'Institute Name',
+#                 'data-rule': 'required',
+#                 'data-msg': 'Please enter institute name'                
+#             }),
+#             'instEmail': forms.EmailInput(attrs={
+#                 'title': 'Institute Email',
+#                 'class': 'form-control',
+#                 'placeholder': 'Institute Email',
+#                 'data-rule': 'email',
+#                 'data-msg': 'Please enter institute email'                
+#             }),
+#             'instStudentCap': forms.NumberInput(attrs={
+#                 'title': 'Student Studying in Institution',
+#                 'class': 'form-control',
+#                 'plceholder': 'Total Students enrolled in institution',
+#                 'data-rule': 'required',
+#                 'data-msg': 'Please enter total students in your institution'                
+#             }),
+#             'instType': forms.Select(
+#                 attrs={
+#                 'class': 'form-control',
+#                 'data-rule': 'required',
+#                 'data-msg': 'Please select institution type' 
+#                 }
+#             ),
+#             'instAvgFee': forms.NumberInput(attrs={
+#                 'title': 'Institute Average Fee',
+#                 'class': 'form-control',
+#                 'placeholder': 'Institute Average Fee',
+#                 'data-rule': 'required',
+#                 'data-msg': 'Please enter institute average fee'                
+#             }),
+#             'instDescription': forms.TextInput(attrs={
+#                 'title': 'Institute Description',
+#                 'class': 'form-control',
+#                 'placeholder': 'Institute Description',
+#                 'data-rule': 'minlen:10',
+#                 'data-msg': 'Please enter institute description'
+#             }),
+#             'instLocation': forms.TextInput(attrs={
+#                 'title': 'Institute Location',
+#                 'class': 'form-control',
+#                 'placeholder': 'Institute Location',
+#                 'data-rule': 'minlen:8',
+#                 'data-msg': 'Please enter intitute location'
+#             }),
+#             'instPin': forms.NumberInput(attrs={
+#                 'title': 'Postal code',
+#                 'class': 'form-control',
+#                 'placeholder': 'Enter Postal Code',
+#                 'data-rule': 'required',
+#                 'data-msg': 'Please enter postal code'
+#             }),
+#         }

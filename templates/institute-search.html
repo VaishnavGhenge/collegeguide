@@ -1,0 +1,295 @@
+{% extends 'institute-base.html' %}
+{% load static %}
+
+{% block title %}Institute Search{% endblock title %}
+
+{% block extra-css %}
+<style>
+  /* Style the input field */
+  .drop-search:focus {
+    box-shadow: none;
+  }
+  .autocomplete-items {
+    position: absolute;
+    background-color: #fff;
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    z-index: 1000 !important;
+    /*position the autocomplete items to be the same width as the container:*/
+    top: 100%;
+    left: 2%;
+    right: 0;
+    color: #495057;
+    text-align: left;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    float: left;
+    background-clip: padding-box;
+    padding: 5px !important;
+  }
+
+  .autocomplete-items div {
+    /* border-radius: 10px; */
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff;
+    /* border-bottom: 1px solid #d4d4d4;  */
+  }
+
+  /*when hovering an item:*/
+  .autocomplete-items div:hover {
+    background-color: #e9e9e9; 
+  }
+
+  /*when navigating through the items using the arrow keys:*/
+  .autocomplete-active {
+    background-color: #4e73df !important; 
+    color: #ffffff; 
+  }
+</style>
+{% endblock extra-css %}
+
+{% block menu %}
+<li><a href="{% url 'institute-home' %}">Institutes</a></li>
+<li class="active"><a href="{% url 'institute-search' %}" id="active">Search</a></li>
+{% endblock menu %}
+
+{% block your-account %}
+<div class="btn-group">
+    <button class="btn-account dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</button>
+    <div class="dropdown-menu shadow" style="border: none;">
+      <a class="dropdown-item" href="{% url 'institute-account' %}">My Profile</a>
+      <a class="dropdown-item" href="#">Edit Profile</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+    </div>
+</div>
+{% endblock your-account %}
+
+{% block body %}
+<main>
+  <div class="breadcrumbs" data-aos="fade-in">
+    <div class="container">
+      <h2>Search Institutes</h2>
+      <form autocomplete="off">
+      <div class="d-flex justify-content-center row">
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <input type="text" name="city-input" id="city-input" class="form-control input-search" placeholder="Type city name">
+          <div class="city-div"></div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 col-sm-12">
+          <input type="text" name="stream-input" id="stream-input" class="form-control input-search" placeholder="Type stream name">
+          <div class="stream-div"></div>
+        </div>
+
+        <div class="col-lg-6 col-md-12 col-sm-12">
+            <div class="search">
+              <input type="text" name="search" id="search" class="form-control input-search" placeholder="Search institute">
+              <i class="fa fa-search"></i>
+            </div>
+          <div class="input-div"></div>
+        </div>
+      </div>
+      </form>
+    </div>
+  </div><!-- End Breadcrumbs -->
+  <div id="down-search" class="">
+      <!-- ======= Searched Colleges Section ======= -->
+      <section id="searched-colleges" class="colleges">
+        <div class="container" data-aos="fade-up">
+          <div class="row" data-aos="zoom-in" data-aos-delay="100">
+  
+            <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+              <!-- College item -->
+              <div class="college-item shadow">
+                <img src="{% static 'assets/img/course-1.jpg' %}" class="img-fluid college-img" alt="">
+                <div class="college-content">
+  
+                  <div class="d-flex justify-content-around align-items-center mb-3">
+                    <a href="#" class="btn btn-follow btn-sm">Follow</a>
+                    <div class="rating">
+                      <p>Rating</p>
+                      <p class="star">
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                      </p>
+                    </div>
+                  </div>
+  
+                  <h3>
+                    <a href="#gpa">Government Polytechnic, Amravati</a> 
+                      <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
+                  </h3>
+  
+                  <h6>
+                    <a href="#cm"><span class="badge badge-pill badge-outline-info">Computer Engineering</span></a>
+                    <a href="#civil"><span class="badge badge-pill badge-outline-info">Civil Engineering</span></a>
+                    <a href="#civil"><span class="badge badge-pill badge-outline-info">more</span></a>
+                  </h6>
+                  
+                  <div class="college d-flex justify-content-between align-items-center">
+                    <div class="college-profile d-flex align-items-center">
+                      <img src="{% static 'assets/img/trainers/siddhesh2.jpg' %}" class="img-fluid" alt="">
+                      <span>GPA</span>
+                    </div>
+                    <div class="college-rank d-flex align-items-center">
+                      <i class="bx bx-user"></i>&nbsp;50
+                      &nbsp;&nbsp;
+                      <i class="bx bx-heart"></i>&nbsp;65
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- End College Item-->
+  
+            <div class="col-lg-3 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
+              <div class="college-item shadow">
+                <img src="{% static 'assets/img/course-2.jpg' %}" class="img-fluid college-img" alt="">
+                <div class="college-content">
+                  <div class="d-flex justify-content-around align-items-center mb-3">
+                    <a href="#" class="btn btn-follow btn-sm">Follow</a>
+                    <div class="rating">
+                      <p>Rating</p>
+                      <p class="star">
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                      </p>
+                    </div>
+                  </div>
+  
+                  <h3>
+                    <a href="#">College of Engineering Amravati</a> 
+                      <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
+                  </h3>
+  
+                  <h6>
+                    <a href="#cm"><span class="badge badge-pill badge-outline-info">Computer Engineering</span></a>
+                    <a href="#civil"><span class="badge badge-pill badge-outline-info">Civil Engineering</span></a>
+                    <a href="#civil"><span class="badge badge-pill badge-outline-info">more</span></a>
+                  </h6>
+                  
+                  <div class="college d-flex justify-content-between align-items-center">
+                    <div class="college-profile d-flex align-items-center">
+                      <img src="{% static 'assets/img/trainers/vaishnav2.jpeg' %}" class="img-fluid" alt="">
+                      <span>COEA</span>
+                    </div>
+                    <div class="college-rank d-flex align-items-center">
+                      <i class="bx bx-user"></i>&nbsp;35
+                      &nbsp;&nbsp;
+                      <i class="bx bx-heart"></i>&nbsp;42
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- End College Item-->
+  
+            <div class="col-lg-3 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0">
+              <div class="college-item shadow">
+                <img src="{% static 'assets/img/course-3.jpg' %}" class="img-fluid college-img" alt="">
+                <div class="college-content">
+                  <div class="d-flex justify-content-around align-items-center mb-3">
+                    <a href="#" class="btn btn-follow btn-sm">Follow</a>
+                    <div class="rating">
+                      <p>Rating</p>
+                      <p class="star">
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                      </p>
+                    </div>
+                  </div>
+  
+                  <h3>
+                    <a href="#">Punjabrao Polytechnic, Amravati </a>
+                      <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
+                  </h3>
+  
+                  <h6>
+                    <a href="#cm"><span class="badge badge-pill badge-outline-info">Computer Engineering</span></a>
+                    <a href="#civil"><span class="badge badge-pill badge-outline-info">Civil Engineering</span></a>
+                    <a href="#civil"><span class="badge badge-pill badge-outline-info">more</span></a>
+                  </h6>
+  
+                  <div class="college d-flex justify-content-between align-items-center">
+                    <div class="college-profile d-flex align-items-center">
+                      <img src="{% static 'assets/img/trainers/parth2.jpg' %}" class="img-fluid" alt="">
+                      <span>PPA</span>
+                    </div>
+                    <div class="college-rank d-flex align-items-center">
+                      <i class="bx bx-user"></i>&nbsp;20
+                      &nbsp;&nbsp;
+                      <i class="bx bx-heart"></i>&nbsp;85
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- End College Item-->
+  
+  
+            <div class="col-lg-3 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0">
+              <div class="college-item shadow">
+                <img src="{% static 'assets/img/course-3.jpg' %}" class="img-fluid college-img" alt="">
+                <div class="college-content">
+                  <div class="d-flex justify-content-around align-items-center mb-3">
+                    <a href="#" class="btn btn-follow btn-sm">Follow</a>
+                    <div class="rating">
+                      <p>Rating</p>
+                      <p class="star">
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                      </p>
+                    </div>
+                  </div>
+  
+                  <h3>
+                    <a href="#">Punjabrao Polytechnic, Amravati </a>
+                      <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
+                  </h3>
+  
+                  <h6>
+                    <a href="#cm"><span class="badge badge-pill badge-outline-info">Computer Engineering</span></a>
+                    <a href="#civil"><span class="badge badge-pill badge-outline-info">Civil Engineering</span></a>
+                    <a href="#civil"><span class="badge badge-pill badge-outline-info">more</span></a>
+                  </h6>
+  
+                  <div class="college d-flex justify-content-between align-items-center">
+                    <div class="college-profile d-flex align-items-center">
+                      <img src="{% static 'assets/img/trainers/parth2.jpg' %}" class="img-fluid" alt="">
+                      <span>PPA</span>
+                    </div>
+                    <div class="college-rank d-flex align-items-center">
+                      <i class="bx bx-user"></i>&nbsp;20
+                      &nbsp;&nbsp;
+                      <i class="bx bx-heart"></i>&nbsp;85
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- End College Item-->
+          </div>
+  
+        </div>
+      </section><!-- End Searched Colleges Section -->
+  </div>
+</main>
+{% endblock body %}
+
+{% block email-form-token %}
+{% csrf_token %}
+{% endblock email-form-token %}
+
+{% block extra-js %}
+<script src="{% static 'assets/js/search-suggestion.js' %}"></script>
+<script src="{% static 'assets/js/institute-search.js' %}"></script>
+{% endblock extra-js %}

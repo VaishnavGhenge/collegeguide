@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>College Signup Form</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/icofont/icofont.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/owl.carousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/animate.css/animate.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.css' %}">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+
+</head>
+
+<body>
+  <br>
+  <div class="container">
+    <form action="{% url 'submit-institute-signup' %}" method="post" role="form" class="signup-form" enctype="multipart/form-data" autocomplete="off">
+      {% csrf_token %}
+      <h1 class="h3 mb-3 font-weight-normal">College Signup Form</h1>
+      <div class="form-group">
+        <label for="profile-picture">Select profile picture (click on icon)</label>
+        <div class="image-container">
+          <img src="{% static 'images\avatar.png' %}" alt="profile picture" class="profile-picture" id="profile-picture">
+          <div class="overlay"><i class="fa fa-camera" aria-hidden="true" id="profile-upload"></i></div>
+        </div>
+        <input type="file" accept="image/*" hidden id="profile-input" class="form-control" name="profile">
+      </div>
+      <div class="form-group">
+        <label for="backprofile">Select background profile picture (click on icon)</label>
+        <div class="background-container">
+          <img src="{% static 'images/default-back.jpeg' %}" alt="background image" class="backprofile" id="backprofile-picture">
+          <div class="back-overlay"><i class="fa fa-camera" aria-hidden="true" id="backprof-upload"></i></div>
+        </div>
+        <input type="file" accept="image/*" hidden id="backprof-input" class="form-control" name="backprof">
+      </div>
+      <div class="form-row">
+        <div class="col-md-6 form-group">
+          <label for="collegeName">College name</label>
+          <input type="text" name="collegeName" class="form-control" id="collegeName" data-rule="minlen:5" data-msg="Please enter at least 5 chars"/>
+          <div class="validate"></div>
+        </div>
+        <div class="col-md-6 form-group">
+          <label for="profileWebsite">College website</label>
+          <input type="url" name="profileWebsite" class="form-control" id="profileWebsite" placeholder="e.g. https://www.website.domain" data-rule="url" data-msg="Please enter valid URL">
+          <div class="validate"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="profileDescription">College description</label>
+        <textarea class="form-control" name="profileDescription" id="profileDescription" rows="5" data-rule="required" data-msg="Please write description"></textarea>
+        <div class="validate"></div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-6 form-group">
+          <label for="location">College location</label>
+          <input type="text" name="location" id="location" class="form-control" data-rule="required" data-msg="Please write location here">
+          <div class="validate"></div>
+        </div>
+        <div class="col-md-6 form-group">
+          <label for="pin">Postal code</label>
+          <input type="number" name="pin" id="pin" class="form-control" data-rule="maxlen:6" data-msg="Please enter valid PIN">
+          <div class="validate"></div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-6 form-group">
+          <label for="collegeType">College type</label><br>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="collegeType" id="private" value="private" checked>
+            <label class="form-check-label" for="private">Private</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="collegeType" id="semi_government" value="semi_government">
+            <label class="form-check-label" for="semi_government">Semi-Government</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="collegeType" id="government" value="government">
+            <label class="form-check-label" for="government">Government</label>
+          </div>
+          <div class="validate"></div>
+        </div>
+        <div class="col-md-6 form-group">
+          <label for="foundation">College foundation year</label>
+          <input type="date" name="foundation" id="foundation" class="form-control" max="" data-rule="required" data-msg="Please enter foundation date">
+          <div class="validate"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 form-group">
+          <label for="idproof">College ID</label>
+          <input type="file" name="idproof" id="idproof" class="form-control" data-rule="required" data-msg="Please upload college ID">
+          <div class="validate"></div>
+        </div>
+      </div>
+      <hr>
+      <!-- User Account form -->
+      <div class="form-row justify-content-center">
+        <div class="col-md-6 form-group">
+          <label for="id_username">Username</label>
+          <input type="text" id="id_username" name="username" class="form-control" checkurl="{% url 'check' %}">
+          <div class="validate"></div>
+        </div>
+      </div>
+      <div class="form-row justify-content-center">
+        <div class="col-md-6 form-group">
+          <label for="id_email">Email</label>
+          <input type="email" id="id_email" name="email" class="form-control" checkurl="{% url 'check-email' %}">
+          <div class="validate"></div>
+        </div>
+      </div>
+      <div class="form-row justify-content-center">
+        <div class="col-md-6 form-group">
+          <label for="id_password1">Create password</label>
+          <input type="password" id="id_password1" name="password1" class="form-control" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" data-rule="minlen:8" data-msg="Password must contain atleast 8 characters">
+          <div class="validate-pass" id="validate-pass">
+            <p>Password must contain the following:</p>
+            <p id="letter" class="invalid-pass">A <b>lowercase</b> letter</p>
+            <p id="capital" class="invalid-pass">A <b>capital (uppercase)</b> letter</p>
+            <p id="number" class="invalid-pass">A <b>number</b></p>
+            <p id="length" class="invalid-pass">Minimum <b>8 characters</b></p>
+          </div>
+          <div class="validate"></div>
+        </div>
+      </div>
+      <div class="form-row justify-content-center">
+        <div class="col-md-6 form-group">
+          <label for="id_password2">Password (again)</label>
+          <input type="password" id="id_password2" name="password2" class="form-control" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" data-rule="minlen:8" data-msg="Password must contain atleast 8 characters">
+          <div class="validate"></div>
+        </div>
+      </div>
+      <div class="checkbox mb-3 form-row justify-content-center">
+        <label>
+          <input type="checkbox" value="show" onclick="show_pass();"> Show password
+        </label>
+      </div>
+      <div class="text-center"><button type="submit" name="submit">Create Account</button></div>
+      <div class="mt-3">
+        <div class="loading">Loading</div>
+        <div class="error-message"></div>
+        <div class="sent-message">Account created successfully, to login <a href="{% url 'signin' %}" id="login-link">click here</a></div>
+      </div>
+    </form>
+  </div>
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <h3>COLLEGEGUIDE</h3>
+            <p>
+              Department of Computer Engineering <br>
+              Government Polytechnic, Amravati <br>
+              Amravati, MH 444604<br>
+              India <br><br>
+              <strong>Phone:</strong> +91 **********<br>
+              <strong>Email:</strong> admin@mymentor.in<br>
+            </p>
+          </div>
+
+          <div class="col-lg-2 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'home' %}">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="{% url 'about' %}">About us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Our Services</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Web Design</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Web Development</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Product Management</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-4 col-md-6 footer-newsletter">
+            <h4>Join Our Newsletter</h4>
+            <p>Join and get daily updates on what is goin on</p>
+            <form action="{% url 'submit-email' %}" method="post" class="email-form">
+              {% block email-form-token %}
+              {% csrf_token %}
+              {% endblock email-form-token %}
+              <input type="email" name="email" class="emailinput" data-rule="email" data-msg="Please enter a valid email">
+              <input type="submit" value="Subscribe">
+            </form>
+            <div id="vld" class="validate" style="margin-left: 20px;"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container d-md-flex py-4">
+
+      <div class="mr-md-auto text-center text-md-left">
+        <div class="copyright">
+          &copy; Copyright <strong><span>COLLEGEGUIDE</span></strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+          Designed by <a href="{% url 'about' %}">Team Coding Pundits</a><br>
+        </div>
+      </div>
+      <div class="social-links text-center text-md-right pt-3 pt-md-0">
+        <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+        <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+        <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+        <a href="#" class="google-plus"><i class="bx bxl-skype"></i><EGE/a>
+        <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top"><i class="bx bx-up-arrow-alt"></i></a>
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/jquery.easing/jquery.easing.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/waypoints/jquery.waypoints.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/counterup/counterup.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/owl.carousel/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+
+  <!-- Template Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+  <!-- Contact Form Validation JS File  -->
+  <script src="{% static 'assets/vendor/form/validate-email.js' %}"></script>
+  <script src="{% static 'assets/vendor/form/validate-institute-signup.js' %}"></script>
+  <script src="{% static 'assets/js/institute-signup.js' %}"></script>
+  <script>
+    sp = '-';
+    today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //As January is 0.
+    var yyyy = today.getFullYear();
+
+    if(dd<10) dd='0'+dd;
+    if(mm<10) mm='0'+mm;
+    $('#foundation').attr('max', yyyy+sp+mm+sp+dd);
+
+    $(document).ready(function() {
+      var readURL = function(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+            $('#profile-picture').attr('src', e.target.result);
+          }
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+
+      var readBackURL = function(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+            $('#backprofile-picture').attr('src', e.target.result);
+          }
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+
+      $("#profile-input").on('change', function(){
+        readURL(this);
+      });
+
+      $("#backprof-input").on('change', function() {
+        readBackURL(this);
+      });
+
+      $("#profile-upload").on('click', function() {
+        $("#profile-input").click();
+      });
+
+      $("#backprof-upload").on('click', function() {
+        $("#backprof-input").click();
+      });
+    });
+
+    function show_pass()
+      {
+        var p1 = document.getElementById('id_password1');
+        var p2 = document.getElementById('id_password2');
+        if(p1.type === 'password' && p2.type === 'password')
+        {
+          p1.type = 'text';
+          p2.type = 'text';
+        }
+        else{
+          p1.type = 'password';
+          p2.type = 'password';
+        }
+      }
+  </script>
+
+</body>
+
+</html>
