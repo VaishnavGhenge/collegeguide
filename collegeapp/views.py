@@ -84,7 +84,7 @@ def submit_signin(request):
 
 def user_logout(request):
     try:
-        del request.session['is_firsttime']
+        request.session['is_firsttime'] = False
     except KeyError:
         pass
     logout(request)
@@ -105,7 +105,12 @@ def institute_search(request):
     return render(request, 'institute-search.html')
 
 def institute_account(request):
-    return render(request, 'institute-account.html')
+    user_obj = CollegeUser.objects.get(email=request.user)
+    data = {
+        'college_courses': CollegeCourses.objects.filter(userId=user_obj),
+        'user': user_obj,
+    }
+    return render(request, 'institute-account.html', data)
 
 def institute_signup(request):
     return render(request, 'institute-signup.html')
@@ -155,6 +160,10 @@ def courses_submit(request):
                 course_obj = Courses.objects.get(courseName=course)
                 user_obj = CollegeUser.objects.get(email=request.user)
                 CollegeCourses(courseId=course_obj, userId=user_obj).save()
+        try:
+            request.session['is_firsttime'] = False
+        except KeyError:
+            pass
         msg = { 'success': True }
     except ValidationError:
         msg = { 'success': False }

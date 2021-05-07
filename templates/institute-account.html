@@ -16,18 +16,18 @@
       <div class="col-lg-4 col-md-5">
         <div class="col-lg-12 col-md-12">
           <div class="card account-details">
-            <img class="card-img-top background-profile" src="{% static 'images/default-back.jpeg' %}" alt="background-profile">
-            <img src="{% static 'tmp/hero-bg.jpg' %}" alt="profile-picture" class="profile-picture">
+            <img class="card-img-top background-profile" src="{{user.backgroundImage.url}}" alt="background-profile">
+            <img src="{{user.profileImage.url}}" alt="profile-picture" class="profile-picture">
             <div class="card-body">
-              <h5 class="card-title account-name">Government Polytechnic, Amravati</h5>
+              <h5 class="card-title account-name">{{user.name}}</h5>
               <hr>
               <div class="row" style="text-align: center; font-weight: 600;">
-                <div class="col">2K<br>Followers</div>
-                <div class="col">50K<br>Likes</div>
+                <div class="col">{{user.profileFollowers}}<br>Followers</div>
+                <div class="col">{{user.profileLikes}}<br>Likes</div>
               </div>
               <hr>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <a href="gpaamravati.ac.in/new_gpa/">gpaamravati.ac.in/new_gpa/</a>
+              <p class="card-text">{{user.profileDescription}}</p>
+              <a href="gpaamravati.ac.in/new_gpa/">{{user.profileWebsite}}</a>
               <br><br>
               <div class="edit-button-div">
                 <button type="button" class="edit-button">Edit Profile</button>
@@ -39,13 +39,9 @@
           <div class="card institute-course-details">
             <div class="card-body">
               <h5 class="card-title title">Courses offered</h5>
-              <a href="#cm"><span class="badge badge-pill course-badge-blue">Computer Engineering Diploma</span></a>
-              <a href="#cm"><span class="badge badge-pill course-badge-darkblue">Civil Engineering Diploma</span></a>
-              <a href="#cm"><span class="badge badge-pill course-badge-yellow">Mechanical Engineering Diploma</span></a>
-              <a href="#cm"><span class="badge badge-pill course-badge-red">IT Engineering Diploma</span></a>
-              <a href="#cm"><span class="badge badge-pill course-badge-violet">Electronics Engineering Diploma</span></a>
-              <a href="#cm"><span class="badge badge-pill course-badge-pink">Electrical Engineering Diploma</span></a>
-              <a href="#cm"><span class="badge badge-pill course-badge-green">Plastic Polymer Engineering Diploma</span></a>
+              {% for course in college_courses %}
+              <a href="#{{course.courseId}}"><span class="badge badge-pill course-badge-blue">{{course.courseId}}</span></a>
+              {% endfor %}
             </div>
           </div>
           <div class="">
@@ -57,7 +53,7 @@
         <div class="col-lg-12 col-md-12">
           <div class="rating-details">
             <h5>
-              Government Polytechnic, Amravati
+              {{user.name}}
               <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
             </h5>
             <div class="rating">
@@ -136,8 +132,8 @@
         <div class="col-lg-12 col-md-12">
           <div class="write-post-div">
             <div class="d-flex flex-row">
-              <img src="{% static 'tmp/hero-bg.jpg' %}" alt="profile-picture" class="write-review-profile-picture">
-              <h6 class="write-review-title">Government Polytechnic, Amravati</h6>
+              <img src="{{user.profileImage.url}}" alt="profile-picture" class="write-review-profile-picture">
+              <h6 class="write-review-title">{{user.name}}</h6>
             </div>
             <br>
             <form action="" method="POST" autocomplete="off">
