@@ -3,6 +3,10 @@
 
 {% block title %}Institute Home{% endblock title %}
 
+{% block extra-css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
+{% endblock extra-css %}
+
 {% block menu %}
 <li class="active"><a href="{% url 'institute-home' %}">Institutes</a></li>
 <li><a href="{% url 'institute-search' %}">Search</a></li>
@@ -524,6 +528,52 @@
   </div>
 </div>
 <!-- End of Recent Show More -->
+
+<!-- Modal -->
+<div class="modal fade" id="alert-modal" tabindex="-1" role="dialog" aria-labelledby="alrt" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="alert-title">Alert</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if is_firsttime %}
+<!-- Modal for course addition -->
+<div class="modal fade" id="course-form" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Add courses to your profile</h5>
+      </div>
+      <form method="POST" class="course-form" action="{% url 'courses_submit' %}">
+        {% csrf_token %}
+        <div class="modal-body">
+          <select id="select-courses" name="select-courses" placeholder="Select courses" multiple>
+            {% for course in courses %}
+            <option value="{{course.courseName}}">{{course.courseName}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="modal-footer">
+          {% comment %} <button type="submit" class="btn btn-secondary" data-dismiss="modal">Close</button> {% endcomment %}
+          <button type="submit" class="btn btn-save-changes">Save changes</button>
+        </div>
+      </form>
+      <div class="mb-2">
+        <div class="loading">Loading</div>
+        <div id="modal-error-message" style="color: #D83D5A; font-weight: 500;">Something went wrong!</div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
 {% endblock body %}
 
 {% block email-form-token %}
@@ -532,8 +582,19 @@
 
 {% block extra-js %}
 <script>
-  // function my(which_section) {
-  //   window.location.href = '/section-page/'+which_section+'/';
-  // }
+  {% if is_firsttime %}
+    $('#course-form').modal('show');
+  {% endif %}
+
+  $(document).ready(function(){
+    var multipleCancelButton = new Choices('#select-courses', {
+    removeItemButton: true,
+    maxItemCount:50,
+    searchResultLimit:5,
+    renderChoiceLimit:5
+  });
+});
 </script>
+<script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+<script src="{% static 'assets/vendor/form/course_submit.js' %}"></script>
 {% endblock extra-js %}

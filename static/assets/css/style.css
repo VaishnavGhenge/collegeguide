@@ -1411,6 +1411,54 @@ section {
   }
 }
 
+/* --------------------------------------------------------- 
+# Institute Home
+----------------------------------------------------------*/
+.btn-save-changes {
+  background-color: #224abe;
+  border-color: #224abe;
+  border-radius: 50px;
+  font-size: 13px;
+  color: #fff;
+  transition: 00.4s;
+}
+
+.btn-save-changes:hover {
+  background-color: #4e73df;
+  border-color: #4e73df;
+  box-shadow: none;
+  color: #fff;
+}
+
+.btn-save-changes:focus {
+  background-color: #4e73df;
+  border-color: #4e73df;
+  box-shadow: none;
+}
+
+.loading {
+  display: none;
+  background: #fff;
+  text-align: center;
+  padding: 15px;
+}
+
+.loading:before {
+  content: "";
+  display: inline-block;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  margin: 0 10px -6px 0;
+  border: 3px solid #4e73df;
+  border-top-color: #eee;
+  -webkit-animation: animate-loading 1s linear infinite;
+  animation: animate-loading 1s linear infinite;
+}
+
+#modal-error-message {
+  display: none;
+}
 
 /* --------------------------------------------------------- 
 # Search

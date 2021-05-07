@@ -17,6 +17,7 @@ urlpatterns = [
     path('institute-account/', views.institute_account, name='institute-account'),
     path('institute-signup/', views.institute_signup, name='institute-signup'),
     path('submit-institute-signup/', views.submit_institute_signup, name='submit-institute-signup'),
+    path('courses_submit/', views.courses_submit, name='courses_submit'),
     path('check/', views.check, name='check'),
     path('check-email/', views.check_email, name='check-email'),
 

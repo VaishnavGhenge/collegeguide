@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.expressions import Col
+from django.db.models.fields import AutoField
 
 ######################################################################################################
 # Contact and Email Form Models
@@ -40,6 +41,7 @@ class StudentUser(models.Model):
 class CollegeUser(models.Model):
     collegeId = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     username = models.CharField(max_length=200, null=True)
+    email = models.EmailField(default='')
     name = models.CharField(max_length=200)
     profileImage = models.ImageField(upload_to='user/college/profile/', default='user/avatar.png')
     backgroundImage = models.ImageField(upload_to='user/college/backprofile', default='user/default-back.jpeg')
@@ -70,14 +72,6 @@ class Images(models.Model):
     title = models.CharField(max_length=200, null=True)
     location = models.CharField(max_length=300, null=True)
     date = models.DateTimeField()
-
-class UserPosts(models.Model):
-    postId = models.AutoField(primary_key=True)
-    userId = models.ForeignKey(User, on_delete=models.CASCADE)
-    location = models.CharField(max_length=200)
-    message = models.CharField(max_length=400)
-    date = models.DateTimeField()
-
 ############################################################################################
 # Other Supporting Models
 class Courses(models.Model):
@@ -89,11 +83,11 @@ class Courses(models.Model):
         return self.courseName
 
 class CollegeCourses(models.Model):
-    courseId = models.OneToOneField(Courses, on_delete=models.CASCADE, primary_key=True)
+    collegecourseId = AutoField(primary_key=True)
+    courseId = models.ForeignKey(Courses, on_delete=models.CASCADE)
     userId = models.ForeignKey(CollegeUser, on_delete=models.CASCADE)
-    name = models.CharField(max_length=200)
-    courseRating = models.PositiveSmallIntegerField(null=True)
-    instrumentAvailabilityRating = models.PositiveSmallIntegerField(null=True)
+    staffRating = models.PositiveSmallIntegerField(null=True)
+    CurriculumRating = models.PositiveSmallIntegerField(null=True)
 
 class AlumniStudentCollege():
     id = models.AutoField(primary_key=True)

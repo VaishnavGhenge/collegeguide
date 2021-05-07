@@ -1,6 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
-from . models import (Contact, Email, )
+from . models import (CollegeCourses, Contact, Courses, Email, )
 from django.contrib import messages
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
@@ -63,23 +63,30 @@ def submit_signin(request):
     if request.method == 'POST':
         email = request.POST.get('inputEmail')
         password = request.POST.get('inputPassword')
-        print("login")
-        print("email: "+str(email)+"\npassword: "+str(password))
         user = authenticate(request, username=email, password=password)
 
         if user is not None:
+            if user.last_login is None or user.last_login == '':
+                request.session['is_firsttime'] = True
+            else:
+                request.session['is_firsttime'] = False
+
             group = None
             if user.groups.exists():
                 group = user.groups.all()[0].name
+
             login(request, user)
             msg = { 'success': True, 'group': group }
         else:
-            print("if error")
             msg = { 'success': False }
         return JsonResponse(msg)
 
 
 def user_logout(request):
+    try:
+        del request.session['is_firsttime']
+    except KeyError:
+        pass
     logout(request)
     return redirect('signin')
 
@@ -88,7 +95,9 @@ def user_logout(request):
 ############################# Institute Views ######################################
 def institute_home(request):
     data = {
-        'colleges': CollegeUser.objects.all()
+        'is_firsttime': request.session['is_firsttime'],
+        'colleges': CollegeUser.objects.all(),
+        'courses': Courses.objects.all(),
     }
     return render(request, 'institute-home.html', data)
 
@@ -123,11 +132,11 @@ def submit_institute_signup(request):
                 user = User.objects.create_user(email, email, password1)
                 group = Group.objects.get(name='college')
                 user.groups.add(group)
-                if profile == '':
+                if profile is None:
                     profile = 'user/avatar.png'
-                if backprof == '':
+                if backprof is None:
                     backprof = 'user/default-back.jpeg'
-                collegeuser = CollegeUser(collegeId=user, username=username, name=name, profileImage=profile, backgroundImage=backprof, profileDescription=description, profileWebsite=website, location=location, postalcode=pin, college_type=collegeType, college_foundation_date=foundation)
+                collegeuser = CollegeUser(collegeId=user, username=username, name=name, profileImage=profile, backgroundImage=backprof, profileDescription=description, profileWebsite=website, location=location, postalcode=pin, college_type=collegeType, college_foundation_date=foundation, email=email)
                 collegeuser.save()
                 print("Success\n\n")
                 msg = { 'success': True }
@@ -136,6 +145,20 @@ def submit_institute_signup(request):
                 print("Error ala\n\n")
                 msg = { 'success': False}
                 return JsonResponse(msg)
+
+def courses_submit(request):
+    courses = list()
+    courses = request.POST.getlist('select-courses')
+    try:
+        for course in courses:
+            if Courses.objects.filter(courseName=course).exists():
+                course_obj = Courses.objects.get(courseName=course)
+                user_obj = CollegeUser.objects.get(email=request.user)
+                CollegeCourses(courseId=course_obj, userId=user_obj).save()
+        msg = { 'success': True }
+    except ValidationError:
+        msg = { 'success': False }
+    return JsonResponse(msg)
 
 def check(request):
     username = request.GET.get('username', None)
