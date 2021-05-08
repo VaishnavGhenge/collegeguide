@@ -68,13 +68,19 @@
     });
   
     function form_submit(action, data) {
+      console.log(data)
       $.ajax({
         type: "POST",
         url: action,
         data: data,
-        timeout: 40000
+        timeout: 40000,
+        cache: false,
+        contentType: false,
+        processData: false
       }).done( function(msg){
         if (msg.success) {
+          location.reload();
+          $("#selected-image-container").slideUp();
           $('#post-loading').slideUp();
           $('#post-success').slideDown();
         } else {

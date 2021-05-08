@@ -164,7 +164,7 @@
   </div>
 </div>
 
-{% if is_firsttime %}
+{% if is_first %}
 <!-- Modal for course addition -->
 <div class="modal fade" id="course-form" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -203,7 +203,7 @@
 
 {% block extra-js %}
 <script>
-  {% if is_firsttime %}
+  {% if is_first %}
     $('#course-form').modal('show');
   {% endif %}
 

@@ -1,7 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.expressions import Col
-from django.db.models.fields import AutoField
 
 ######################################################################################################
 # Contact and Email Form Models
@@ -57,12 +55,13 @@ class CollegeUser(models.Model):
     libraryRating = models.PositiveSmallIntegerField(null=True)
     verified = models.BooleanField(default=False)
     reviewCount = models.IntegerField(default=0)
-    location = models.CharField(max_length=200)
+    city = models.CharField(max_length=200)
     postalcode = models.IntegerField(null=True)
     alumniCount = models.IntegerField(default=0)
     college_type = models.CharField(max_length=100)
     college_foundation_date = models.DateField()
     nirfRanking = models.IntegerField(default=0)
+    is_first = models.BooleanField(default=False)
 
 ##########################################################################################
 # User Post Models
@@ -71,8 +70,10 @@ class Images(models.Model):
     userId = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='user/image-posts/', null=True)
     title = models.CharField(max_length=200, null=True)
+    totalLikes = models.IntegerField(default=0)
     location = models.CharField(max_length=300, null=True)
     date = models.DateTimeField()
+
 ############################################################################################
 # Other Supporting Models
 class Courses(models.Model):
@@ -84,7 +85,7 @@ class Courses(models.Model):
         return self.courseName
 
 class CollegeCourses(models.Model):
-    collegecourseId = AutoField(primary_key=True)
+    collegecourseId = models.AutoField(primary_key=True)
     courseId = models.ForeignKey(Courses, on_delete=models.CASCADE)
     userId = models.ForeignKey(CollegeUser, on_delete=models.CASCADE)
     staffRating = models.PositiveSmallIntegerField(null=True)
@@ -94,6 +95,14 @@ class AlumniStudentCollege():
     id = models.AutoField(primary_key=True)
     studentId = models.ForeignKey(StudentUser, on_delete=models.CASCADE)
     collegeId = models.ForeignKey(CollegeUser, on_delete=models.CASCADE)
+
+class Cities(models.Model):
+    citiId = models.AutoField(primary_key=True)
+    cityName = models.CharField(max_length=200)
+    nearCity = models.ForeignKey('self', on_delete=models.PROTECT, null=True)
+
+    def __str__(self):
+        return self.courseName    
 
 ########################################################################################
 # User Review Models

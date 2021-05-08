@@ -1905,7 +1905,7 @@ section {
   background-color: #fff;
   height: auto;
   margin-bottom: 20px;
-  border: none;
+  border: 1px solid rgba(0,0,0,.1);
 }
 
 .reviews-div .post .post-picture {
@@ -2113,6 +2113,19 @@ section {
 
 .signup-form textarea {
   padding: 10px 12px;
+}
+
+.signup-form .select-city {
+  border-radius: 4px;
+  box-shadow: none;
+  background-color: transparent;
+  font-size: 14px;
+}
+
+.signup-form .select-city:focus {
+  border-width: 1px;
+  border-color: #224abe;
+  box-shadow: none;
 }
 
 .signup-form button[type="submit"] {

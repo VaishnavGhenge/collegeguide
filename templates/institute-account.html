@@ -399,41 +399,24 @@
               <div class="review">3</div>
             </div>
             <div class="reviews-div tab-pane fade" id="college-posts" role="tabpanel" aria-labelledby="college-posts-tab">
+            {% if posts %}
               <div class="row">
+                {% for post in posts %}
                 <div class="col-lg-6 col-sm-12">
                   <div class="post">
-                    <img src="{% static 'tmp/banner-img-1.jpg' %}" alt="post picture" class="img-fluid post-picture">
+                    <img src="{{post.image.url}}" alt="post picture" class="img-fluid post-picture">
                     <div class="d-flex justify-content-start">
-                      <i class="fa fa-heart-o icon" aria-hidden="true" style="padding-right: 5px;"></i>
-                      &nbsp;
-                      <i class="fa fa-comment-o icon" aria-hidden="true"></i>
+                      <i class="fa fa-heart-o icon" aria-hidden="true" style="padding-right: 5px; padding-left: 3px; font-weight: 600;"></i>
+                      <p style="padding-top: 3px; margin-bottom: 0px; font-weight: 600;">{{post.totalLikes}} Likes</p>
                     </div>
-                    <p style="padding-top: 3px;">This view is of our college building..</p>
+                    <p style="padding-left: 3px; margin-bottom: 3px;">{{post.title}}</p>
                   </div>
                 </div>
-                <div class="col-lg-6 col-sm-12">
-                  <div class="post">
-                    <img src="{% static 'tmp/banner-img-1.jpg' %}" alt="post picture" class="img-fluid post-picture">
-                    <div class="d-flex justify-content-start">
-                      <i class="fa fa-heart-o icon" aria-hidden="true" style="padding-right: 5px;"></i>
-                      &nbsp;
-                      <i class="fa fa-comment-o icon" aria-hidden="true"></i>
-                    </div>
-                    <p style="padding-top: 3px;">This view is of our college building..</p>
-                  </div>
-                </div>
-                <div class="col-lg-6 col-sm-12">
-                  <div class="post">
-                    <img src="{% static 'tmp/banner-img-1.jpg' %}" alt="post picture" class="img-fluid post-picture">
-                    <div class="d-flex justify-content-start">
-                      <i class="fa fa-heart-o icon" aria-hidden="true" style="padding-right: 5px;"></i>
-                      &nbsp;
-                      <i class="fa fa-comment-o icon" aria-hidden="true"></i>
-                    </div>
-                    <p style="padding-top: 3px;">This view is of our college building..</p>
-                  </div>
-                </div>
+                {% endfor %}
               </div>
+            {% else %}
+            <div class="review">No result found</div>
+            {% endif %}
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
-from . models import (CollegeCourses, Contact, Courses, Email, Images, )
+from . models import (Cities, CollegeCourses, Contact, Courses, Email, Images, )
 from django.contrib import messages
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
@@ -69,11 +69,7 @@ def submit_signin(request):
 
         if user is not None:
             if user.last_login is None or user.last_login == '':
-                print('if')
-                request.session['is_firsttime'] = True
-            else:
-                print('else')
-                request.session['is_firsttime'] = False
+                CollegeUser.objects.filter(email=email).update(is_first=True)
 
             group = None
             if user.groups.exists():
@@ -87,10 +83,12 @@ def submit_signin(request):
 
 
 def user_logout(request):
-    try:
-        request.session['is_firsttime'] = False
-    except KeyError:
-        pass
+    user = request.user
+    group = None
+    if user.groups.exists():
+        group = user.groups.all()[0].name
+    if group == 'college':
+        CollegeUser.objects.filter(email=user).update(is_first=False)
     logout(request)
     return redirect('signin')
 
@@ -99,11 +97,13 @@ def user_logout(request):
 ############################# Institute Views ######################################
 @login_required(login_url='signin')
 def institute_home(request):
+    user = CollegeUser.objects.get(email=request.user)
+    is_first = user.is_first
     data = {
-        'is_firsttime': request.session['is_firsttime'],
         'colleges': CollegeUser.objects.all(),
         'nirf_colleges': CollegeUser.objects.exclude(nirfRanking=0).order_by('nirfRanking'),
         'courses': Courses.objects.all(),
+        'is_first': is_first,
     }
     return render(request, 'institute-home.html', data)
 
@@ -117,11 +117,15 @@ def institute_account(request):
     data = {
         'college_courses': CollegeCourses.objects.filter(userId=user_obj),
         'user': user_obj,
+        'posts': Images.objects.filter(userId=request.user)
     }
     return render(request, 'institute-account.html', data)
 
 def institute_signup(request):
-    return render(request, 'institute-signup.html')
+    data = {
+        'cities': Cities.objects.all(),
+    }
+    return render(request, 'institute-signup.html', data)
 
 def submit_institute_signup(request):
     if request.method == 'POST' and request.FILES['idproof']:
@@ -169,10 +173,6 @@ def courses_submit(request):
                 course_obj = Courses.objects.get(courseName=course)
                 user_obj = CollegeUser.objects.get(email=request.user)
                 CollegeCourses(courseId=course_obj, userId=user_obj).save()
-        try:
-            request.session['is_firsttime'] = False
-        except KeyError:
-            pass
         msg = { 'success': True }
     except ValidationError:
         msg = { 'success': False }
@@ -183,14 +183,15 @@ def submit_institute_post(request):
     if request.method == 'POST' and request.FILES['post-image']:
         description = request.POST.get('post-text')
         image = request.FILES.get('post-image')
-        date = datetime.now()
+        date = datetime.now().date()
         print(date, description, image)
-        # try:
-        #     user_obj = User.objects.get(username=request.user)
-        #     post = Images(userId=user_obj, image=image, title=description, date=)
-        msg = {
-            'success': True,
-        }
+        try:
+            user_obj = User.objects.get(username=request.user)
+            post = Images(userId=user_obj, image=image, title=description, date=date)
+            post.save()
+            msg = {'success': True,}
+        except ValidationError:
+            msg = {'success': False,}
         return JsonResponse(msg)
 
 
