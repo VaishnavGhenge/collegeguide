@@ -1,6 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
-from . models import (CollegeCourses, Contact, Courses, Email, )
+from . models import (CollegeCourses, Contact, Courses, Email, Images, )
 from django.contrib import messages
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
@@ -8,6 +8,8 @@ from .models import CollegeUser
 from django.contrib.auth.models import User, Group
 import re
 from django.db import IntegrityError
+from django.contrib.auth.decorators import login_required
+from datetime import datetime
 
 ################################## Website Home Views ########################################
 # Home page
@@ -67,8 +69,10 @@ def submit_signin(request):
 
         if user is not None:
             if user.last_login is None or user.last_login == '':
+                print('if')
                 request.session['is_firsttime'] = True
             else:
+                print('else')
                 request.session['is_firsttime'] = False
 
             group = None
@@ -93,17 +97,21 @@ def user_logout(request):
 ############################# End of Signin and Logout Views ######################################
 
 ############################# Institute Views ######################################
+@login_required(login_url='signin')
 def institute_home(request):
     data = {
         'is_firsttime': request.session['is_firsttime'],
         'colleges': CollegeUser.objects.all(),
+        'nirf_colleges': CollegeUser.objects.exclude(nirfRanking=0).order_by('nirfRanking'),
         'courses': Courses.objects.all(),
     }
     return render(request, 'institute-home.html', data)
 
+@login_required(login_url='signin')
 def institute_search(request):
     return render(request, 'institute-search.html')
 
+@login_required(login_url='signin')
 def institute_account(request):
     user_obj = CollegeUser.objects.get(email=request.user)
     data = {
@@ -151,6 +159,7 @@ def submit_institute_signup(request):
                 msg = { 'success': False}
                 return JsonResponse(msg)
 
+@login_required(login_url='signin')
 def courses_submit(request):
     courses = list()
     courses = request.POST.getlist('select-courses')
@@ -168,6 +177,22 @@ def courses_submit(request):
     except ValidationError:
         msg = { 'success': False }
     return JsonResponse(msg)
+
+@login_required(login_url='signin')
+def submit_institute_post(request):
+    if request.method == 'POST' and request.FILES['post-image']:
+        description = request.POST.get('post-text')
+        image = request.FILES.get('post-image')
+        date = datetime.now()
+        print(date, description, image)
+        # try:
+        #     user_obj = User.objects.get(username=request.user)
+        #     post = Images(userId=user_obj, image=image, title=description, date=)
+        msg = {
+            'success': True,
+        }
+        return JsonResponse(msg)
+
 
 def check(request):
     username = request.GET.get('username', None)

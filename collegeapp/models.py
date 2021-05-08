@@ -62,6 +62,7 @@ class CollegeUser(models.Model):
     alumniCount = models.IntegerField(default=0)
     college_type = models.CharField(max_length=100)
     college_foundation_date = models.DateField()
+    nirfRanking = models.IntegerField(default=0)
 
 ##########################################################################################
 # User Post Models

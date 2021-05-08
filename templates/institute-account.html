@@ -27,7 +27,7 @@
               </div>
               <hr>
               <p class="card-text">{{user.profileDescription}}</p>
-              <a href="gpaamravati.ac.in/new_gpa/">{{user.profileWebsite}}</a>
+              <a href="{{user.profileWebsite}}" target="_blank">{{user.profileWebsite}}</a>
               <br><br>
               <div class="edit-button-div">
                 <button type="button" class="edit-button">Edit Profile</button>
@@ -43,9 +43,6 @@
               <a href="#{{course.courseId}}"><span class="badge badge-pill course-badge-blue">{{course.courseId}}</span></a>
               {% endfor %}
             </div>
-          </div>
-          <div class="">
-
           </div>
         </div>
       </div>
@@ -136,18 +133,19 @@
               <h6 class="write-review-title">{{user.name}}</h6>
             </div>
             <br>
-            <form action="" method="POST" autocomplete="off">
+            <form action="{% url 'submit-institute-post' %}" method="POST" autocomplete="off" class="submit-institute-post">
               {% csrf_token %}
               <div class="row">
                 <div class="col-lg-8 col-sm-12">
-                  <input type="text" name="post-text" class="form-control input-post" placeholder="Write your post here...">
+                  <input type="text" id="post-text" name="post-text" class="form-control input-post" placeholder="Write your post here..." data-rule="required" data-msg="Please enter valid input">
+                  <div class="validate"></div>
                 </div>
                 <br><br>
                 <div class="col-lg-4 col col-sm-12">
                   <div class="row justify-content-between">
                     <div class="col-lg-3 col-sm-2">
                       <i class="fa fa-picture-o" aria-hidden="true" id="image-icon"></i>
-                      <input type="file" id="post-image" accept="image/*" class="form-control" hidden name="post-image">
+                      <input type="file" id="post-image" name="post-image" accept="image/*" class="form-control" hidden data-rule="required">
                     </div>
                     <br><br>
                     <div class="col-lg-9 col-sm-4">
@@ -158,6 +156,9 @@
               </div>
             </form>
             <br>
+            <div class="loading" id="post-loading">Loading</div>
+            <div id="post-success">Post added successfully!</div>
+            <div id="post-error">Something went wrong!</div>
             <div id="selected-image-container">
               <p style="margin-bottom: 0px;">Selected image: </p><p id="selected-image" style="color: #4e73df;">None</p>
             </div>
@@ -560,17 +561,6 @@
   function mouseLeave() {
     $('#star').popover('hide');
   };
-  // $('#reviews-show').on('click', function (e) {
-  //   e.preventDefault()
-  //   $(this).tab('show');
-  // });
-  // $('#course-reviews-show').on('click', function (e) {
-  //   e.preventDefault()
-  //   $(this).tab('show');
-  // });
-  // $('#college-posts-show').on('click', function (e) {
-  //   e.preventDefault()
-  //   $(this).tab('show');
-  // });
 </script>
+<script src="{% static 'assets/vendor/form/submit_institute_post.js' %}"></script>3
 {% endblock extra-js %}

@@ -1923,6 +1923,28 @@ section {
   cursor: pointer;
 }
 
+.error {
+  color: #D83D5A!important;
+}
+
+#post-success {
+  display: none;
+  color: #fff;
+  background: #18d26e;
+  text-align: center;
+  padding: 15px;
+  font-weight: 600;
+}
+
+#post-error {
+  display: none;
+  color: #fff;
+  background: #ed3c0d;
+  text-align: left;
+  padding: 15px;
+  font-weight: 600;
+}
+
 /*--------------------------------------------------------------
 # Signup
 --------------------------------------------------------------*/
