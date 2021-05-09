@@ -33,27 +33,43 @@
       
       current_form.find('.error-message').slideUp();
       current_form.find('.loading').slideDown();
-  
+
+      $.urlParam = function(name){
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        if (results==null){
+           return false;
+        }
+        else{
+           return results[1] || 0;
+        }
+      }
+      var next = '';
+      if($.urlParam('next')) {
+        next = $.urlParam('next');
+        // console.log('if');
+      }
+      // console.log(next);
       if ( $(this).data('recaptcha-site-key') ) {
         var recaptcha_site_key = $(this).data('recaptcha-site-key');
         grecaptcha.ready(function() {
           grecaptcha.execute(recaptcha_site_key, {action: 'form_submit'}).then(function(token) {
-            signin_submit(current_form, action, current_form.serialize() + '&recaptcha-response=' + token);
+            signin_submit(current_form, action, next, current_form.serialize() + '&recaptcha-response=' + token);
           });
         });
       } else {
-        signin_submit(current_form, action, current_form.serialize());
+        signin_submit(current_form, action, next, current_form.serialize());
       }
 
       return true;
     });
 
-    function signin_submit(current_form, action, data)
+    function signin_submit(current_form, action, next, data)
     {
         $.ajax({
             type: "POST",
             url: action,
             data: data,
+            next: next,
             timeout: 40000   
         }).done(function(msg){
             if(msg.success) {
@@ -61,7 +77,12 @@
                 if(msg.group == 'admin') {
                   window.location.href = "/admin/";
                 } else if(msg.group == 'college') {
-                  window.location.href = '/institute-home/';
+                  if(next != '') {
+                    window.location.href = next;
+                  }
+                  else {
+                    window.location.href = '/institute-home/';
+                  }
                 } else if(msg.group == 'student') {
                   window.location.href = '/student-home/';
                 }

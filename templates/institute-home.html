@@ -207,14 +207,14 @@
     $('#course-form').modal('show');
   {% endif %}
 
-  $(document).ready(function(){
+  $(document).ready(function() {
     var multipleCancelButton = new Choices('#select-courses', {
     removeItemButton: true,
     maxItemCount:50,
     searchResultLimit:5,
     renderChoiceLimit:5
+    });
   });
-});
 </script>
 <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
 <script src="{% static 'assets/vendor/form/course_submit.js' %}"></script>

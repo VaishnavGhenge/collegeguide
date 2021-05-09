@@ -62,6 +62,8 @@ def signin(request):
 
 # Sign in form submission (form action view)
 def submit_signin(request):
+    next = request.POST.get('next')
+    print(next, '\n')
     if request.method == 'POST':
         email = request.POST.get('inputEmail')
         password = request.POST.get('inputPassword')
@@ -117,7 +119,8 @@ def institute_account(request):
     data = {
         'college_courses': CollegeCourses.objects.filter(userId=user_obj),
         'user': user_obj,
-        'posts': Images.objects.filter(userId=request.user)
+        'posts': Images.objects.filter(userId=request.user),
+        'courses': Courses.objects.all(),
     }
     return render(request, 'institute-account.html', data)
 

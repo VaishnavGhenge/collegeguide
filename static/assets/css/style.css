@@ -1517,6 +1517,25 @@ section {
   transform: 1s;
 }
 
+.btn-search {
+  background-color: transparent;
+  color: #fff;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.btn-search:hover {
+  background-color: #fff;
+  color: #224abe;
+  box-shadow: none;
+  border-color: #fff;
+}
+
+.btn-search:focus {
+  box-shadow: none;
+}
+
 .khali-pahije {
   z-index: -99 !important;
   position: relative !important;
@@ -1676,6 +1695,25 @@ section {
 .institute-course-details .course-badge-green:hover {
   color: #fff;
   background-color: #00e64d;
+}
+
+.institute-course-details .btn-add {
+  background-color: #224abe;
+  font-size: 13px;
+  border-color: #224abe;
+  color: #fff;
+  transition: 00.4s;
+  border-radius: 50px;
+}
+
+.institute-course-details .btn-add:hover {
+  background-color: #4e73df;
+  border-color: #4e73df;
+  box-shadow: none;
+}
+
+.institute-course-details .btn-add:focus {
+  box-shadow: none;
 }
 
 .rating-details {
