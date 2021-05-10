@@ -76,7 +76,7 @@
                       <span>{{college.username}}</span>
                     </div>
                     <div class="college-rank d-flex align-items-center">
-                      <i class="bx bx-heart"></i>&nbsp;{{college.profileLikes}}
+                      <i class="fa fa-heart heart-fill icon" id="{{college.username}}-like" aria-hidden="true"></i>&nbsp;{{college.profileLikes}}
                     </div>
                   </div>
                 </div>
@@ -218,4 +218,14 @@
 </script>
 <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
 <script src="{% static 'assets/vendor/form/course_submit.js' %}"></script>
+<script>
+  $(document).on('click', '.icon', function() {
+    
+    var id = $(this).attr('id');
+    pureId = String('#'+id);
+    $(pureId).removeClass();
+    $(pureId).addClass("fa fa-heart-o icon");
+
+  });
+</script>
 {% endblock extra-js %}

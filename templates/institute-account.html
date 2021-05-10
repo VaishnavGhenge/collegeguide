@@ -434,7 +434,7 @@
               <div class="row">
                 {% for post in posts %}
                 <div class="col-lg-6 col-sm-12">
-                  <div class="post">
+                  <div class="post shadow-sm">
                     <img src="{{post.image.url}}" alt="post picture" class="img-fluid post-picture">
                     <div class="d-flex justify-content-start">
                       <form action="{% url 'likedislikePosts' %}" method="GET">

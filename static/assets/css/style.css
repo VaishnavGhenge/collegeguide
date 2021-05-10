@@ -843,6 +843,13 @@ section {
   border: 1px solid #17a2b8;
   background-color: transparent;
 }
+
+.colleges .college-content .college .college-rank .heart-fill{
+  color: red;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .colleges .college {
   padding-top: 15px;
   border-top: 1px solid #eef0ef;
