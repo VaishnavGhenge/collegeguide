@@ -1,15 +1,15 @@
 from django.core.exceptions import ValidationError
+from django.db.models.query import QuerySet
 from django.shortcuts import redirect, render
-from . models import (Cities, CollegeCourses, Contact, Courses, Email, Images, )
-from django.contrib import messages
+from . models import (Cities, CollegeCourses, Contact, Courses, Email, ImageLikes, Images, Like, )
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from .models import CollegeUser
 from django.contrib.auth.models import User, Group
 import re
-from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
+from itertools import chain
 
 ################################## Website Home Views ########################################
 # Home page
@@ -101,35 +101,133 @@ def user_logout(request):
 def institute_home(request):
     user = CollegeUser.objects.get(email=request.user)
     is_first = user.is_first
+    liked_col = Like.objects.filter(user1=request.user)
+    liked_colleges = list()
+    for col in liked_col:
+        liked_colleges = liked_colleges + list(chain(CollegeUser.objects.filter(collegeId=col.user2)))
     data = {
-        'colleges': CollegeUser.objects.all(),
+        'liked_colleges': liked_colleges,
         'nirf_colleges': CollegeUser.objects.exclude(nirfRanking=0).order_by('nirfRanking'),
         'courses': Courses.objects.all(),
         'is_first': is_first,
     }
     return render(request, 'institute-home.html', data)
 
+###################################
 @login_required(login_url='signin')
 def institute_search(request):
-    return render(request, 'institute-search.html')
+    search_response = None
+    if 'btn-search' in request.GET:
+        city = request.GET.get('select-city')
+        stream = request.GET.get('select-stream')
+        college = request.GET.get('select-college')
 
+        print(city, stream, college, '\n\n')
+
+        if city == '' and stream == '' and college != '':
+            search_response = CollegeUser.objects.filter(email=college)
+        elif city != '' and stream == '' and college != '':
+            search_response = CollegeUser.objects.filter(email=college, city=city)
+        elif city != '' and stream == '' and college == '':
+            search_response = CollegeUser.objects.filter(city=city)
+        elif city != '' and stream != '' and college == '':
+            response1 = CollegeCourses.objects.filter(courseId=stream)
+            response2 = list()
+            for col in response1:
+                response2 = response2 + list(chain(CollegeUser.objects.filter(collegeId=col.userId),))
+            search_response = list()
+            for col in response2:
+                search_response =  search_response + list(chain(CollegeUser.objects.filter(collegeId=col.collegeId, city=city),))
+        elif city == '' and stream != '' and college == '':
+            response1 = CollegeCourses.objects.filter(courseId=stream)
+            search_response = list()
+            for col in response1:
+                search_response = search_response + list(chain(CollegeUser.objects.filter(collegeId=col.userId),))
+            
+    data = {
+        'cities': Cities.objects.all(),
+        'streams': Courses.objects.all(),
+        'colleges': CollegeUser.objects.all(),
+        'search_response': search_response,
+    }
+    return render(request, 'institute-search.html', data)
+
+####################################
 @login_required(login_url='signin')
 def institute_account(request):
     user_obj = CollegeUser.objects.get(email=request.user)
+    posts = Images.objects.filter(userId=request.user).order_by('-date')
+    liked = ImageLikes.objects.filter(userId=request.user).values()
+    ids = list()
+    for like in liked:
+        ids.append(like.get('imageId_id'))
+
     data = {
         'college_courses': CollegeCourses.objects.filter(userId=user_obj),
         'user': user_obj,
-        'posts': Images.objects.filter(userId=request.user),
+        'posts': posts,
         'courses': Courses.objects.all(),
+        'selfliked': Like.objects.filter(user2=request.user).exists(),
+        'ids': ids,
     }
+  
     return render(request, 'institute-account.html', data)
 
+###################################
+@login_required(login_url='signin')
+def likedislike(request):
+    if request.method == 'POST':
+        if 'purpose' in request.POST:
+                user = User.objects.get(username=request.user)
+                try:
+                    if request.POST.get('purpose') == 'self-like':
+                        Like(user1=user, user2=user, date=datetime.now().date()).save()
+                    elif request.POST.get('purpose') == 'self-dislike':
+                        Like.objects.filter(user1=user, user2=user).delete()
+                    like_count = Like.objects.filter(user2=user).count()
+                    CollegeUser.objects.filter(email=request.user).update(profileLikes=like_count)
+                    msg = {
+                        'success': True,
+                        'count': like_count,
+                    }
+                    return JsonResponse(msg)
+                except ValidationError:
+                    msg = {
+                        'success': False,
+                    }
+                    return JsonResponse(msg)
+
+###################################
+@login_required(login_url='signin')
+def likedislikePosts(request):
+    postId = int(request.GET.get('postId'))
+    purpose = request.GET.get('purpose')
+    try:
+        image = Images.objects.get(imageId=postId)
+        if purpose == 'post-like':
+            ImageLikes(imageId=image, userId=request.user, date=datetime.now().date()).save()
+        elif purpose == 'post-dislike':
+            ImageLikes.objects.filter(imageId=image, userId=request.user).delete()
+        likeCount = ImageLikes.objects.filter(imageId=image).count()
+        Images.objects.filter(imageId=postId).update(totalLikes=likeCount)
+        msg = {
+            'success': True,
+            'count': likeCount,
+        }
+    except ValidationError:
+        msg = {
+            'success': False,
+        }
+    return JsonResponse(msg)
+
+##############################
 def institute_signup(request):
     data = {
         'cities': Cities.objects.all(),
     }
     return render(request, 'institute-signup.html', data)
 
+####################################
 def submit_institute_signup(request):
     if request.method == 'POST' and request.FILES['idproof']:
         profile = request.FILES.get('profile')
@@ -156,7 +254,7 @@ def submit_institute_signup(request):
                     profile = 'user/avatar.png'
                 if backprof is None:
                     backprof = 'user/default-back.jpeg'
-                collegeuser = CollegeUser(collegeId=user, username=username, name=name, profileImage=profile, backgroundImage=backprof, profileDescription=description, profileWebsite=website, location=location, postalcode=pin, college_type=collegeType, college_foundation_date=foundation, email=email)
+                collegeuser = CollegeUser(collegeId=user, username=username, name=name, profileImage=profile, backgroundImage=backprof, profileDescription=description, profileWebsite=website, city=location, postalcode=pin, college_type=collegeType, college_foundation_date=foundation, email=email)
                 collegeuser.save()
                 print("Success\n\n")
                 msg = { 'success': True }
@@ -166,6 +264,7 @@ def submit_institute_signup(request):
                 msg = { 'success': False}
                 return JsonResponse(msg)
 
+######################################
 @login_required(login_url='signin')
 def courses_submit(request):
     courses = list()
@@ -181,13 +280,13 @@ def courses_submit(request):
         msg = { 'success': False }
     return JsonResponse(msg)
 
+###################################
 @login_required(login_url='signin')
 def submit_institute_post(request):
     if request.method == 'POST' and request.FILES['post-image']:
         description = request.POST.get('post-text')
         image = request.FILES.get('post-image')
-        date = datetime.now().date()
-        print(date, description, image)
+        date = datetime.now()
         try:
             user_obj = User.objects.get(username=request.user)
             post = Images(userId=user_obj, image=image, title=description, date=date)
@@ -197,7 +296,7 @@ def submit_institute_post(request):
             msg = {'success': False,}
         return JsonResponse(msg)
 
-
+###################
 def check(request):
     username = request.GET.get('username', None)
     if len(str(username)) < 4:
@@ -211,6 +310,7 @@ def check(request):
     }
     return JsonResponse(data)
 
+##########################
 def check_email(request):
     email = request.GET.get('email', None)
     pattern = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'

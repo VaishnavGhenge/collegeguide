@@ -1,3 +1,4 @@
+from datetime import date
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -74,6 +75,12 @@ class Images(models.Model):
     location = models.CharField(max_length=300, null=True)
     date = models.DateTimeField()
 
+class ImageLikes(models.Model):
+    likeId = models.AutoField(primary_key=True)
+    imageId = models.ForeignKey(Images, on_delete=models.CASCADE)
+    userId= models.ForeignKey(User, on_delete=models.CASCADE)
+    date = models.DateField()
+
 ############################################################################################
 # Other Supporting Models
 class Courses(models.Model):
@@ -102,7 +109,19 @@ class Cities(models.Model):
     nearCity = models.ForeignKey('self', on_delete=models.PROTECT, null=True)
 
     def __str__(self):
-        return self.courseName    
+        return self.cityName
+
+class Followers(models.Model):
+    followId = models.AutoField(primary_key=True)
+    user1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='one')
+    user2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='two')
+    date = models.DateField()
+
+class Like(models.Model):
+    likeId = models.AutoField(primary_key=True)
+    user1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='onelike')
+    user2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='twolike')
+    date = models.DateField()
 
 ########################################################################################
 # User Review Models

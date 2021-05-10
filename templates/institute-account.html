@@ -23,11 +23,32 @@
             <img class="card-img-top background-profile" src="{{user.backgroundImage.url}}" alt="background-profile">
             <img src="{{user.profileImage.url}}" alt="profile-picture" class="profile-picture">
             <div class="card-body">
-              <h5 class="card-title account-name">{{user.name}}</h5>
+              <h5 class="card-title account-name">
+                {{user.name}}
+                {% if user.verified %}
+                  <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
+                {% endif %}
+              </h5>
               <hr>
               <div class="row" style="text-align: center; font-weight: 600;">
-                <div class="col">{{user.profileFollowers}}<br>Followers</div>
-                <div class="col">{{user.profileLikes}}<br>Likes</div>
+                <div class="col">
+                  <p id="followers">{{user.profileFollowers}}</p>
+                  <i class="fa fa-user-plus" id="follow-profile" style="cursor: pointer;" aria-hidden="true"></i>
+                  <!-- <i class="fa fa-check" aria-hidden="true"></i> -->
+                </div>
+                <div class="col">
+                  <p id="likes">{{user.profileLikes}}</p>
+                  <form method="POST" class="like-form" action="{% url 'likedislike' %}">
+                    {% csrf_token %}
+                    {% if not selfliked %}
+                    <i class="fa fa-heart-o o-heart" id="like-profile" aria-hidden="true"></i>
+                    <input type="text" name="purpose" id="like-purpose" value="self-like" hidden class="form-control">
+                    {% else %}
+                    <i class="fa fa-heart fill-heart" id="like-profile" aria-hidden="true"></i>
+                    <input type="text" name="purpose" id="like-purpose" value="self-dislike" hidden class="form-control">
+                    {% endif %}
+                  </form>
+                </div>
               </div>
               <hr>
               <p class="card-text">{{user.profileDescription}}</p>
@@ -59,7 +80,9 @@
           <div class="rating-details">
             <h5>
               {{user.name}}
-              <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
+              {% if user.verified %}
+                <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
+              {% endif %}
             </h5>
             <div class="rating">
               <div class="star">
@@ -145,7 +168,7 @@
               {% csrf_token %}
               <div class="row">
                 <div class="col-lg-8 col-sm-12">
-                  <input type="text" id="post-text" name="post-text" class="form-control input-post" placeholder="Write your post here..." data-rule="required" data-msg="Please enter valid input">
+                  <input type="text" id="post-text" name="post-text" class="form-control input-post" placeholder="Write description for your post!!!" data-rule="required" data-msg="Please enter valid input">
                   <div class="validate"></div>
                 </div>
                 <br><br>
@@ -414,8 +437,14 @@
                   <div class="post">
                     <img src="{{post.image.url}}" alt="post picture" class="img-fluid post-picture">
                     <div class="d-flex justify-content-start">
-                      <i class="fa fa-heart-o icon" aria-hidden="true" style="padding-right: 5px; padding-left: 3px; font-weight: 600;"></i>
-                      <p style="padding-top: 3px; margin-bottom: 0px; font-weight: 600;">{{post.totalLikes}} Likes</p>
+                      <form action="{% url 'likedislikePosts' %}" method="GET">
+                        {% if not post.imageId in ids %}
+                        <i class="fa fa-heart-o heart-o icon" id="{{post.imageId}}-icon" action="{% url 'likedislikePosts' %}" purpose="post-like" aria-hidden="true"></i>
+                        {% else %}
+                        <i class="fa fa-heart heart-fill icon" id="{{post.imageId}}-icon" action="{% url 'likedislikePosts' %}" purpose="post-dislike" aria-hidden="true"></i>
+                        {% endif %}
+                      </form>
+                      <p id="{{post.imageId}}-likes" style="padding-top: 3px; margin-bottom: 0px; font-weight: 600;">{{post.totalLikes}} Likes</p>
                     </div>
                     <p style="padding-left: 3px; margin-bottom: 3px;">{{post.title}}</p>
                   </div>
@@ -479,121 +508,7 @@
 {% endblock email-form-token %}
 
 {% block extra-js %}
-<script>
-  // $('#star').hover(function() {
-  //   $('#star').popover('show');
-  // });
-  //  html="true" role="button" data-toggle="popover" data-placement="bottom" data-trigger="hover click" title="Popover" data-content="<div class='spinner-border text-secondary' role='status'><span class='sr-only'>Loading...</span></div>"
-  $(document).ready(function () {
-    var popoverTemplate = ['<div class="popover rating-popover" role="tooltip">',
-        '<div class="arrow"></div>',
-        '<div class="popover-body rating-body">',
-        '</div>',
-        '</div>'].join('');
-
-    var content = ['<div>',
-    '<div class="rating-header">4.3 out of 5</div>',
-    '<div>567 total ratings</div><br>',
-    '<div class="row txt-center">',
-      '<div class="col-2">5 star</div>',
-      '<div class="col-4">',
-        '<div class="progress">',
-          '<div id="5" class="progress-bar rating-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>',
-        '</div>',
-      '</div>',
-      '<div id="5-per" class="col-2"></div>',
-    '</div>',
-    '<div class="row txt-center">',
-      '<div class="col-2">4 star</div>',
-      '<div class="col-4">',
-        '<div class="progress">',
-          '<div id="4" class="progress-bar rating-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>',
-        '</div>',
-      '</div>',
-      '<div id="4-per" class="col-2"></div>',
-    '</div>',
-    '<div class="row txt-center">',
-      '<div class="col-2">3 star</div>',
-      '<div class="col-4">',
-        '<div class="progress">',
-          '<div id="3" class="progress-bar rating-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>',
-        '</div>',
-      '</div>',
-      '<div id="3-per" class="col-2"></div>',
-    '</div>',
-    '<div class="row txt-center">',
-      '<div class="col-2">2 star</div>',
-      '<div class="col-4">',
-        '<div class="progress">',
-          '<div id="2" class="progress-bar rating-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>',
-        '</div>',
-      '</div>',
-      '<div id="2-per" class="col-2"></div>',
-    '</div>',
-    '<div class="row txt-center">',
-      '<div class="col-2">1 star</div>',
-      '<div class="col-4">',
-        '<div class="progress">',
-          '<div id="1" class="progress-bar rating-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>',
-        '</div>',
-      '</div>',
-      '<div id="2-per" class="col-2"></div>',
-    '</div>',
-    '</div>', ].join('');
-    $('#star').popover({
-        selector: '[rel=popover]',
-        trigger: 'hover',
-        content: content,
-        template: popoverTemplate,
-        placement: "bottom",
-        html: true
-    });
-
-    $("#image-icon").on('click', function() {
-        $("#post-image").click();
-      });
-
-    $("#post-image").on('change', function(e) {
-      var value = e.target.files[0].name;
-      $("#selected-image").text(value);
-      $("#selected-image-container").slideDown();
-    });
-  });
-  $('#star').hover(mouseEnter, mouseLeave);
-  function mouseEnter() {
-    $('#star').popover('show');
-    $('#5').attr('style', 'width: 75%');
-    $('#5-per').text('75%');
-
-    $('#4').attr('style', 'width: 8%');
-    $('#4-per').text('8%');
-
-    $('#3').attr('style', 'width: 5%');
-    $('#3-per').text('5%');
-
-    $('#2').attr('style', 'width: 2%');
-    $('#2-per').text('2%');
-
-    $('#1').attr('style', 'width: 10%');
-    $('#1-per').text('10%');
-  };
-  function mouseLeave() {
-    $('#star').popover('hide');
-  };
-  
-  $(document).on('click', '.btn-add', function() {
-    $('#course-form').modal('show');
-  });
-  
-  $(document).ready(function() {
-    var multipleCancelButton = new Choices('#select-courses', {
-    removeItemButton: true,
-    maxItemCount:50,
-    searchResultLimit:5,
-    renderChoiceLimit:5
-    });
-  });
-</script>
 <script src="{% static 'assets/vendor/form/submit_institute_post.js' %}"></script>
+<script src="{% static 'assets/js/institute-account.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
 {% endblock extra-js %}
