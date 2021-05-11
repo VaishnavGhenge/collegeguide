@@ -235,7 +235,7 @@ def submit_institute_signup(request):
         name = request.POST.get('collegeName')
         website = request.POST.get('profileWebsite')
         description = request.POST.get('profileDescription')
-        location = request.POST.get('location')
+        city = request.POST.get('city')
         pin = request.POST.get('pin')
         collegeType = request.POST.get('collegeType')
         foundation = request.POST.get('foundation')
@@ -254,9 +254,13 @@ def submit_institute_signup(request):
                     profile = 'user/avatar.png'
                 if backprof is None:
                     backprof = 'user/default-back.jpeg'
-                collegeuser = CollegeUser(collegeId=user, username=username, name=name, profileImage=profile, backgroundImage=backprof, profileDescription=description, profileWebsite=website, city=location, postalcode=pin, college_type=collegeType, college_foundation_date=foundation, email=email)
+
+                collegeuser = CollegeUser(collegeId=user, username=username, name=name, profileImage=profile,
+                backgroundImage=backprof, profileDescription=description, profileWebsite=website,
+                city=city, postalcode=pin, college_type=collegeType, college_foundation_date=foundation,
+                email=email)
+
                 collegeuser.save()
-                print("Success\n\n")
                 msg = { 'success': True }
                 return JsonResponse(msg)
             except (ValidationError):
@@ -275,6 +279,11 @@ def courses_submit(request):
                 course_obj = Courses.objects.get(courseName=course)
                 user_obj = CollegeUser.objects.get(email=request.user)
                 CollegeCourses(courseId=course_obj, userId=user_obj).save()
+        group = None
+        if request.user.groups.exists():
+            group = request.user.groups.all()[0].name
+        if group == 'college':
+            CollegeUser.objects.filter(email=request.user).update(is_first=False)
         msg = { 'success': True }
     except ValidationError:
         msg = { 'success': False }
