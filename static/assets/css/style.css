@@ -808,6 +808,20 @@ section {
   margin: 0;
 }
 
+.colleges .college-content .btn-follow-disabled {
+  color: #476b6b;
+  font-family: "Raleway", sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: 1px;
+  display: inline-block;
+  padding: 3px 15px;
+  box-shadow: none;
+  transition: 0.5s;
+  background-color: #c2d6d6;
+  border: 2px solid #c2d6d6;
+}
+
 .colleges .college-content .btn-follow {
   color: #ffffff;
   font-family: "Raleway", sans-serif;
@@ -844,10 +858,16 @@ section {
   background-color: transparent;
 }
 
-.colleges .college-content .college .college-rank .heart-fill{
+.colleges .college-content .college .college-rank .heart-fill {
   color: red;
   font-weight: 600;
   cursor: pointer;
+}
+
+.colleges .college-content .college .college-rank .heart-o {
+  font-weight: 600;
+  cursor: pointer;
+  color: #657a6d;
 }
 
 .colleges .college {
@@ -1608,6 +1628,10 @@ section {
   transition: 0.4s;
 }
 
+.account-details .o-heart {
+  color: #657a6d;
+}
+
 .account-details .fill-heart {
   cursor: pointer;
   color: red;
@@ -1999,6 +2023,7 @@ section {
   padding-right: 5px;
   padding-left: 3px;
   font-weight: 600;
+  color: #657a6d;
 }
 
 .reviews-div .post .heart-fill {
@@ -2006,6 +2031,7 @@ section {
   padding-right: 5px;
   padding-left: 3px;
   font-weight: 600;
+  cursor: pointer;
 }
 
 .reviews-div .post .post-description {

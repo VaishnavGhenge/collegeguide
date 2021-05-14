@@ -46,16 +46,46 @@
       <div class="mt-4">
         <small>Forgot your password <a href="#">click here</a></small>
         <br>
-        <small>Not registered? <a href="{% url 'institute-signup' %}">Sign up</a></small>
+        <small>Not registered? <a href="#" onclick="triggerchoose();">Sign up</a></small>
       </div>
       <p class="mt-5 mb-3 text-muted">&copy; 2021</p>
     </form>
+
+    <!-- Modal -->
+    <div class="modal fade" id="choose" tabindex="-1" role="dialog" aria-labelledby="choose" aria-hidden=
+    "true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Choose account type</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="d-flex justify-content-center">
+              <div class="col-lg-3 col-md-4 col-sm-6">
+                <img src="{% static 'images/college.jpeg' %}" onclick="choose('college');" class="choose-image">
+                <p>College</p>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6">
+                <img src="{% static 'images/student.jpeg' %}" onclick="choose('student');" class="choose-image">
+                <p>Student</p>
+              </div>             
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Vendor JS Files -->
     <script src="{% static 'assets/vendor/jquery/jquery.min.js' %}"></script>
 
     <!-- Sign in Form Validation JS File -->
     <script src="{% static 'assets/vendor/form/validate-signin.js' %}"></script>
+
+    <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
     <!-- Show password JS script -->
     <script>
@@ -70,6 +100,22 @@
           x.type = 'password';
         }
       }
+
+      function triggerchoose()
+      {
+        $('#choose').modal('show');
+      }
+
+      function choose(type)
+      {
+        if(type == 'college')
+        {
+          window.location.replace('/institute-signup/');
+        }
+        else if(type == 'student')
+          window.location.replace('/student-signup/');
+      }
+
     </script>
   </body>
 </html>

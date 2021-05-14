@@ -126,3 +126,10 @@ a {
   -webkit-animation: animate-loading 1s linear infinite;
   animation: animate-loading 1s linear infinite;
 }
+
+.choose-image {
+  object-fit: cover;
+  height: 70px;
+  width: 70px;
+  border-radius: 50px;
+}

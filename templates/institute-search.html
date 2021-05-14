@@ -133,7 +133,15 @@
                 <div class="college-content">
   
                   <div class="d-flex justify-content-around align-items-center mb-3">
-                    <a href="#" class="btn btn-follow btn-sm">Follow</a>
+                    {% if college.collegeId == request.user %}
+                    <a href="#disabled" class="btn btn-follow-disabled btn-sm">Self</a>
+                    {% else %}
+                      {% if college not in followed_colleges %}
+                      <button type="button" userid="{{college.collegeId}}" id="{{college.username}}-follow" purpose="follow" action="{% url 'follow_unfollow' %}" class="btn btn-follow btn-sm">Follow</button>
+                      {% else %}
+                      <button type="button" userid="{{college.collegeId}}" id="{{college.username}}-follow" purpose="unfollow" action="{% url 'follow_unfollow' %}" class="btn btn-follow btn-sm">Following</button>
+                      {% endif %}
+                    {% endif %}
                     <div class="rating">
                       <p>Rating</p>
                       <p class="star">
@@ -150,12 +158,6 @@
                     <a href="#gpa">{{college.name}}</a> 
                       <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
                   </h3>
-  
-                  <h6>
-                    <a href="#cm"><span class="badge badge-pill badge-outline-info">Computer Engineering</span></a>
-                    <a href="#civil"><span class="badge badge-pill badge-outline-info">Civil Engineering</span></a>
-                    <a href="#civil"><span class="badge badge-pill badge-outline-info">more</span></a>
-                  </h6>
                   
                   <div class="college d-flex justify-content-between align-items-center">
                     <div class="college-profile d-flex align-items-center">
@@ -163,7 +165,11 @@
                       <span>{{college.username}}</span>
                     </div>
                     <div class="college-rank d-flex align-items-center">
-                      <i class="bx bx-heart"></i>&nbsp;{{college.profileLikes}}
+                      {% if college in liked_colleges %}
+                      <i class="fa fa-heart heart-fill like" id="{{college.username}}-like" userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="dislike" aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count" style="margin-top: 15px;">{{college.profileLikes}}</p>
+                      {% else %}
+                      <i class="fa fa-heart-o heart-o like" id="{{college.username}}-like" userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="like" aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count" style="margin-top: 15px;">{{college.profileLikes}}</p>
+                      {% endif %}
                     </div>
                   </div>
                 </div>
@@ -201,4 +207,5 @@
   });
 </script>
 <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+<script src="{% static 'assets/js/institute-search.js' %}"></script>
 {% endblock extra-js %}

@@ -20,6 +20,7 @@ class StudentUser(models.Model):
     studentId = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     name = models.CharField(max_length=100)
     surname = models.CharField(max_length=100)
+    email = models.EmailField(null=True)
     profileImage = models.ImageField(upload_to='user/student/profile/', default='user/avatar.png')
     backgroundImage = models.ImageField(upload_to='user/student/backprofile/', default='user/default-back.jpeg')
     prefCourse1 = models.CharField(max_length=100, null=True)
@@ -106,7 +107,7 @@ class AlumniStudentCollege():
 class Cities(models.Model):
     citiId = models.AutoField(primary_key=True)
     cityName = models.CharField(max_length=200)
-    nearCity = models.ForeignKey('self', on_delete=models.PROTECT, null=True)
+    nearCity = models.ForeignKey('self', on_delete=models.PROTECT, null=True, default='')
 
     def __str__(self):
         return self.cityName

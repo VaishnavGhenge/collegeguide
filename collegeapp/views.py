@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db.models.query import QuerySet
 from django.shortcuts import redirect, render
-from . models import (Cities, CollegeCourses, Contact, Courses, Email, ImageLikes, Images, Like, )
+from . models import (Cities, CollegeCourses, Contact, Courses, Email, Followers, ImageLikes, Images, Like, StudentUser, )
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from .models import CollegeUser
@@ -99,15 +99,29 @@ def user_logout(request):
 ############################# Institute Views ######################################
 @login_required(login_url='signin')
 def institute_home(request):
+    # Check if users first time login or not to show course form
     user = CollegeUser.objects.get(email=request.user)
     is_first = user.is_first
-    liked_col = Like.objects.filter(user1=request.user)
+
+    # Get all liked colleges by requesr.user
+    liked_col = Like.objects.filter(user1=request.user)[:4]
     liked_colleges = list()
     for col in liked_col:
         liked_colleges = liked_colleges + list(chain(CollegeUser.objects.filter(collegeId=col.user2)))
+
+    # Followed colleges
+    followed_col = Followers.objects.filter(user1=request.user)[:4]
+    followed_colleges = list()
+    for col in followed_col:
+        followed_colleges = followed_colleges + list(chain(CollegeUser.objects.filter(collegeId=col.user2)))
+
+    # Getting 4 highest ranked colleges by nirf
+    nirf_colleges = CollegeUser.objects.exclude(nirfRanking=0).order_by('nirfRanking')[:4]
+
     data = {
         'liked_colleges': liked_colleges,
-        'nirf_colleges': CollegeUser.objects.exclude(nirfRanking=0).order_by('nirfRanking'),
+        'followed_colleges': followed_colleges,
+        'nirf_colleges': nirf_colleges,
         'courses': Courses.objects.all(),
         'is_first': is_first,
     }
@@ -117,6 +131,9 @@ def institute_home(request):
 @login_required(login_url='signin')
 def institute_search(request):
     search_response = None
+    followed_colleges = None
+    liked_colleges = None
+    
     if 'btn-search' in request.GET:
         city = request.GET.get('select-city')
         stream = request.GET.get('select-stream')
@@ -143,12 +160,26 @@ def institute_search(request):
             search_response = list()
             for col in response1:
                 search_response = search_response + list(chain(CollegeUser.objects.filter(collegeId=col.userId),))
+
+        # Followed colleges
+        followed_col = Followers.objects.filter(user1=request.user)[:4]
+        followed_colleges = list()
+        for col in followed_col:
+            followed_colleges = followed_colleges + list(chain(CollegeUser.objects.filter(collegeId=col.user2)))
+
+        # Get all liked colleges by requesr.user
+        liked_col = Like.objects.filter(user1=request.user)[:4]
+        liked_colleges = list()
+        for col in liked_col:
+            liked_colleges = liked_colleges + list(chain(CollegeUser.objects.filter(collegeId=col.user2)))
             
     data = {
         'cities': Cities.objects.all(),
         'streams': Courses.objects.all(),
         'colleges': CollegeUser.objects.all(),
         'search_response': search_response,
+        'liked_colleges': liked_colleges,
+        'followed_colleges': followed_colleges,
     }
     return render(request, 'institute-search.html', data)
 
@@ -186,16 +217,31 @@ def likedislike(request):
                         Like.objects.filter(user1=user, user2=user).delete()
                     like_count = Like.objects.filter(user2=user).count()
                     CollegeUser.objects.filter(email=request.user).update(profileLikes=like_count)
-                    msg = {
-                        'success': True,
-                        'count': like_count,
-                    }
+                    msg = { 'success': True, 'count': like_count, }
                     return JsonResponse(msg)
                 except ValidationError:
-                    msg = {
-                        'success': False,
-                    }
+                    msg = { 'success': False, }
                     return JsonResponse(msg)
+    if request.method == 'GET':
+        userid = str(request.GET.get('userid'))
+        purpose = str(request.GET.get('purpose'))
+        acctype = str(request.GET.get('acctype'))
+        try:
+            user = User.objects.get(email=userid)
+            if purpose == 'like':
+                Like(user1=request.user, user2=user, date=datetime.now().date()).save()
+            elif purpose == 'dislike':
+                Like.objects.filter(user1=request.user, user2=user).delete()
+            like_count = Like.objects.filter(user2=user).count()
+            if acctype == 'college':
+                CollegeUser.objects.filter(email=request.user).update(profileLikes=like_count)
+            elif acctype == 'student':
+                StudentUser.objects.filter(email=request.user).update(profileLikes=like_count)
+            msg = { 'success': True, 'count': like_count, }
+            return JsonResponse(msg)
+        except ValidationError:
+            msg = { 'success': False }
+            return JsonResponse(msg)
 
 ###################################
 @login_required(login_url='signin')
@@ -218,6 +264,30 @@ def likedislikePosts(request):
         msg = {
             'success': False,
         }
+    return JsonResponse(msg)
+
+
+# Follow or to Unfollow
+def follow_unfollow(request):
+    userid = str(request.GET.get('userid'))
+    purpose = str(request.GET.get('purpose'))
+    accType = str(request.GET.get('acctype'))
+
+    try:
+        user = User.objects.get(email=userid)
+        if purpose == 'follow':
+            Followers(user1=request.user, user2=user, date=datetime.now().date()).save()
+        elif purpose == 'unfollow':
+            Followers.objects.filter(user1=request.user, user2=user).delete()
+        follow_count = Followers.objects.filter(user1=request.user).count()
+        if accType == 'college':
+            CollegeUser.objects.filter(email=request.user.email).update(profileFollowers=follow_count)
+        elif accType == 'student':
+            StudentUser.objects.filter(email=request.user.email).update(profileFollowers=follow_count)
+        msg = { 'success': True }
+    except ValidationError:
+        msg = { 'success': False }
+
     return JsonResponse(msg)
 
 ##############################
@@ -264,8 +334,7 @@ def submit_institute_signup(request):
                 msg = { 'success': True }
                 return JsonResponse(msg)
             except (ValidationError):
-                print("Error ala\n\n")
-                msg = { 'success': False}
+                msg = { 'success': False }
                 return JsonResponse(msg)
 
 ######################################

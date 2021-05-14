@@ -79,7 +79,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'collegeguide',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'vaishnav',
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
