@@ -1,4 +1,4 @@
-{% extends 'institute-base.html' %}
+{% extends 'account-base.html' %}
 {% load static %}
 
 {% block title %}Institute Account{% endblock title %}
@@ -8,9 +8,21 @@
 {% endblock extra-css %}
 
 {% block menu %}
-<li><a href="{% url 'institute-home' %}">Institutes</a></li>
-<li><a href="{% url 'institute-search' %}">Search</a></li>
+<li><a href="{% url 'home' %}">Institutes</a></li>
+<li><a href="{% url 'search' %}">Search</a></li>
 {% endblock menu %}
+
+{% block your-account %}
+<div class="btn-group">
+    <button class="btn-account btn-active dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</button>
+    <div class="dropdown-menu shadow" style="border: none;">
+      <a class="dropdown-item" href="{% url 'account' %}">My Profile</a>
+      <a class="dropdown-item" href="#">Edit Profile</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+    </div>
+</div>
+{% endblock your-account %}
 
 {% block body %}
 <main id="institute-account">
@@ -24,7 +36,7 @@
             <img src="{{user.profileImage.url}}" alt="profile-picture" class="profile-picture">
             <div class="card-body">
               <h5 class="card-title account-name">
-                {{user.name}}
+                {{user.name}} {% if group == 'student' %}{{user.surname}}{% endif %}
                 {% if user.verified %}
                   <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
                 {% endif %}
@@ -33,7 +45,7 @@
               <div class="row" style="text-align: center; font-weight: 600;">
                 <div class="col">
                   <p id="followers">{{user.profileFollowers}}</p>
-                  <i class="fa fa-user-plus" id="follow-profile" style="cursor: pointer;" aria-hidden="true"></i>
+                  <i class="fa fa-user-plus text-muted" id="follow-profile" style="cursor: pointer;" aria-hidden="true"></i>
                   <!-- <i class="fa fa-check" aria-hidden="true"></i> -->
                 </div>
                 <div class="col">
@@ -51,6 +63,26 @@
                 </div>
               </div>
               <hr>
+              {% if group == 'college' %}
+                {% if user.nirfRanking != 0 %}
+                  <a href="#"><span class="badge badge-pill course-badge-green">#{{user.nirfRanking}}</span></a>
+                {% endif %}
+                <a href="#"><span class="badge badge-pill course-badge-green">Type: {{user.college_type}}</span></a>
+                <a href="#"><span class="badge badge-pill course-badge-green">Location: {{user.city}}</span></a>
+                {% if postCount == 1 %}
+                  <a href="#"><span class="badge badge-pill course-badge-green">{{postCount}} Post</span></a>
+                {% else %}
+                  <a href="#"><span class="badge badge-pill course-badge-green">{{postCount}} Posts</span></a>
+                {% endif %}
+                {% if user.reviewCount == 1 %}
+                  <a href="#"><span class="badge badge-pill course-badge-green">{{user.reviewCount}} Review</span></a>
+                {% else %}
+                  <a href="#"><span class="badge badge-pill course-badge-green">{{user.reviewCount}} Reviews</span></a>
+                {% endif %}
+                {% else %}
+                  <a href="#"><span class="badge badge-pill course-badge-green">{{postCount}} Posts</span></a>
+              {% endif %}
+            <br><br>
               <p class="card-text">{{user.profileDescription}}</p>
               <a href="{{user.profileWebsite}}" target="_blank">{{user.profileWebsite}}</a>
               <br><br>
@@ -60,6 +92,7 @@
             </div>
           </div>
         </div>
+        {% if group == 'college' %}
         <div class="col-lg-12 col-md-12">
           <div class="card institute-course-details">
             <div class="card-body">
@@ -74,12 +107,14 @@
             </div>
           </div>
         </div>
+        {% endif %}
       </div>
       <div class="col-lg-8 col-md-7">
+        {% if group == 'college' %}
         <div class="col-lg-12 col-md-12">
           <div class="rating-details">
             <h5>
-              {{user.name}}
+              {{user.name}} {% if group == 'student' %}{{user.surname}}{% endif %}
               {% if user.verified %}
                 <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
               {% endif %}
@@ -157,22 +192,27 @@
             </div>
           </div>
         </div>
+        {% endif %}
         <div class="col-lg-12 col-md-12">
           <div class="write-post-div">
             <div class="d-flex flex-row">
               <img src="{{user.profileImage.url}}" alt="profile-picture" class="write-review-profile-picture">
-              <h6 class="write-review-title">{{user.name}}</h6>
+              <h6 class="write-review-title">{{user.name}} {% if group == 'student' %}{{user.surname}}{% endif %}</h6>
             </div>
             <br>
             <form action="{% url 'submit-institute-post' %}" method="POST" autocomplete="off" class="submit-institute-post">
               {% csrf_token %}
               <div class="row">
-                <div class="col-lg-8 col-sm-12">
-                  <input type="text" id="post-text" name="post-text" class="form-control input-post" placeholder="Write description for your post!!!" data-rule="required" data-msg="Please enter valid input">
+                <div class="col-lg-12 col-sm-12">
+                  <input type="text" id="post-text" name="post-text" class="form-control input-post" placeholder="Post message" data-rule="required" data-msg="Please enter valid input">
+                  <div class="validate"></div>
+                </div>
+                <div class="col-lg-8 col-sm-12 mt-3">
+                  <input type="url" id="post-url" name="post-url" class="form-control input-post" placeholder="http://example.com (optional)" data-rule="url" data-msg="Please enter valid URL">
                   <div class="validate"></div>
                 </div>
                 <br><br>
-                <div class="col-lg-4 col col-sm-12">
+                <div class="col-lg-4 col col-sm-12 mt-3">
                   <div class="row justify-content-between">
                     <div class="col-lg-3 col-sm-2">
                       <i class="fa fa-picture-o" aria-hidden="true" id="image-icon"></i>
@@ -195,6 +235,7 @@
             </div>
           </div>
         </div>
+        {% if group == 'college' %}
         <div class="col-lg-12 col-md-12">
           <div class="select-category">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -227,62 +268,6 @@
                     <i class="fa fa-star-o" aria-hidden="true"></i>
                   </div>
                   <div class="rating-date">29/03/2021</div>
-                </div>
-                <div class="rating-description">
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem 
-                  Ipsum has been the industry's standard dummy text ever since the 1500s, when an 
-                  unknown printer took a galley of type and scrambled it to make a type specimen 
-                  book.
-                </div>
-                <div class="more-ratings mt-4">
-                  <div class="row">
-                    <div class="col">
-                      <div class="rating-name">Campus Rating</div>
-                      <div class="rating-stars">
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                      </div>
-                    </div>
-                    <div class="col">
-                      <div class="rating-name">Library Rating</div>
-                      <div class="rating-stars">
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="helful-div mt-2">
-                  <small>67 people found this useful</small>
-                  <div class="row">
-                    <div class="col-lg-4"><p>Was this review helpful?</p></div>
-                    <div class="col-lg-4">
-                      <button type="button" class="btn btn-yes-no">Yes</button>
-                      <button type="button" class="btn btn-yes-no">No</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="review">
-                <div class="d-flex flex-row">
-                  <img src="{% static 'tmp/hero-bg.jpg' %}" alt="profile-picture" class="review-profile-picture">
-                  <h6 class="review-title">Parth Bamnote</h6>
-                </div>
-                <div class="d-flex flex-row">
-                  <div class="total-rating">
-                    <i class="fa fa-star" aria-hidden="true"></i>
-                    <i class="fa fa-star" aria-hidden="true"></i>
-                    <i class="fa fa-star" aria-hidden="true"></i>
-                    <i class="fa fa-star" aria-hidden="true"></i>
-                    <i class="fa fa-star-o" aria-hidden="true"></i>
-                  </div>
-                  <div class="rating-date">28/03/2021</div>
                 </div>
                 <div class="rating-description">
                   Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem 
@@ -377,57 +362,6 @@
                   </div>
                 </div>
               </div>
-              <div class="review">
-                <div class="d-flex flex-row">
-                  <img src="{% static 'tmp/hero-bg.jpg' %}" alt="profile-picture" class="review-profile-picture">
-                  <h6 class="review-title">Parth Bamnote</h6>
-                </div>
-                <div class="d-flex flex-row">
-                  <div class="rating-course">IT Engineering Dimploma</div>
-                  <div class="rating-date">27/03/2021</div>
-                </div>
-                <div class="rating-description">
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem 
-                  Ipsum has been the industry's standard dummy text ever since the 1500s, when an 
-                  unknown printer took a galley of type and scrambled it to make a type specimen 
-                  book.
-                </div>
-                <div class="more-ratings mt-4">
-                  <div class="row">
-                    <div class="col">
-                      <div class="rating-name">Staff Rating</div>
-                      <div class="rating-stars">
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                      </div>
-                    </div>
-                    <div class="col">
-                      <div class="rating-name">Curriculum Rating</div>
-                      <div class="rating-stars">
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="helful-div mt-2">
-                  <small>67 people found this useful</small>
-                  <div class="row">
-                    <div class="col-lg-4"><p>Was this review helpful?</p></div>
-                    <div class="col-lg-4">
-                      <button type="button" class="btn btn-yes-no">Yes</button>
-                      <button type="button" class="btn btn-yes-no">No</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="review">3</div>
             </div>
             <div class="reviews-div tab-pane fade" id="college-posts" role="tabpanel" aria-labelledby="college-posts-tab">
             {% if posts %}
@@ -446,17 +380,52 @@
                       </form>
                       <p id="{{post.imageId}}-likes" style="padding-top: 3px; margin-bottom: 0px; font-weight: 600;">{{post.totalLikes}} Likes</p>
                     </div>
+                    {% if post.url != '' %}
+                    <a style="padding-left: 5px; margin-bottom: 3px;" href="{{post.url}}" target="_blank" rel="noopener noreferrer">{{post.url}}</a>
+                    {% endif %}
                     <p style="padding-left: 3px; margin-bottom: 3px;">{{post.title}}</p>
                   </div>
                 </div>
                 {% endfor %}
               </div>
             {% else %}
-            <div class="review">No result found</div>
+              <div class="review">No result found</div>
             {% endif %}
             </div>
           </div>
         </div>
+        {% endif %}
+        {% if group == 'student' %}
+        <div class="reviews-div" id="college-posts" style="margin-left: 15px; margin-right: 15px;">
+          {% if posts %}
+            <div class="row">
+              {% for post in posts %}
+              <div class="col-lg-6 col-sm-12">
+                <div class="post shadow-sm">
+                  <img src="{{post.image.url}}" alt="post picture" class="img-fluid post-picture">
+                  <div class="d-flex justify-content-start">
+                    <form action="{% url 'likedislikePosts' %}" method="GET">
+                      {% if not post.imageId in ids %}
+                      <i class="fa fa-heart-o heart-o icon" id="{{post.imageId}}-icon" action="{% url 'likedislikePosts' %}" purpose="post-like" aria-hidden="true"></i>
+                      {% else %}
+                      <i class="fa fa-heart heart-fill icon" id="{{post.imageId}}-icon" action="{% url 'likedislikePosts' %}" purpose="post-dislike" aria-hidden="true"></i>
+                      {% endif %}
+                    </form>
+                    <p id="{{post.imageId}}-likes" style="padding-top: 3px; margin-bottom: 0px; font-weight: 600;">{{post.totalLikes}} Likes</p>
+                  </div>
+                  {% if post.url != '' %}
+                  <a style="padding-left: 5px; margin-bottom: 3px;" href="{{post.url}}" target="_blank" rel="noopener noreferrer">{{post.url}}</a>
+                  {% endif %}
+                  <p style="padding-left: 3px; margin-bottom: 3px;">{{post.title}}</p>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="review">No result found</div>
+          {% endif %}
+          </div>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -490,18 +459,6 @@
 </div>
 </main>
 {% endblock body %}
-
-{% block your-account %}
-<div class="btn-group">
-    <button class="btn-account btn-active dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</button>
-    <div class="dropdown-menu shadow" style="border: none;">
-      <a class="dropdown-item" href="{% url 'institute-account' %}">My Profile</a>
-      <a class="dropdown-item" href="#">Edit Profile</a>
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-    </div>
-</div>
-{% endblock your-account %}
 
 {% block email-form-token %}
 {% csrf_token %}

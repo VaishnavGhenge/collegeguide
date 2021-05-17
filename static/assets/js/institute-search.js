@@ -8,6 +8,7 @@ $(document).on('click', '.btn-follow', function() {
         data: {
         'userid' : userid,
         'purpose': purpose,
+        'acctype': 'college',
         },
         dataType: 'json',
       }).done(function(msg) {

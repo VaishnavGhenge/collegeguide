@@ -1,0 +1,700 @@
+{% extends 'account-base.html' %}
+{% load static %}
+
+{% block title %}Institute Account{% endblock title %}
+
+{% block extra-css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
+{% endblock extra-css %}
+
+{% block menu %}
+<li class="active"><a href="{% url 'home' %}">Institutes</a></li>
+<li><a href="{% url 'search' %}">Search</a></li>
+{% endblock menu %}
+
+{% block your-account %}
+<div class="btn-group">
+    <button class="btn-account dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</button>
+    <div class="dropdown-menu shadow" style="border: none;">
+      <a class="dropdown-item" href="{% url 'account' %}">My Profile</a>
+      <a class="dropdown-item" href="#">Edit Profile</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+    </div>
+</div>
+{% endblock your-account %}
+
+{% block body %}
+<main id="institute-account">
+  <br><br><br><br>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4 col-md-5">
+        <div class="col-lg-12 col-md-12">
+          <div class="card account-details">
+            <img class="card-img-top background-profile" src="{{user.backgroundImage.url}}" alt="background-profile">
+            <img src="{{user.profileImage.url}}" alt="profile-picture" class="profile-picture">
+            <div class="card-body">
+              <h5 class="card-title account-name">
+                {{user.name}}
+                {% if type == 'college' %}
+                  {% if user.verified %}
+                    <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
+                  {% endif %}
+                {% endif %}
+              </h5>
+              <hr>
+              <div class="row" style="text-align: center; font-weight: 600;">
+                <div class="col">
+                  <p id="followers">{{user.profileFollowers}}</p>
+                  {% if type == 'college' %}
+                    {% if followed != 'true' %}
+                    <i class="fa fa-user-plus" style="color: #224abe;" id="follow-profile" userid="{{user.collegeId}}" purpose="follow" action="{% url 'follow_unfollow' %}" acctype="{{type}}" style="cursor: pointer;" aria-hidden="true"></i>
+                    {% else %}
+                    <i class="fa fa-check tick" id="follow-profile" userid="{{user.collegeId}}" purpose="unfollow" action="{% url 'follow_unfollow' %}" acctype="{{type}}" style="cursor: pointer;" aria-hidden="true"></i>
+                    {% endif %}
+                  {% endif %}
+                  {% if type == 'student' %}
+                    {% if followed != 'true' %}
+                    <i class="fa fa-user-plus" style="color: #224abe;" id="follow-profile" userid="{{user.studentId}}" purpose="follow" action="{% url 'follow_unfollow' %}" acctype="{{type}}" style="cursor: pointer;" aria-hidden="true"></i>
+                    {% else %}
+                    <i class="fa fa-check tick" id="follow-profile" userid="{{user.studentId}}" purpose="unfollow" action="{% url 'follow_unfollow' %}" acctype="{{type}}" style="cursor: pointer;" aria-hidden="true"></i>
+                    {% endif %}
+                  {% endif %}
+                </div>
+                <div class="col">
+                  <p id="likes">{{user.profileLikes}}</p>
+                    {% if type == 'college' %}
+                      {% if liked != 'true' %}
+                        <i class="fa fa-heart-o o-heart" id="like-profile" userid="{{user.collegeId}}" action="{% url 'likedislike' %}" purpose="like" acctype="{{type}}" aria-hidden="true"></i>
+                        {% else %}
+                        <i class="fa fa-heart fill-heart" id="like-profile" userid="{{user.collegeId}}" action="{% url 'likedislike' %}" purpose="dislike" acctype="{{type}}" aria-hidden="true"></i>
+                      {% endif %}
+                    {% endif %}
+                    {% if type == 'student' %}
+                      {% if liked != 'true' %}
+                        <i class="fa fa-heart-o o-heart" id="like-profile" userid="{{user.studentId}}" action="{% url 'likedislike' %}" purpose="like" acctype="{{type}}" aria-hidden="true"></i>
+                        {% else %}
+                        <i class="fa fa-heart fill-heart" id="like-profile" userid="{{user.studentId}}" action="{% url 'likedislike' %}" purpose="dislike" acctype="{{type}}" aria-hidden="true"></i>
+                      {% endif %}
+                    {% endif %}
+                  </form>
+                </div>
+              </div>
+              <hr>
+              {% if type == 'college' %}
+                {% if user.nirfRanking != 0 %}
+                  <a href="#"><span class="badge badge-pill course-badge-green">#{{user.nirfRanking}}</span></a>
+                {% endif %}
+                <a href="#"><span class="badge badge-pill course-badge-green">Type: {{user.college_type}}</span></a>
+                <a href="#"><span class="badge badge-pill course-badge-green">Location: {{user.city}}</span></a>
+                {% if postCount == 1 %}
+                  <a href="#"><span class="badge badge-pill course-badge-green">{{postCount}} Post</span></a>
+                  {% else %}
+                <a href="#"><span class="badge badge-pill course-badge-green">{{postCount}} Posts</span></a>
+                {% endif %}
+                {% if user.reviewCount == 1 %}
+                  <a href="#"><span class="badge badge-pill course-badge-green">{{user.reviewCount}} Review</span></a>
+                  {% else %}
+                  <a href="#"><span class="badge badge-pill course-badge-green">{{user.reviewCount}} Reviews</span></a>
+                {% endif %}
+                <br><br>
+              {% endif %}
+              <p class="card-text">{{user.profileDescription}}</p>
+              <a href="{{user.profileWebsite}}" target="_blank">{{user.profileWebsite}}</a>
+              <br>
+            </div>
+          </div>
+        </div>
+        {% if type == 'college' %}
+        <div class="col-lg-12 col-md-12">
+          <div class="card institute-course-details">
+            <div class="card-body">
+              <h5 class="card-title title">Courses offered</h5>
+              {% if college_courses %}
+              {% for course in college_courses %}
+              <a href="#{{course.collegecourseId}}"><span class="badge badge-pill course-badge-blue">{{course.courseName}}</span></a>
+              {% endfor %}
+              {% else %}
+              <a href="#empty"><span class="badge badge-pill course-badge-red">Courses not added yet</span></a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      <div class="col-lg-8 col-md-7">
+        {% if type == 'college' %}
+        <div class="col-lg-12 col-md-12">
+          <div class="rating-details">
+            <h5>
+              {{user.name}}
+              {% if user.verified %}
+                <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
+              {% endif %}
+            </h5>
+            <div class="rating">
+              <div class="star">
+                <div style="width: 110px;" tabindex="0" id="star">
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star-o" aria-hidden="true"></i>
+                  <i class="fa fa-angle-down" aria-hidden="true"></i>
+                </div>
+              </div>
+              <small style="margin-bottom: 0;">567 total  ratings</small>
+            </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <p>Campus Rating</p>
+                <div class="sub-rating">
+                  <div class="star">
+                    <div style="width: 110px;">
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <p>Staff Rating</p>
+                <div class="sub-rating">
+                  <div class="star">
+                    <div style="width: 110px;">
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <p>Library Rating</p>
+                <div class="sub-rating">
+                  <div class="star">
+                    <div style="width: 110px;">
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <p>Overall Curriculum Rating</p>
+                <div class="sub-rating">
+                  <div class="star">
+                    <div style="width: 110px;">
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        {% if visiting_user_group == 'student' %}
+        <div class="col-lg-12 col-md-12">
+          <div class="write-post-div">
+            <div class="d-flex flex-row">
+              <img src="{{user.profileImage.url}}" alt="profile-picture" class="write-review-profile-picture">
+              <h6 class="write-review-title">{{user.name}}</h6>
+            </div>
+            <br>
+
+            {% if type == 'college' %}
+            <fieldset class="form-group">
+              <legend class="col-form-label col-sm-4 pt-0">Select review type</legend>
+              <div class="col-sm-8">
+                <div class="form-check">
+                  <input class="form-check-input review-type" type="radio" name="review-type" id="college" value="college">
+                  <label class="form-check-label" for="college">
+                  College review
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input review-type" type="radio" name="review-type" id="course" value="course">
+                  <label class="form-check-label" for="course">
+                  Course Review
+                  </label>
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- College Review Form -->
+            <div class="row" id="college-review">
+              <form action="{% url 'submit-college-review' %}" method="POST" autocomplete="off" class="college-review">
+                {% csrf_token %}
+                <input type="text" name="userid" value="{{user.email}}" hidden>
+                <div class="col-lg-12 col-sm-12">
+                  <div class="form-group">
+                    <textarea name="college-review" id="college-review-text" placeholder="Write you review here.." class="form-control review-textarea" cols="30" rows="6" data-rule="minlen:5" data-msg="Please write atleast 5 characters"></textarea>
+                    <div class="validate"></div>
+                  </div>
+                </div>
+                <div class="col-6 col-sm-8 mt-3">
+                  <label for="campus">Select campus rating</label>
+                  <div class="star" id="campus">
+                    <div style="width: 110px;">
+                      <i class="fa fa-star-o rate" id="campus-1" aria-hidden="true"></i>
+                      <i class="fa fa-star-o rate" id="campus-2" aria-hidden="true"></i>
+                      <i class="fa fa-star-o rate" id="campus-3" aria-hidden="true"></i>
+                      <i class="fa fa-star-o rate" id="campus-4" aria-hidden="true"></i>
+                      <i class="fa fa-star-o rate" id="campus-5" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <input type="number" name="campus-input" id="campus-input" value="0" hidden>
+                  </div>
+                </div>
+                <div class="col-6 col-sm-8 mt-3">
+                  <label for="library">Select library rating</label>
+                  <div class="star" id="library">
+                    <div style="width: 110px;">
+                      <i class="fa fa-star-o rate" id="library-1" aria-hidden="true"></i>
+                      <i class="fa fa-star-o rate" id="library-2" aria-hidden="true"></i>
+                      <i class="fa fa-star-o rate" id="library-3" aria-hidden="true"></i>
+                      <i class="fa fa-star-o rate" id="library-4" aria-hidden="true"></i>
+                      <i class="fa fa-star-o rate" id="library-5" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <input type="number" name="library-input" id="library-input" value="0" hidden>
+                  </div>
+                </div>
+                <div class="col-lg-9 col-sm-4 mt-3">
+                  <button type="submit" class="btn btn-post">Post</button>
+                </div>
+              </form>
+            </div>
+            <!-- End of College Review Form -->
+
+            <!-- Course Review Form -->
+            <div class="row" id="course-review">
+              {% if college_courses %}
+              <form action="{% url 'submit-course-review' %}" method="POST" autocomplete="off" class="course-review">
+                {% csrf_token %}
+                <input type="text" name="userid" value="{{user.email}}" hidden>
+                <div class="col-6 col-sm-12">
+                  <label for="select-course">Select course</label>
+                  <select name="select-course" id="select-course" placeholder="Select course" class="review-textarea">
+                    {% for course in college_courses %}
+                    <option value="{{course.courseId}}">{{course.courseName}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="col-lg-12 col-sm-12 mt-3">
+                  <textarea name="course-review-text" id="course-review-text" placeholder="Write you review here.." class="form-control review-textarea" cols="30" rows="6" data-rule="minlen:5" data-msg="Please write atleast 5 characters"></textarea>
+                  <div class="validate"></div>
+                </div>
+                <div class="col-6 col-sm-12 mt-3">
+                  <label for="staff">Select staff rating</label>
+                  <div class="star" id="staff">
+                    <div style="width: 110px;">
+                      <i class="fa fa-star-o rate" id="staff-1" aria-hidden="true"></i>
+                      <i class="fa fa-star-o rate" id="staff-2" aria-hidden="true"></i>
+                      <i class="fa fa-star-o rate" id="staff-3" aria-hidden="true"></i>
+                      <i class="fa fa-star-o rate" id="staff-4" aria-hidden="true"></i>
+                      <i class="fa fa-star-o rate" id="staff-5" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                  <input type="number" name="staff-input" id="staff-input" value="0" hidden>
+                </div>
+                <div class="col-6 col-sm-12 mt-3">
+                  <label for="curriculum">Select curriculum rating</label>
+                  <div class="star" id="curriculum">
+                    <div style="width: 110px;">
+                      <i class="fa fa-star-o rate" id="curriculum-1" aria-hidden="true"></i>
+                      <i class="fa fa-star-o rate" id="curriculum-2" aria-hidden="true"></i>
+                      <i class="fa fa-star-o rate" id="curriculum-3" aria-hidden="true"></i>
+                      <i class="fa fa-star-o rate" id="curriculum-4" aria-hidden="true"></i>
+                      <i class="fa fa-star-o rate" id="curriculum-5" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                  <input type="number" name="curriculum-input" id="curriculum-input" value="0" hidden>
+                </div>
+                <div class="col-lg-9 col-sm-4 mt-3">
+                  <button type="submit" class="btn btn-post">Post</button>
+                </div>
+              </form>
+              {% else %}
+              <a href="#empty"><span class="badge badge-pill course-badge-red">Courses not added yet</span></a>
+              {% endif %}
+            </div>
+            <!-- End of Course Review Form -->
+            <br>
+            <div class="loading" id="review-loading">Loading</div>
+            <div id="review-success">Review added successfully!</div>
+            <div id="review-error">Please recheck form values you entered</div>
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+        {% if type == 'college' %}
+        <div class="col-lg-12 col-md-12">
+          <div class="select-category">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <a class="nav-link active select-item" id="review-tab" data-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="true">Reviews</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                <a class="nav-link select-item" id="course-review-tab" data-toggle="tab" href="#course-reviews" role="tab" aria-controls="course-reviews" aria-selected="false">Course reviews</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                <a class="nav-link select-item" id="college-posts-tab" data-toggle="tab" href="#college-posts" role="tab" aria-controls="college-posts" aria-selected="false">College posts</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        {% endif %}
+        <div class="col-lg-12 col-md-12">
+          <div class="tab-content" id="myTabContent">
+            {% if type == 'college' %}
+            <div class="reviews-div tab-pane fade show active" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+              {% if collegeReviews %}
+              {% for review in collegeReviews %}
+              <div class="review">
+                <div class="d-flex flex-row">
+                  {% for reviewed_user in college_reviewed_users %}
+                  {% if review.studentId == reviewed_user %}
+                  <img src="{{reviewed_user.profileImage.url}}" alt="profile-picture" class="review-profile-picture">
+                  <h6 class="review-title">{{reviewed_user.name}} {{reviewed_user.surname}}</h6>
+                  {% endif %}
+                  {% endfor %}
+                </div>
+                <div class="d-flex flex-row">
+                  <div class="total-rating">
+                    {% if review.totalRating == 1 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if review.totalRating == 2 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if review.totalRating == 3 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if review.totalRating == 4 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if review.totalRating == 5 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    {% endif %}
+                  </div>
+                  <div class="rating-date">{{ review.date|date:"M d, Y" }}</div>
+                </div>
+                <div class="rating-description">
+                  {{review.message}}
+                </div>
+                <div class="more-ratings mt-4">
+                  <div class="row">
+                    <div class="col">
+                      <div class="rating-name">Campus Rating</div>
+                      <div class="rating-stars">
+                        {% if review.campusRating == 1 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        {% endif %}
+                        {% if review.campusRating == 2 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        {% endif %}
+                        {% if review.campusRating == 3 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        {% endif %}
+                        {% if review.campusRating == 4 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        {% endif %}
+                        {% if review.campusRating == 5 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="rating-name">Library Rating</div>
+                      <div class="rating-stars">
+                        {% if review.libraryRating == 1 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        {% endif %}
+                        {% if review.libraryRating == 2 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        {% endif %}
+                        {% if review.libraryRating == 3 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        {% endif %}
+                        {% if review.libraryRating == 4 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        {% endif %}
+                        {% if review.libraryRating == 5 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="helful-div mt-2">
+                  <small>Till {{review.helpfulCount}} people found this useful</small>
+                  <div class="row">
+                    <div class="col-lg-4"><p>Was this review helpful?</p></div>
+                    <div class="col-lg-4">
+                      <button type="button" class="btn btn-yes-no">Yes</button>
+                      <button type="button" class="btn btn-yes-no">No</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              {% else %}
+              <div class="review">No College Reviews Found</div>
+              {% endif %}
+            </div>
+            <div class="reviews-div tab-pane fade" id="course-reviews" role="tabpanel" aria-labelledby="course-reviews-tab">
+              {% if CourseReviews %}
+              {% for review in CourseReviews %}
+              <div class="review">
+                <div class="d-flex flex-row">
+                  {% for reviewed_user in course_reviewed_users %}
+                  {% if review.studentId == reviewed_user %}
+                  <img src="{{reviewed_user.profileImage.url}}" alt="profile-picture" class="review-profile-picture">
+                  <h6 class="review-title">{{reviewed_user.name}} {{reviewed_user.surname}}</h6>
+                  {% endif %}
+                  {% endfor %}
+                </div>
+                <div class="d-flex flex-row">
+                  {% for course in college_courses %}
+                  {% if review.courseId_id == course.courseId %}
+                  <div class="rating-course">{{course}}</div>
+                  {% endif %}
+                  {% endfor %}
+                  <div class="rating-date">{{ review.date|date:"M d, Y" }}</div>
+                </div>
+                <div class="rating-description">
+                  {{review.message}}
+                </div>
+                <div class="more-ratings mt-4">
+                  <div class="row">
+                    <div class="col">
+                      <div class="rating-name">Staff Rating</div>
+                      <div class="rating-stars">
+                        {% if review.staffRating == 1 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        {% endif %}
+                        {% if review.staffRating == 2 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        {% endif %}
+                        {% if review.staffRating == 3 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        {% endif %}
+                        {% if review.staffRating == 4 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        {% endif %}
+                        {% if review.staffRating == 5 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        {% endif %}
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="rating-name">Curriculum Rating</div>
+                      <div class="rating-stars">
+                        {% if review.curriculumRating == 1 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        {% endif %}
+                        {% if review.curriculumRating == 2 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        {% endif %}
+                        {% if review.curriculumRating == 3 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        {% endif %}
+                        {% if review.curriculumRating == 4 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        {% endif %}
+                        {% if review.curriculumRating == 5 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="helful-div mt-2">
+                  <small>Till {{review.helpfulCount}} people found this useful</small>
+                  <div class="row">
+                    <div class="col-lg-4"><p>Was this review helpful?</p></div>
+                    <div class="col-lg-4">
+                      <button type="button" class="btn btn-yes-no">Yes</button>
+                      <button type="button" class="btn btn-yes-no">No</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              {% else %}
+              <div class="review">No Course Reviews Found</div>
+              {% endif %}
+            </div>
+            {% endif %}
+            <div class="reviews-div tab-pane fade" id="college-posts" role="tabpanel" aria-labelledby="college-posts-tab">
+            {% if posts %}
+              <div class="row">
+                {% for post in posts %}
+                <div class="col-lg-6 col-sm-12">
+                  <div class="post shadow-sm">
+                    <img src="{{post.image.url}}" alt="post picture" class="img-fluid post-picture">
+                    <div class="d-flex justify-content-start">
+                      <form action="{% url 'likedislikePosts' %}" method="GET">
+                        {% if not post.imageId in ids %}
+                        <i class="fa fa-heart-o heart-o icon" id="{{post.imageId}}-icon" action="{% url 'likedislikePosts' %}" purpose="post-like" aria-hidden="true"></i>
+                        {% else %}
+                        <i class="fa fa-heart heart-fill icon" id="{{post.imageId}}-icon" action="{% url 'likedislikePosts' %}" purpose="post-dislike" aria-hidden="true"></i>
+                        {% endif %}
+                      </form>
+                      <p id="{{post.imageId}}-likes" style="padding-top: 3px; margin-bottom: 0px; font-weight: 600;">{{post.totalLikes}} Likes</p>
+                    </div>
+                    {% if post.url != '' %}
+                    <a style="padding-left: 5px; margin-bottom: 3px;" href="{{post.url}}" target="_blank" rel="noopener noreferrer">{{post.url}}</a>
+                    {% endif %}
+                    <p style="padding-left: 3px; margin-bottom: 3px;">{{post.title}}</p>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            {% else %}
+            <div class="review">No result found</div>
+            {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock body %}
+
+{% block email-form-token %}
+{% csrf_token %}
+{% endblock email-form-token %}
+
+{% block extra-js %}
+<script>
+  $(document).ready(function() {
+    var city = new Choices('#select-course', {
+    removeItemButton: true,
+    searchResultLimit:5,
+    renderChoiceLimit:5
+    });
+  });
+</script>
+<script src="{% static 'assets/js/account.js' %}"></script>
+<script src="{% static 'assets/vendor/form/validate-review.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+{% endblock extra-js %}

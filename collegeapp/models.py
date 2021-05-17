@@ -20,6 +20,7 @@ class StudentUser(models.Model):
     studentId = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     name = models.CharField(max_length=100)
     surname = models.CharField(max_length=100)
+    username = models.CharField(max_length=100, null=True)
     email = models.EmailField(null=True)
     profileImage = models.ImageField(upload_to='user/student/profile/', default='user/avatar.png')
     backgroundImage = models.ImageField(upload_to='user/student/backprofile/', default='user/default-back.jpeg')
@@ -27,16 +28,15 @@ class StudentUser(models.Model):
     prefCourse2 = models.CharField(max_length=100, null=True)
     prefCourse3 = models.CharField(max_length=100, null=True)
     prefLocation = models.CharField(max_length=200, null=True)
-    prefInstitute = models.CharField(max_length=200, null=True)
     profileFollowers = models.IntegerField(default=0)
     profileDescription = models.CharField(max_length=300, null=True)
-    profileWebsite = models.CharField(max_length=100, null=True)
     profileVisits =  models.IntegerField(default=0)
     postCount = models.IntegerField(default=0)
     reviewCount = models.IntegerField(default=0)
     profileLikes = models.IntegerField(default=0)
     reviewPoints = models.IntegerField(default=0)
     is_alumni = models.BooleanField(default=False)
+    is_first = models.BooleanField(default=False)
 
 class CollegeUser(models.Model):
     collegeId = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
@@ -72,6 +72,7 @@ class Images(models.Model):
     userId = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='user/image-posts/', null=True)
     title = models.CharField(max_length=200, null=True)
+    url = models.URLField(default='', null=True)
     totalLikes = models.IntegerField(default=0)
     location = models.CharField(max_length=300, null=True)
     date = models.DateTimeField()
@@ -128,8 +129,8 @@ class Like(models.Model):
 # User Review Models
 class CollegeReview(models.Model):
     reviewId = models.AutoField(primary_key=True)
-    collegeId = models.ForeignKey(CollegeUser, on_delete=models.CASCADE)
-    studentId = models.ForeignKey(StudentUser, on_delete=models.CASCADE)
+    collegeId = models.ForeignKey(CollegeUser, on_delete=models.CASCADE, null=True)
+    studentId = models.ForeignKey(StudentUser, on_delete=models.CASCADE, null=True)
     date = models.DateTimeField()
     message = models.CharField(max_length=400, null=True)
     totalRating = models.PositiveSmallIntegerField(null=True)
@@ -138,17 +139,22 @@ class CollegeReview(models.Model):
     helpfulCount = models.IntegerField(default=0)
     spamCount = models.IntegerField(default=0)
     inappropriateCount = models.IntegerField(default=0)
+    is_alumni = models.BooleanField(default=False)
 
 class CourseReview(models.Model):
     reviewId = models.AutoField(primary_key=True)
-    courseId = models.ForeignKey(CollegeCourses, on_delete=models.CASCADE)
-    studentId = models.ForeignKey(StudentUser, on_delete=models.CASCADE)
+    courseId = models.ForeignKey(CollegeCourses, on_delete=models.CASCADE, null=True)
+    collegeId = models.ForeignKey(CollegeUser, on_delete=models.CASCADE, null=True)
+    studentId = models.ForeignKey(StudentUser, on_delete=models.CASCADE, null=True)
     date = models.DateTimeField()
     message = models.CharField(max_length=400)
     totalRating = models.PositiveSmallIntegerField(null=True)
     staffRating = models.PositiveSmallIntegerField(null=True)
     curriculumRating = models.PositiveSmallIntegerField(null=True)
-    instrumentsRating = models.PositiveSmallIntegerField(null=True)
+    helpfulCount = models.IntegerField(default=0)
+    spamCount = models.IntegerField(default=0)
+    inappropriateCount = models.IntegerField(default=0)
+    is_alumni = models.BooleanField(default=False)
 
 ################################################################################################
 # Website Statistics Models

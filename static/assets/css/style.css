@@ -1680,7 +1680,7 @@ section {
   font-weight: 600;
 }
 
-.institute-course-details .course-badge-yellow {
+.course-badge-yellow {
   color: #ffcc00;
   border: 1px solid #ffcc00;
   background-color: #fffae6;
@@ -1752,10 +1752,11 @@ section {
   background-color: #ac00e6;
 }
 
-.institute-course-details .course-badge-green {
+.course-badge-green {
   color: #00e64d;
   border: 1px solid #00e64d;
-  background-color: #e6ffee;
+  background-color: transparent;
+  /* background-color: #e6ffee; */
   font-size: 65%;
 }
 
@@ -1820,6 +1821,18 @@ section {
   border-radius: 5px;
 }
 
+#college-review {
+  display: none;
+}
+
+#course-review {
+  display: none;
+}
+
+.rate {
+  font-size: 18px;
+}
+
 .write-post-div .write-review-profile-picture {
   object-fit: cover;
   border: none;
@@ -1861,6 +1874,24 @@ section {
 
 .write-post-div .fa-picture-o:hover {
   color: #cccccc;
+}
+
+.write-post-div .review-textarea {
+  font-size: 14px;
+  background-color: #f1f3f4;
+  border: none;
+}
+
+.write-post-div .review-textarea:focus {
+  font-weight: 400;
+  font-size: 14px;
+  color: #495057;
+  box-shadow: none;
+}
+
+.write-post-div .star {
+  color: #ffde58;
+  cursor: pointer;
 }
 
 .write-post-div .btn-post {
@@ -2057,6 +2088,24 @@ section {
 }
 
 #post-error {
+  display: none;
+  color: #fff;
+  background: #ed3c0d;
+  text-align: left;
+  padding: 15px;
+  font-weight: 600;
+}
+
+#review-success {
+  display: none;
+  color: #fff;
+  background: #18d26e;
+  text-align: center;
+  padding: 15px;
+  font-weight: 600;
+}
+
+#review-error {
   display: none;
   color: #fff;
   background: #ed3c0d;

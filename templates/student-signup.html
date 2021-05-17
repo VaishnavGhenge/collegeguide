@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>College Signup Form</title>
+  <title>Student Signup Form</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -37,9 +37,9 @@
 <body>
   <br>
   <div class="container">
-    <form action="{% url 'submit-institute-signup' %}" method="post" role="form" class="signup-form" enctype="multipart/form-data" autocomplete="off">
+    <form action="{% url 'submit-student-signup' %}" method="post" role="form" class="signup-form" enctype="multipart/form-data" autocomplete="off">
       {% csrf_token %}
-      <h1 class="h3 mb-3 font-weight-normal">College Signup Form</h1>
+      <h1 class="h3 mb-3 font-weight-normal">Student Signup Form</h1>
       <div class="form-group">
         <label for="profile-picture">Select profile picture (click on icon)</label>
         <div class="image-container">
@@ -58,25 +58,25 @@
       </div>
       <div class="form-row">
         <div class="col-md-6 form-group">
-          <label for="collegeName">College name</label>
-          <input type="text" name="collegeName" class="form-control" id="collegeName" data-rule="minlen:5" data-msg="Please enter at least 5 chars"/>
+          <label for="firstname">First Name</label>
+          <input type="text" name="firstname" class="form-control" id="firstname" data-rule="minlen:2" data-msg="Please enter at least 2 chars"/>
           <div class="validate"></div>
         </div>
         <div class="col-md-6 form-group">
-          <label for="profileWebsite">College website</label>
-          <input type="url" name="profileWebsite" class="form-control" id="profileWebsite" placeholder="e.g. http://exmple.com" data-rule="url" data-msg="Please enter valid URL">
+          <label for="lastname">Last Name</label>
+          <input type="text" name="lastname" class="form-control" id="lastname" data-rule="minlen:2" data-msg="Please enter at least 2 chars">
           <div class="validate"></div>
         </div>
       </div>
       <div class="form-group">
-        <label for="profileDescription">College description</label>
+        <label for="profileDescription">Describe Yourself</label>
         <textarea class="form-control" name="profileDescription" id="profileDescription" rows="5" data-rule="required" data-msg="Please write description"></textarea>
         <div class="validate"></div>
       </div>
       <div class="form-row">
         <div class="col-md-6 form-group">
           <label for="location">Select city name</label>
-          <select class="form-control selectpicker select-city" name="city" id="city" data-live-search="true" data-rule="required"  data-msg="Please write location here" title="Select city">
+          <select class="form-control selectpicker select-city" name="city" id="city" data-live-search="true" data-rule="required"  data-msg="Please write location here" title="Select prefered city">
             {% for city in cities %}
             <option data-tokens="{{city.cityName}}">{{city.cityName}}</option>
             {% endfor %}
@@ -84,42 +84,15 @@
           <div class="validate"></div>
         </div>
         <div class="col-md-6 form-group">
-          <label for="pin">Postal code</label>
-          <input type="number" name="pin" id="pin" class="form-control" data-rule="maxlen:6" data-msg="Please enter valid PIN">
+          <label for="courses">Courses</label><br>
+          <select class="form-control selectpicker" name="courses" id="courses" data-live-search="true" data-rule="required" data-msg="Please select city" multiple title="Select prefered courses" data-max-options="3">
+            {% for course in courses %}
+            <option data-tokens="{{course.courseId}}">{{course.courseName}}</option>
+            {% endfor %}
+          </select>
           <div class="validate"></div>
         </div>
       </div>
-      <div class="form-row">
-        <div class="col-md-6 form-group">
-          <label for="collegeType">College type</label><br>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="collegeType" id="private" value="private" checked>
-            <label class="form-check-label" for="private">Private</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="collegeType" id="semi_government" value="semi_government">
-            <label class="form-check-label" for="semi_government">Semi-Government</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="collegeType" id="government" value="government">
-            <label class="form-check-label" for="government">Government</label>
-          </div>
-          <div class="validate"></div>
-        </div>
-        <div class="col-md-6 form-group">
-          <label for="foundation">College foundation year</label>
-          <input type="date" name="foundation" id="foundation" class="form-control" max="" data-rule="required" data-msg="Please enter foundation date">
-          <div class="validate"></div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6 form-group">
-          <label for="idproof">College ID</label>
-          <input type="file" name="idproof" id="idproof" class="form-control" data-rule="required" data-msg="Please upload college ID">
-          <div class="validate"></div>
-        </div>
-      </div>
-      <hr>
       <!-- User Account form -->
       <div class="form-row justify-content-center">
         <div class="col-md-6 form-group">
@@ -212,7 +185,7 @@
 
           <div class="col-lg-4 col-md-6 footer-newsletter">
             <h4>Join Our Newsletter</h4>
-            <p>Join and get daily updates on what is goin on</p>
+            <p>Join and get daily updates on what is going on</p>
             <form action="{% url 'submit-email' %}" method="post" class="email-form">
               {% block email-form-token %}
               {% csrf_token %}

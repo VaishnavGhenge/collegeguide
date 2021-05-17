@@ -1,4 +1,4 @@
-{% extends 'institute-base.html' %}
+{% extends 'account-base.html' %}
 {% load static %}
 
 {% block title %}Institute Home{% endblock title %}
@@ -8,15 +8,15 @@
 {% endblock extra-css %}
 
 {% block menu %}
-<li class="active"><a href="{% url 'institute-home' %}">Institutes</a></li>
-<li><a href="{% url 'institute-search' %}">Search</a></li>
+<li class="active"><a href="{% url 'home' %}">Institutes</a></li>
+<li><a href="{% url 'search' %}">Search</a></li>
 {% endblock menu %}
 
 {% block your-account %}
 <div class="btn-group">
     <button class="btn-account dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</button>
     <div class="dropdown-menu shadow" style="border: none;">
-      <a class="dropdown-item" href="{% url 'institute-account' %}">My Profile</a>
+      <a class="dropdown-item" href="{% url 'account' %}">My Profile</a>
       <a class="dropdown-item" href="#">Edit Profile</a>
       <div class="dropdown-divider"></div>
       <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
@@ -69,7 +69,7 @@
                   </div>
   
                   <h3>
-                    <a href="#gpa">{{college.name}}</a> 
+                    <a href="/account/college/{{college.username}}/">{{college.name}}</a> 
                       <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
                   </h3>
                   
@@ -135,7 +135,7 @@
                   </div>
   
                   <h3>
-                    <a href="#gpa">{{college.name}}</a> 
+                    <a href="/account/college/{{college.username}}/">{{college.name}}</a> 
                       <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
                   </h3>
                   
@@ -199,7 +199,7 @@
                     </div>
     
                     <h3>
-                      <a href="#gpa">{{college.name}}</a> 
+                      <a href="/account/college/{{college.username}}/">{{college.name}}</a> 
                         <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
                         <span class="badge badge-warning">#{{college.nirfRanking}}</span>
                     </h3>
@@ -242,6 +242,7 @@
   </div>
 </div>
 
+{% if group == 'college' %}
 {% if is_first %}
 <!-- Modal for course addition -->
 <div class="modal fade" id="course-form" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -271,6 +272,7 @@
     </div>
   </div>
 </div>
+{% endif %}
 {% endif %}
 
 {% endblock body %}

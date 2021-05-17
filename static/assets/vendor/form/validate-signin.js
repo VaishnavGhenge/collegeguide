@@ -81,10 +81,10 @@
                     window.location.href = next;
                   }
                   else {
-                    window.location.href = '/institute-home/';
+                    window.location.href = '/home/';
                   }
                 } else if(msg.group == 'student') {
-                  window.location.href = '/student-home/';
+                  window.location.href = '/home/';
                 }
             }
             else {

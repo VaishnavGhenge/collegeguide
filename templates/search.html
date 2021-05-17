@@ -1,4 +1,4 @@
-{% extends 'institute-base.html' %}
+{% extends 'account-base.html' %}
 {% load static %}
 
 {% block title %}Institute Search{% endblock title %}
@@ -52,15 +52,15 @@
 {% endblock extra-css %}
 
 {% block menu %}
-<li><a href="{% url 'institute-home' %}">Institutes</a></li>
-<li class="active"><a href="{% url 'institute-search' %}" id="active">Search</a></li>
+<li><a href="{% url 'home' %}">Institutes</a></li>
+<li class="active"><a href="{% url 'search' %}" id="active">Search</a></li>
 {% endblock menu %}
 
 {% block your-account %}
 <div class="btn-group">
     <button class="btn-account dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</button>
     <div class="dropdown-menu shadow" style="border: none;">
-      <a class="dropdown-item" href="{% url 'institute-account' %}">My Profile</a>
+      <a class="dropdown-item" href="{% url 'account' %}">My Profile</a>
       <a class="dropdown-item" href="#">Edit Profile</a>
       <div class="dropdown-divider"></div>
       <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
@@ -155,7 +155,7 @@
                   </div>
   
                   <h3>
-                    <a href="#gpa">{{college.name}}</a> 
+                    <a href="/account/college/{{college.username}}/">{{college.name}}</a>  
                       <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
                   </h3>
                   

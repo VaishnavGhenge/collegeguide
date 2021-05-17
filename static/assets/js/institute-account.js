@@ -178,19 +178,6 @@ $(document).on('click', '#like-profile', function() {
           });
     }
 });
-  
-$(document).on('click', '#follow-profile', function() {
-    if($(this).hasClass("fa-user-plus")) {
-        $(this).removeClass();
-        $(this).addClass("fa fa-check tick");
-        $('#followers').text('1');
-    }
-    else if($(this).hasClass("fa-check")) {
-        $(this).removeClass();
-        $(this).addClass("fa fa-user-plus");
-        $('#followers').text('0');
-    }
-});
 
 $(document).on('click', '.icon', function() {
     var postId = $(this).attr('id');

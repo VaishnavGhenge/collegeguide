@@ -6,6 +6,8 @@
        
         var i = [$('#post-text'), $('#post-image')]; // current input
         var ferror = false;
+        var url_pattern = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+
         $('#image-icon').removeClass('error');
         i.forEach(element => {
             var rule = element.attr('data-rule');
@@ -31,6 +33,11 @@
                       ferror = ierror = true;
                     }
                     break;
+                  case 'url':
+                    if(!url_pattern.test(element.val())) {
+                      ferror = ierror = true;
+                    }
+                  break;
                 }
                 if(element.attr('id') == 'post-text') {
                     element.next('.validate').html((ierror ? (element.attr('data-msg') !== undefined ? element.attr('data-msg') : 'wrong Input') : '')).show('blind');
