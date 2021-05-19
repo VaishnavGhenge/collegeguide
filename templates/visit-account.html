@@ -804,20 +804,22 @@
                 <div class="col-lg-6 col-sm-12">
                   <div class="post shadow-sm">
                     <img src="{{post.image.url}}" alt="post picture" class="img-fluid post-picture">
-                    <div class="d-flex justify-content-start">
-                      <form action="{% url 'likedislikePosts' %}" method="GET">
-                        {% if not post.imageId in ids %}
-                        <i class="fa fa-heart-o heart-o icon" id="{{post.imageId}}-icon" action="{% url 'likedislikePosts' %}" purpose="post-like" aria-hidden="true"></i>
-                        {% else %}
-                        <i class="fa fa-heart heart-fill icon" id="{{post.imageId}}-icon" action="{% url 'likedislikePosts' %}" purpose="post-dislike" aria-hidden="true"></i>
-                        {% endif %}
-                      </form>
-                      <p id="{{post.imageId}}-likes" style="padding-top: 3px; margin-bottom: 0px; font-weight: 600;">{{post.totalLikes}} Likes</p>
+                    <div class="post-body">
+                      <div class="d-flex justify-content-start">
+                        <form action="{% url 'likedislikePosts' %}" method="GET">
+                          {% if not post.imageId in ids %}
+                          <i class="fa fa-heart-o heart-o icon" id="{{post.imageId}}-icon" action="{% url 'likedislikePosts' %}" purpose="post-like" aria-hidden="true"></i>
+                          {% else %}
+                          <i class="fa fa-heart heart-fill icon" id="{{post.imageId}}-icon" action="{% url 'likedislikePosts' %}" purpose="post-dislike" aria-hidden="true"></i>
+                          {% endif %}
+                        </form>
+                        <p id="{{post.imageId}}-likes" style="padding-top: 3px; margin-bottom: 0px; font-weight: 600;">{{post.totalLikes}} Likes</p>
+                      </div>
+                      {% if post.url != '' %}
+                      <a style="padding-left: 5px; margin-bottom: 3px;" href="{{post.url}}" target="_blank" rel="noopener noreferrer">{{post.url}}</a>
+                      {% endif %}
+                      <p style="padding-left: 3px; margin-bottom: 3px;">{{post.title}}</p>
                     </div>
-                    {% if post.url != '' %}
-                    <a style="padding-left: 5px; margin-bottom: 3px;" href="{{post.url}}" target="_blank" rel="noopener noreferrer">{{post.url}}</a>
-                    {% endif %}
-                    <p style="padding-left: 3px; margin-bottom: 3px;">{{post.title}}</p>
                   </div>
                 </div>
                 {% endfor %}
@@ -837,20 +839,22 @@
                 <div class="col-lg-6 col-sm-12">
                   <div class="post shadow-sm">
                     <img src="{{post.image.url}}" alt="post picture" class="img-fluid post-picture">
-                    <div class="d-flex justify-content-start">
-                      <form action="{% url 'likedislikePosts' %}" method="GET">
-                        {% if not post.imageId in ids %}
-                        <i class="fa fa-heart-o heart-o icon" id="{{post.imageId}}-icon" action="{% url 'likedislikePosts' %}" purpose="post-like" aria-hidden="true"></i>
-                        {% else %}
-                        <i class="fa fa-heart heart-fill icon" id="{{post.imageId}}-icon" action="{% url 'likedislikePosts' %}" purpose="post-dislike" aria-hidden="true"></i>
-                        {% endif %}
-                      </form>
-                      <p id="{{post.imageId}}-likes" style="padding-top: 3px; margin-bottom: 0px; font-weight: 600;">{{post.totalLikes}} Likes</p>
+                    <div class="post-body">
+                      <div class="d-flex justify-content-start">
+                        <form action="{% url 'likedislikePosts' %}" method="GET">
+                          {% if not post.imageId in ids %}
+                          <i class="fa fa-heart-o heart-o icon" id="{{post.imageId}}-icon" action="{% url 'likedislikePosts' %}" purpose="post-like" aria-hidden="true"></i>
+                          {% else %}
+                          <i class="fa fa-heart heart-fill icon" id="{{post.imageId}}-icon" action="{% url 'likedislikePosts' %}" purpose="post-dislike" aria-hidden="true"></i>
+                          {% endif %}
+                        </form>
+                        <p id="{{post.imageId}}-likes" style="padding-top: 3px; margin-bottom: 0px; font-weight: 600;">{{post.totalLikes}} Likes</p>
+                      </div>
+                      {% if post.url != '' %}
+                      <a style="padding-left: 5px; margin-bottom: 3px;" href="{{post.url}}" target="_blank" rel="noopener noreferrer">{{post.url}}</a>
+                      {% endif %}
+                      <p style="padding-left: 3px; margin-bottom: 3px;">{{post.title}}</p>
                     </div>
-                    {% if post.url != '' %}
-                    <a style="padding-left: 5px; margin-bottom: 3px;" href="{{post.url}}" target="_blank" rel="noopener noreferrer">{{post.url}}</a>
-                    {% endif %}
-                    <p style="padding-left: 3px; margin-bottom: 3px;">{{post.title}}</p>
                   </div>
                 </div>
                 {% endfor %}

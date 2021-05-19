@@ -2042,12 +2042,19 @@ section {
   height: auto;
   margin-bottom: 20px;
   border: 1px solid rgba(0,0,0,.1);
+  border-radius: 5px;
 }
 
 .reviews-div .post .post-picture {
   object-fit: cover;
   width: 100%;
   height: 250px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.reviews-div .post .post-body {
+  padding: 10px;
 }
 
 .reviews-div .post .heart-o {
