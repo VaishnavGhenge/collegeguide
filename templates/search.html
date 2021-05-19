@@ -142,15 +142,48 @@
                       <button type="button" userid="{{college.collegeId}}" id="{{college.username}}-follow" purpose="unfollow" action="{% url 'follow_unfollow' %}" class="btn btn-follow btn-sm">Following</button>
                       {% endif %}
                     {% endif %}
+
                     <div class="rating">
+                      {% if college.totalCount != 0 %}
                       <p>Rating</p>
                       <p class="star">
+                        {% if college.totalRating == 1 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        {% endif %}
+                        {% if college.totalRating == 2 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        {% endif %}
+                        {% if college.totalRating == 3 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                        {% endif %}
+                        {% if college.totalRating == 4 %}
                         <i class="fa fa-star" aria-hidden="true"></i>
                         <i class="fa fa-star" aria-hidden="true"></i>
                         <i class="fa fa-star" aria-hidden="true"></i>
                         <i class="fa fa-star" aria-hidden="true"></i>
                         <i class="fa fa-star-o" aria-hidden="true"></i>
+                        {% endif %}
+                        {% if college.totalRating == 5 %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        {% endif %}
                       </p>
+                      {% endif %}
                     </div>
                   </div>
   

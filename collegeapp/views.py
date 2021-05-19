@@ -8,12 +8,14 @@ from django.contrib.auth.models import User, Group
 import re
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
-from itertools import chain
+from itertools import chain, permutations
 
 ################################## Website Home Views ########################################
 # Home page
 def index(request):
-    return render(request, 'index.html')
+    nirf_colleges = CollegeUser.objects.exclude(nirfRanking=0).order_by('nirfRanking')
+    data = { 'nirf_colleges': nirf_colleges, }
+    return render(request, 'index.html', data)
 
 # About page
 def about(request):
@@ -122,8 +124,8 @@ def home(request):
     for col in followed_col:
         followed_colleges = followed_colleges + list(chain(CollegeUser.objects.filter(collegeId=col.user2)))
 
-    # Getting 4 highest ranked colleges by nirf
-    nirf_colleges = CollegeUser.objects.exclude(nirfRanking=0).order_by('nirfRanking')[:4]
+    # Getting highest ranked colleges by nirf
+    nirf_colleges = CollegeUser.objects.exclude(nirfRanking=0).order_by('nirfRanking')
 
     data = {
         'liked_colleges': liked_colleges,
@@ -206,6 +208,28 @@ def account(request):
         ids = list()
         for like in liked:
             ids.append(like.get('imageId_id'))
+        
+        collegeReviews = CollegeReview.objects.filter(collegeId=user_obj).order_by('-date')
+        collegeReviews_tmp = CollegeReview.objects.filter(collegeId=user_obj).values()
+        college_reviewed_users = list()
+        student_list = list()
+        for review in collegeReviews_tmp:
+            if review.get('studentId') in student_list:
+                continue
+            else:
+                college_reviewed_users = college_reviewed_users + list(chain(StudentUser.objects.filter(studentId=review.get('studentId_id'))))
+                student_list.append(review.get('studentId'))
+
+        CourseReviews =  CourseReview.objects.filter(collegeId=user_obj).order_by('-date')
+        courseReviews_tmp = CourseReview.objects.filter(collegeId=user_obj).values()
+        course_reviewed_users = list()
+        student_list = list()
+        for review in courseReviews_tmp:
+            if review.get('studenId') in student_list:
+                continue
+            else:
+                course_reviewed_users = course_reviewed_users + list(chain(StudentUser.objects.filter(studentId=review.get('studentId_id'))))
+                student_list.append(review.get('studenId'))
 
         data = {
             'college_courses': CollegeCourses.objects.filter(userId=user_obj),
@@ -216,6 +240,10 @@ def account(request):
             'ids': ids,
             'postCount': postCount,
             'group': 'college',
+            'collegeReviews': collegeReviews,
+            'CourseReviews': CourseReviews,
+            'college_reviewed_users': college_reviewed_users,
+            'course_reviewed_users': course_reviewed_users,
         }
     if group == 'student':
         user_obj = StudentUser.objects.get(email=request.user)
@@ -346,6 +374,11 @@ def view_account(request, group, username):
             posts = Images.objects.filter(userId=student.id).order_by('-imageId')
             postCount = Images.objects.filter(userId=student.id).count()
 
+            likedposts = ImageLikes.objects.filter(userId=request.user).values()
+            ids = list()
+            for like in likedposts:
+                ids.append(like.get('imageId_id'))
+
             data = {
                 'liked': liked,
                 'followed': followed,
@@ -353,6 +386,7 @@ def view_account(request, group, username):
                 'type': 'student',
                 'posts': posts,
                 'postCount': postCount,
+                'ids': ids,
             }
             return render(request, 'visit-account.html', data)
 
@@ -424,7 +458,7 @@ def likedislikePosts(request):
         }
     return JsonResponse(msg)
 
-
+@login_required(login_url='signin')
 # Follow or to Unfollow
 def follow_unfollow(request):
     userid = str(request.GET.get('userid'))
@@ -437,7 +471,7 @@ def follow_unfollow(request):
             Followers(user1=request.user, user2=user, date=datetime.now().date()).save()
         elif purpose == 'unfollow':
             Followers.objects.filter(user1=request.user, user2=user).delete()
-        follow_count = Followers.objects.filter(user1=request.user).count()
+        follow_count = Followers.objects.filter(user2=user).count()
         if acctype == 'college':
             CollegeUser.objects.filter(email=userid).update(profileFollowers=follow_count)
         elif acctype == 'student':
@@ -606,10 +640,54 @@ def submit_college_review(request):
         student = StudentUser.objects.get(email=request.user.email)
         try:
             total_rating = int((campus_rating+library_rating)/2)
+
             CollegeReview(studentId=student, collegeId=college, message=text,
             campusRating=campus_rating, libraryRating=library_rating, date=datetime.now(), totalRating=total_rating).save()
+
+            campus = college.campusRating
+            campussum = college.campusSum
+            library = college.libraryRating
+            librarysum = college.librarySum
+            reviewcount = college.collegeReviewCount
+
+            totalsum = college.totalSum
+            totalcount = college.totalCount
+            total = college.totalRating
+            if campus is None and library is None and total is None or campus == 0 and library == 0 and total == 0:
+                campus = int(campus_rating)
+                campussum = campus
+                library = int(library_rating)
+                librarysum = library
+                reviewcount = 1
+
+                totalsum = campus + library
+                totalcount = 2
+                total = int(totalsum / totalcount)
+            elif campus is None and library is None and total is not None or campus == 0 and library == 0 and total != 0:
+                campus = int(campus_rating)
+                campussum = campus
+                library = int(library_rating)
+                librarysum = library
+                reviewcount = 1
+                 
+                totalsum = int(totalsum + (campus + library))
+                totalcount = totalcount + 2
+                total = int(totalsum / totalcount)
+            elif campus is not None and library is not None or campus != 0 and library != 0:
+                campussum = campussum + campus
+                reviewcount = reviewcount + 1
+                campus = int(campussum / reviewcount)
+                librarysum = librarysum + library
+                library = int(librarysum / reviewcount)
+                totalsum = int(totalsum + (campus + library))
+                totalcount = totalcount + 2
+                total = int(totalsum / totalcount)
+            else:
+                raise ValidationError
+
             count = CollegeReview.objects.filter(collegeId_id=college).count() + CourseReview.objects.filter(collegeId_id=college).count()
-            CollegeUser.objects.filter(email=userid).update(reviewCount=count)
+            CollegeUser.objects.filter(email=userid).update(reviewCount=count, campusRating=campus, libraryRating=library,
+            totalRating=total, campusSum=campussum, librarySum=librarysum, collegeReviewCount=reviewcount, totalSum=totalsum, totalCount=totalcount)
             msg = { 'success': True, }
         except ValidationError:
             msg = { 'success': False, }
@@ -629,10 +707,57 @@ def submit_course_review(request):
         student = StudentUser.objects.get(email=request.user.email)
         try:
             total_rating = int((staff_rating+curriculum_rating)/2)
+
             CourseReview(courseId=course, collegeId=college, studentId=student, message=text,
             staffRating = staff_rating, curriculumRating=staff_rating, date=datetime.now(), totalRating=total_rating).save()
+
+            staff = college.staffRating
+            staffsum = college.staffSum
+            curriculum = college.curriculumRating
+            curriculumsum = college.curriculumSum
+            reviewcount = college.courseReviewCount
+
+            total = college.totalRating
+            totalsum = college.totalSum
+            totalcount = college.totalCount
+
+            if staff is None and curriculum is None and total is None or staff == 0 and curriculum == 0 and total == 0:
+                staff = int(staff_rating)
+                staffsum = staff
+                curriculum = int(curriculum_rating)
+                curriculumsum = curriculum
+                reviewcount = 1
+
+                totalsum = staff + curriculum
+                totalcount = 2
+                total = int(totalsum / totalcount)
+            elif staff is None and curriculum is None and total is not None or staff == 0 and curriculum == 0 and total != 0:
+                staff = int(staff_rating)
+                staffsum = staff
+                curriculum = int(curriculum_rating)
+                curriculumsum = curriculum
+                reviewcount = 1
+
+                totalsum = int(totalsum + (staff + curriculum))
+                totalcount = totalcount + 2
+                total = int(totalsum / totalcount)
+            elif staff is not None and curriculum is not None or staff !=0 and curriculum != 0:
+                staffsum = staffsum + staff
+                reviewcount = reviewcount + 1
+                staff = int(staffsum / reviewcount)
+                curriculumsum = curriculumsum + curriculum
+                curriculum = int(curriculumsum / reviewcount)
+                totalsum = int(totalsum + (staff + curriculum))
+                totalcount = totalcount + 2
+                total = int(totalsum / totalcount)
+            else:
+                raise ValidationError
+
+            CollegeCourses.objects.all().update(staffRating=staff, CurriculumRating=curriculum)
             count = CollegeReview.objects.filter(collegeId_id=college).count() + CourseReview.objects.filter(collegeId_id=college).count()
-            CollegeUser.objects.filter(email=userid).update(reviewCount=count)
+            CollegeUser.objects.filter(email=userid).update(reviewCount=count, totalRating=total, staffRating=staff,
+            curriculumRating=curriculum, courseReviewCount=reviewcount, staffSum=staffsum, curriculumSum=curriculumsum)
+
             msg = { 'success': True, }
         except ValidationError:
             msg = { 'success': False, }

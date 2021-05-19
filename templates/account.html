@@ -80,7 +80,7 @@
                   <a href="#"><span class="badge badge-pill course-badge-green">{{user.reviewCount}} Reviews</span></a>
                 {% endif %}
                 {% else %}
-                  <a href="#"><span class="badge badge-pill course-badge-green">{{postCount}} Posts</span></a>
+                  <a href="#"><span class="badge badge-pill course-badge-green">Posts {{postCount}}</span></a>
               {% endif %}
             <br><br>
               <p class="card-text">{{user.profileDescription}}</p>
@@ -119,44 +119,91 @@
                 <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
               {% endif %}
             </h5>
+            {% if user.totalRating %}
             <div class="rating">
               <div class="star">
                 <div style="width: 110px;" tabindex="0" id="star">
+                  {% if user.totalRating == 1 %}
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star-o" aria-hidden="true"></i>
+                  <i class="fa fa-star-o" aria-hidden="true"></i>
+                  <i class="fa fa-star-o" aria-hidden="true"></i>
+                  <i class="fa fa-star-o" aria-hidden="true"></i>
+                  {% endif %}
+                  {% if user.totalRating == 2 %}
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star-o" aria-hidden="true"></i>
+                  <i class="fa fa-star-o" aria-hidden="true"></i>
+                  <i class="fa fa-star-o" aria-hidden="true"></i>
+                  {% endif %}
+                  {% if user.totalRating == 3 %}
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star-o" aria-hidden="true"></i>
+                  <i class="fa fa-star-o" aria-hidden="true"></i>
+                  {% endif %}
+                  {% if user.totalRating == 4 %}
                   <i class="fa fa-star" aria-hidden="true"></i>
                   <i class="fa fa-star" aria-hidden="true"></i>
                   <i class="fa fa-star" aria-hidden="true"></i>
                   <i class="fa fa-star" aria-hidden="true"></i>
                   <i class="fa fa-star-o" aria-hidden="true"></i>
-                  <i class="fa fa-angle-down" aria-hidden="true"></i>
+                  {% endif %}
+                  {% if user.totalRating == 5 %}
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  <i class="fa fa-star" aria-hidden="true"></i>
+                  {% endif %}
                 </div>
               </div>
-              <small style="margin-bottom: 0;">567 total  ratings</small>
+              <small style="margin-bottom: 0;">{{user.reviewCount}} total  ratings</small>
             </div>
             <div class="row">
+              {% if user.collegeReviewCount != 0 %}
               <div class="col-lg-6">
                 <p>Campus Rating</p>
                 <div class="sub-rating">
                   <div class="star">
                     <div style="width: 110px;">
+                      {% if user.campusRating == 1 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      {% endif %}
+                      {% if user.campusRating == 2 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      {% endif %}
+                      {% if user.campusRating == 3 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      {% endif %}
+                      {% if user.campusRating == 4 %}
                       <i class="fa fa-star" aria-hidden="true"></i>
                       <i class="fa fa-star" aria-hidden="true"></i>
                       <i class="fa fa-star" aria-hidden="true"></i>
                       <i class="fa fa-star" aria-hidden="true"></i>
                       <i class="fa fa-star-o" aria-hidden="true"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <p>Staff Rating</p>
-                <div class="sub-rating">
-                  <div class="star">
-                    <div style="width: 110px;">
+                      {% endif %}
+                      {% if user.campusRating == 5 %}
                       <i class="fa fa-star" aria-hidden="true"></i>
                       <i class="fa fa-star" aria-hidden="true"></i>
                       <i class="fa fa-star" aria-hidden="true"></i>
                       <i class="fa fa-star" aria-hidden="true"></i>
-                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      {% endif %}
                     </div>
                   </div>
                 </div>
@@ -166,11 +213,87 @@
                 <div class="sub-rating">
                   <div class="star">
                     <div style="width: 110px;">
+                      {% if user.libraryRating == 1 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      {% endif %}
+                      {% if user.libraryRating == 2 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      {% endif %}
+                      {% if user.libraryRating == 3 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      {% endif %}
+                      {% if user.libraryRating == 4 %}
                       <i class="fa fa-star" aria-hidden="true"></i>
                       <i class="fa fa-star" aria-hidden="true"></i>
                       <i class="fa fa-star" aria-hidden="true"></i>
                       <i class="fa fa-star" aria-hidden="true"></i>
                       <i class="fa fa-star-o" aria-hidden="true"></i>
+                      {% endif %}
+                      {% if user.libraryRating == 5 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+              {% if user.courseReviewCount != 0%}
+              <div class="col-lg-6">
+                <p>Staff Rating</p>
+                <div class="sub-rating">
+                  <div class="star">
+                    <div style="width: 110px;">
+                      {% if user.staffRating == 1 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      {% endif %}
+                      {% if user.staffRating == 2 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      {% endif %}
+                      {% if user.staffRating == 3 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      {% endif %}
+                      {% if user.staffRating == 4 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      {% endif %}
+                      {% if user.staffRating == 5 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      {% endif %}
                     </div>
                   </div>
                 </div>
@@ -180,16 +303,48 @@
                 <div class="sub-rating">
                   <div class="star">
                     <div style="width: 110px;">
+                      {% if user.curriculumRating == 1 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      {% endif %}
+                      {% if user.curriculumRating == 2 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      {% endif %}
+                      {% if user.curriculumRating == 3 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      {% endif %}
+                      {% if user.curriculumRating == 4 %}
                       <i class="fa fa-star" aria-hidden="true"></i>
                       <i class="fa fa-star" aria-hidden="true"></i>
                       <i class="fa fa-star" aria-hidden="true"></i>
                       <i class="fa fa-star" aria-hidden="true"></i>
                       <i class="fa fa-star-o" aria-hidden="true"></i>
+                      {% endif %}
+                      {% if user.curriculumRating == 5 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      {% endif %}
                     </div>
                   </div>
                 </div>
               </div>
+              {% endif %}
             </div>
+            {% endif %}
           </div>
         </div>
         {% endif %}
@@ -254,118 +409,286 @@
         <div class="col-lg-12 col-md-12">
           <div class="tab-content" id="myTabContent">
             <div class="reviews-div tab-pane fade show active" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
-              <div class="review">
-                <div class="d-flex flex-row">
-                  <img src="{% static 'tmp/hero-bg.jpg' %}" alt="profile-picture" class="review-profile-picture">
-                  <h6 class="review-title">Parth Bamnote</h6>
-                </div>
-                <div class="d-flex flex-row">
-                  <div class="total-rating">
-                    <i class="fa fa-star" aria-hidden="true"></i>
-                    <i class="fa fa-star" aria-hidden="true"></i>
-                    <i class="fa fa-star" aria-hidden="true"></i>
-                    <i class="fa fa-star" aria-hidden="true"></i>
-                    <i class="fa fa-star-o" aria-hidden="true"></i>
+              {% if collegeReviews %}
+                {% for review in collegeReviews %}
+                <div class="review">
+                  <div class="d-flex flex-row">
+                    {% for reviewed_user in college_reviewed_users %}
+                    {% if review.studentId == reviewed_user %}
+                    <img src="{{reviewed_user.profileImage.url}}" alt="profile-picture" class="review-profile-picture">
+                    <h6 class="review-title">{{reviewed_user.name}} {{reviewed_user.surname}}</h6>
+                    {% endif %}
+                    {% endfor %}
                   </div>
-                  <div class="rating-date">29/03/2021</div>
-                </div>
-                <div class="rating-description">
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem 
-                  Ipsum has been the industry's standard dummy text ever since the 1500s, when an 
-                  unknown printer took a galley of type and scrambled it to make a type specimen 
-                  book.
-                </div>
-                <div class="more-ratings mt-4">
-                  <div class="row">
-                    <div class="col">
-                      <div class="rating-name">Campus Rating</div>
-                      <div class="rating-stars">
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                  <div class="d-flex flex-row">
+                    <div class="total-rating">
+                      {% if review.totalRating == 1 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      {% endif %}
+                      {% if review.totalRating == 2 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      {% endif %}
+                      {% if review.totalRating == 3 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      {% endif %}
+                      {% if review.totalRating == 4 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      {% endif %}
+                      {% if review.totalRating == 5 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      {% endif %}
+                    </div>
+                    <div class="rating-date">{{ review.date|date:"M d, Y" }}</div>
+                  </div>
+                  <div class="rating-description">
+                    {{review.message}}
+                  </div>
+                  <div class="more-ratings mt-4">
+                    <div class="row">
+                      <div class="col">
+                        <div class="rating-name">Campus Rating</div>
+                        <div class="rating-stars">
+                          {% if review.campusRating == 1 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          {% endif %}
+                          {% if review.campusRating == 2 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          {% endif %}
+                          {% if review.campusRating == 3 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          {% endif %}
+                          {% if review.campusRating == 4 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          {% endif %}
+                          {% if review.campusRating == 5 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          {% endif %}
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="rating-name">Library Rating</div>
+                        <div class="rating-stars">
+                          {% if review.libraryRating == 1 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          {% endif %}
+                          {% if review.libraryRating == 2 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          {% endif %}
+                          {% if review.libraryRating == 3 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          {% endif %}
+                          {% if review.libraryRating == 4 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          {% endif %}
+                          {% if review.libraryRating == 5 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          {% endif %}
+                        </div>
                       </div>
                     </div>
-                    <div class="col">
-                      <div class="rating-name">Library Rating</div>
-                      <div class="rating-stars">
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                  </div>
+                  <div class="helful-div mt-2">
+                    <small>Till {{review.helpfulCount}} people found this useful</small>
+                    <div class="row">
+                      <div class="col-lg-4"><p>Was this review helpful?</p></div>
+                      <div class="col-lg-4">
+                        <button type="button" class="btn btn-yes-no">Yes</button>
+                        <button type="button" class="btn btn-yes-no">No</button>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="helful-div mt-2">
-                  <small>67 people found this useful</small>
-                  <div class="row">
-                    <div class="col-lg-4"><p>Was this review helpful?</p></div>
-                    <div class="col-lg-4">
-                      <button type="button" class="btn btn-yes-no">Yes</button>
-                      <button type="button" class="btn btn-yes-no">No</button>
-                    </div>
-                  </div>
-                </div>
+                {% endfor %}
+               {% else %}
+                <div class="review">No College Reviews Found</div>
+              {% endif %}
               </div>
-            </div>
-            <div class="reviews-div tab-pane fade" id="course-reviews" role="tabpanel" aria-labelledby="course-reviews-tab">
-              <div class="review">
-                <div class="d-flex flex-row">
-                  <img src="{% static 'tmp/hero-bg.jpg' %}" alt="profile-picture" class="review-profile-picture">
-                  <h6 class="review-title">Parth Bamnote</h6>
-                </div>
-                <div class="d-flex flex-row">
-                  <div class="rating-course">Computer Engineering Dimploma</div>
-                  <div class="rating-date">28/03/2021</div>
-                </div>
-                <div class="rating-description">
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem 
-                  Ipsum has been the industry's standard dummy text ever since the 1500s, when an 
-                  unknown printer took a galley of type and scrambled it to make a type specimen 
-                  book.
-                </div>
-                <div class="more-ratings mt-4">
-                  <div class="row">
-                    <div class="col">
-                      <div class="rating-name">Staff Rating</div>
-                      <div class="rating-stars">
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
+              <div class="reviews-div tab-pane fade" id="course-reviews" role="tabpanel" aria-labelledby="course-reviews-tab">
+                {% if CourseReviews %}
+                {% for review in CourseReviews %}
+                <div class="review">
+                  <div class="d-flex flex-row">
+                    {% for reviewed_user in course_reviewed_users %}
+                    {% if review.studentId == reviewed_user %}
+                    <img src="{{reviewed_user.profileImage.url}}" alt="profile-picture" class="review-profile-picture">
+                    <h6 class="review-title">{{reviewed_user.name}} {{reviewed_user.surname}}</h6>
+                    {% endif %}
+                    {% endfor %}
+                  </div>
+                  <div class="d-flex flex-row">
+                    {% for course in college_courses %}
+                    {% if review.courseId_id == course.courseId %}
+                    <div class="rating-course">{{course}}</div>
+                    {% endif %}
+                    {% endfor %}
+                    <div class="rating-date">{{ review.date|date:"M d, Y" }}</div>
+                  </div>
+                  <div class="rating-description">
+                    {{review.message}}
+                  </div>
+                  <div class="more-ratings mt-4">
+                    <div class="row">
+                      <div class="col">
+                        <div class="rating-name">Staff Rating</div>
+                        <div class="rating-stars">
+                          {% if review.staffRating == 1 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          {% endif %}
+                          {% if review.staffRating == 2 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          {% endif %}
+                          {% if review.staffRating == 3 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          {% endif %}
+                          {% if review.staffRating == 4 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          {% endif %}
+                          {% if review.staffRating == 5 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          {% endif %}
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="rating-name">Curriculum Rating</div>
+                        <div class="rating-stars">
+                          {% if review.curriculumRating == 1 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          {% endif %}
+                          {% if review.curriculumRating == 2 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          {% endif %}
+                          {% if review.curriculumRating == 3 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          {% endif %}
+                          {% if review.curriculumRating == 4 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          {% endif %}
+                          {% if review.curriculumRating == 5 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          {% endif %}
+                        </div>
                       </div>
                     </div>
-                    <div class="col">
-                      <div class="rating-name">Curriculum Rating</div>
-                      <div class="rating-stars">
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                  </div>
+                  <div class="helful-div mt-2">
+                    <small>Till {{review.helpfulCount}} people found this useful</small>
+                    <div class="row">
+                      <div class="col-lg-4"><p>Was this review helpful?</p></div>
+                      <div class="col-lg-4">
+                        <button type="button" class="btn btn-yes-no">Yes</button>
+                        <button type="button" class="btn btn-yes-no">No</button>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="helful-div mt-2">
-                  <small>67 people found this useful</small>
-                  <div class="row">
-                    <div class="col-lg-4"><p>Was this review helpful?</p></div>
-                    <div class="col-lg-4">
-                      <button type="button" class="btn btn-yes-no">Yes</button>
-                      <button type="button" class="btn btn-yes-no">No</button>
-                    </div>
-                  </div>
-                </div>
+                {% endfor %}
+                {% else %}
+                <div class="review">No Course Reviews Found</div>
+                {% endif %}
               </div>
-            </div>
-            <div class="reviews-div tab-pane fade" id="college-posts" role="tabpanel" aria-labelledby="college-posts-tab">
-            {% if posts %}
-              <div class="row">
+              <div class="reviews-div tab-pane fade" id="college-posts" role="tabpanel" aria-labelledby="college-posts-tab">
+              {% if posts %}
+                <div class="row">
                 {% for post in posts %}
                 <div class="col-lg-6 col-sm-12">
                   <div class="post shadow-sm">
@@ -388,9 +711,9 @@
                 </div>
                 {% endfor %}
               </div>
-            {% else %}
-              <div class="review">No result found</div>
-            {% endif %}
+              {% else %}
+                <div class="review">No result found</div>
+              {% endif %}
             </div>
           </div>
         </div>

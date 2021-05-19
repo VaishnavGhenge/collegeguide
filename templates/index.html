@@ -21,203 +21,94 @@
 
   <main id="main">
 
-    <!-- ======= Popular Colleges Section ======= -->
-    <section id="popular-colleges" class="colleges">
-      <div class="container" data-aos="fade-up">
-
-        <div class="section-title">
-          <h2>Colleges</h2>
-          <p>Featured Colleges</p>
-        </div>
-
-        <div class="row" data-aos="zoom-in" data-aos-delay="100">
-
-          <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
-            <!-- College item -->
-            <div class="college-item">
-              <img src="{% static 'assets/img/course-1.jpg' %}" class="img-fluid college-img" alt="">
-              <div class="college-content">
-
-                <div class="d-flex justify-content-around align-items-center mb-3">
-                  <a href="#" class="btn btn-follow btn-sm">Follow</a>
-                  <div class="rating">
-                    <p>Rating</p>
-                    <p class="star">
-                      <i class="fa fa-star" aria-hidden="true"></i>
-                      <i class="fa fa-star" aria-hidden="true"></i>
-                      <i class="fa fa-star" aria-hidden="true"></i>
-                      <i class="fa fa-star" aria-hidden="true"></i>
-                      <i class="fa fa-star-o" aria-hidden="true"></i>
-                    </p>
-                  </div>
-                </div>
-
-                <h3>
-                  <a href="#gpa">Government Polytechnic, Amravati</a> 
-                    <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
-                    <span class="badge badge-warning">#1</span>
-                </h3>
-
-                <h6>
-                  <a href="#cm"><span class="badge badge-pill badge-outline-info">Computer Engineering</span></a>
-                  <a href="#civil"><span class="badge badge-pill badge-outline-info">Civil Engineering</span></a>
-                  <a href="#civil"><span class="badge badge-pill badge-outline-info">more</span></a>
-                </h6>
-                
-                <div class="college d-flex justify-content-between align-items-center">
-                  <div class="college-profile d-flex align-items-center">
-                    <img src="{% static 'assets/img/trainers/siddhesh2.jpg' %}" class="img-fluid" alt="">
-                    <span>GPA</span>
-                  </div>
-                  <div class="college-rank d-flex align-items-center">
-                    <i class="bx bx-user"></i>&nbsp;50
-                    &nbsp;&nbsp;
-                    <i class="bx bx-heart"></i>&nbsp;65
-                  </div>
-                </div>
-              </div>
+        <!-- ======= Nirf Colleges Section ======= -->
+        <section id="popular-colleges" class="colleges">
+          <div class="container" data-aos="fade-up">
+    
+            <div class="section-title">
+              <h2>Nirf Raking Colleges</h2>
             </div>
-          </div> <!-- End College Item-->
-
-          <div class="col-lg-3 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
-            <div class="college-item">
-              <img src="{% static 'assets/img/course-2.jpg' %}" class="img-fluid" alt="">
-              <div class="college-content">
-                <div class="d-flex justify-content-around align-items-center mb-3">
-                  <a href="#" class="btn btn-follow btn-sm">Follow</a>
-                  <div class="rating">
-                    <p>Rating</p>
-                    <p class="star">
-                      <i class="fa fa-star" aria-hidden="true"></i>
-                      <i class="fa fa-star" aria-hidden="true"></i>
-                      <i class="fa fa-star" aria-hidden="true"></i>
-                      <i class="fa fa-star" aria-hidden="true"></i>
-                      <i class="fa fa-star-o" aria-hidden="true"></i>
-                    </p>
+    
+            <div class="row" data-aos="zoom-in" data-aos-delay="100">
+              {% for college in nirf_colleges %}
+              <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+                <!-- College item -->
+                <div class="college-item">
+                  <img src="{{college.backgroundImage.url}}" class="img-fluid college-img" alt="">
+                  <div class="college-content">
+    
+                    <div class="d-flex justify-content-start mb-3">
+                      <div class="rating">
+                        {% if college.totalCount != 0 %}
+                        <p>Rating</p>
+                        <p class="star">
+                          {% if college.totalRating == 1 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          {% endif %}
+                          {% if college.totalRating == 2 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          {% endif %}
+                          {% if college.totalRating == 3 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          {% endif %}
+                          {% if college.totalRating == 4 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star-o" aria-hidden="true"></i>
+                          {% endif %}
+                          {% if college.totalRating == 5 %}
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          <i class="fa fa-star" aria-hidden="true"></i>
+                          {% endif %}
+                        </p>
+                        {% endif %}
+                      </div>
+                    </div>
+    
+                    <h3>
+                      <a href="/account/college/{{college.username}}/">{{college.name}}</a> 
+                        <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
+                        <span class="badge badge-warning">#{{college.nirfRanking}}</span>
+                    </h3>
+                    
+                    <div class="college d-flex justify-content-between align-items-center">
+                      <div class="college-profile d-flex align-items-center">
+                        <img src="{{college.profileImage.url}}" class="img-fluid" alt="">
+                        <span>{{college.username}}</span>
+                      </div>
+                      <div class="college-rank d-flex align-items-center">
+                        {% if college in liked_colleges %}
+                        <i class="fa fa-heart heart-fill like" id="{{college.username}}-like-nirf" userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="dislike" aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count-nirf" style="margin-top: 15px;">{{college.profileLikes}}</p>
+                        {% else %}
+                        <i class="fa fa-heart-o heart-o like" id="{{college.username}}-like-nirf" userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="like" aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count-nirf" style="margin-top: 15px;">{{college.profileLikes}}</p>
+                        {% endif %}
+                      </div>
+                    </div>
                   </div>
                 </div>
-
-                <h3>
-                  <a href="#">College of Engineering Amravati</a> 
-                    <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
-                    <span class="badge badge-warning">#2</span>
-                </h3>
-
-                <h6>
-                  <a href="#cm"><span class="badge badge-pill badge-outline-info">Computer Engineering</span></a>
-                  <a href="#civil"><span class="badge badge-pill badge-outline-info">Civil Engineering</span></a>
-                  <a href="#civil"><span class="badge badge-pill badge-outline-info">more</span></a>
-                </h6>
-                
-                <div class="college d-flex justify-content-between align-items-center">
-                  <div class="college-profile d-flex align-items-center">
-                    <img src="{% static 'assets/img/trainers/vaishnav2.jpeg' %}" class="img-fluid" alt="">
-                    <span>COEA</span>
-                  </div>
-                  <div class="college-rank d-flex align-items-center">
-                    <i class="bx bx-user"></i>&nbsp;35
-                    &nbsp;&nbsp;
-                    <i class="bx bx-heart"></i>&nbsp;42
-                  </div>
-                </div>
-              </div>
+              </div> <!-- End College Item-->
+              {% endfor %}
             </div>
-          </div> <!-- End College Item-->
-
-          <div class="col-lg-3 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0">
-            <div class="college-item">
-              <img src="{% static 'assets/img/course-3.jpg' %}" class="img-fluid" alt="">
-              <div class="college-content">
-                <div class="d-flex justify-content-around align-items-center mb-3">
-                  <a href="#" class="btn btn-follow btn-sm">Follow</a>
-                  <div class="rating">
-                    <p>Rating</p>
-                    <p class="star">
-                      <i class="fa fa-star" aria-hidden="true"></i>
-                      <i class="fa fa-star" aria-hidden="true"></i>
-                      <i class="fa fa-star" aria-hidden="true"></i>
-                      <i class="fa fa-star" aria-hidden="true"></i>
-                      <i class="fa fa-star-o" aria-hidden="true"></i>
-                    </p>
-                  </div>
-                </div>
-
-                <h3>
-                  <a href="#">Punjabrao Polytechnic, Amravati </a>
-                    <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
-                    <span class="badge badge-warning">#3</span>
-                </h3>
-
-                <h6>
-                  <a href="#cm"><span class="badge badge-pill badge-outline-info">Computer Engineering</span></a>
-                  <a href="#civil"><span class="badge badge-pill badge-outline-info">Civil Engineering</span></a>
-                  <a href="#civil"><span class="badge badge-pill badge-outline-info">more</span></a>
-                </h6>
-
-                <div class="college d-flex justify-content-between align-items-center">
-                  <div class="college-profile d-flex align-items-center">
-                    <img src="{% static 'assets/img/trainers/parth2.jpg' %}" class="img-fluid" alt="">
-                    <span>PPA</span>
-                  </div>
-                  <div class="college-rank d-flex align-items-center">
-                    <i class="bx bx-user"></i>&nbsp;20
-                    &nbsp;&nbsp;
-                    <i class="bx bx-heart"></i>&nbsp;85
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> <!-- End College Item-->
-
-
-          <div class="col-lg-3 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0">
-            <div class="college-item">
-              <img src="{% static 'assets/img/course-3.jpg' %}" class="img-fluid" alt="">
-              <div class="college-content">
-                <div class="d-flex justify-content-around align-items-center mb-3">
-                  <a href="#" class="btn btn-follow btn-sm">Follow</a>
-                  <div class="rating">
-                    <p>Rating</p>
-                    <p class="star">
-                      <i class="fa fa-star" aria-hidden="true"></i>
-                      <i class="fa fa-star" aria-hidden="true"></i>
-                      <i class="fa fa-star" aria-hidden="true"></i>
-                      <i class="fa fa-star" aria-hidden="true"></i>
-                      <i class="fa fa-star-o" aria-hidden="true"></i>
-                    </p>
-                  </div>
-                </div>
-
-                <h3>
-                  <a href="#">Punjabrao Polytechnic, Amravati </a>
-                    <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
-                    <span class="badge badge-warning">#4</span>
-                </h3>
-
-                <h6>
-                  <a href="#cm"><span class="badge badge-pill badge-outline-info">Computer Engineering</span></a>
-                  <a href="#civil"><span class="badge badge-pill badge-outline-info">Civil Engineering</span></a>
-                  <a href="#civil"><span class="badge badge-pill badge-outline-info">more</span></a>
-                </h6>
-
-                <div class="college d-flex justify-content-between align-items-center">
-                  <div class="college-profile d-flex align-items-center">
-                    <img src="{% static 'assets/img/trainers/parth2.jpg' %}" class="img-fluid" alt="">
-                    <span>PPA</span>
-                  </div>
-                  <div class="college-rank d-flex align-items-center">
-                    <i class="bx bx-user"></i>&nbsp;20
-                    &nbsp;&nbsp;
-                    <i class="bx bx-heart"></i>&nbsp;85
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> <!-- End College Item-->
-        </div>
-
-      </div>
-    </section><!-- End Popular Collges Section -->
+    
+          </div>
+        </section><!-- End Collges Section -->
 
     <!-- ======= Popular Courses Section ======= -->
     <section id="features" class="features">
