@@ -1,3 +1,4 @@
+from collegeapp.decorators import unauthenticated_user
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
 from . models import (Cities, CollegeCourses, CollegeReview, Contact, CourseReview, Courses, Email, Followers, ImageLikes, Images, Like, StudentUser, )
@@ -8,8 +9,7 @@ from django.contrib.auth.models import User, Group
 import re
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
-from itertools import chain, permutations
-
+from itertools import chain
 ################################## Website Home Views ########################################
 # Home page
 def index(request):
@@ -58,10 +58,12 @@ def submit_email(request):
 
 ############################# Signin and Logout Views ######################################
 # Sign in page
+@unauthenticated_user
 def signin(request):
     return render(request, 'signin.html')
 
 # Sign in form submission (form action view)
+@unauthenticated_user
 def submit_signin(request):
     next = request.POST.get('next')
     print(next, '\n')
@@ -97,7 +99,7 @@ def user_logout(request):
 
 ############################# End of Signin and Logout Views ######################################
 
-############################# Institute Views ######################################
+############################# Acount Views ######################################
 @login_required(login_url='signin')
 def home(request):
     group = None
@@ -275,7 +277,7 @@ def view_account(request, group, username):
         user = CollegeUser.objects.get(username=username)
 
         if user.email == request.user.email:
-            return redirect('institute-account')
+            return redirect('account')
 
         if user is not None:
             college = User.objects.get(email=user.email)
