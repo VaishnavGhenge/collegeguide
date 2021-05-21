@@ -49,14 +49,14 @@
                   <p id="followers">{{user.profileFollowers}}</p>
                   {% if type == 'college' %}
                     {% if followed != 'true' %}
-                    <i class="fa fa-user-plus" style="color: #224abe;" id="follow-profile" userid="{{user.collegeId}}" purpose="follow" action="{% url 'follow_unfollow' %}" acctype="{{type}}" style="cursor: pointer;" aria-hidden="true"></i>
+                    <i class="fa fa-user-plus" style="color: #224abe; cursor: pointer;" id="follow-profile" userid="{{user.collegeId}}" purpose="follow" action="{% url 'follow_unfollow' %}" acctype="{{type}}" aria-hidden="true"></i>
                     {% else %}
                     <i class="fa fa-check tick" id="follow-profile" userid="{{user.collegeId}}" purpose="unfollow" action="{% url 'follow_unfollow' %}" acctype="{{type}}" style="cursor: pointer;" aria-hidden="true"></i>
                     {% endif %}
                   {% endif %}
                   {% if type == 'student' %}
                     {% if followed != 'true' %}
-                    <i class="fa fa-user-plus" style="color: #224abe;" id="follow-profile" userid="{{user.studentId}}" purpose="follow" action="{% url 'follow_unfollow' %}" acctype="{{type}}" style="cursor: pointer;" aria-hidden="true"></i>
+                    <i class="fa fa-user-plus" style="color: #224abe; cursor: pointer;" id="follow-profile" userid="{{user.studentId}}" purpose="follow" action="{% url 'follow_unfollow' %}" acctype="{{type}}" aria-hidden="true"></i>
                     {% else %}
                     <i class="fa fa-check tick" id="follow-profile" userid="{{user.studentId}}" purpose="unfollow" action="{% url 'follow_unfollow' %}" acctype="{{type}}" style="cursor: pointer;" aria-hidden="true"></i>
                     {% endif %}
