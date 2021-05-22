@@ -38,9 +38,9 @@ def submit_contact(request):
         email = request.POST.get('email')
         subject = request.POST.get('subject')
         message = request.POST.get('message')
-
+        date = datetime.now()
         try:
-            Contact(name=name, email=email, subject=subject, message=message).save()
+            Contact(name=name, email=email, subject=subject, message=message, date=date).save()
             message = { 'msg': 'OK' }
             return JsonResponse(message)
         except ValidationError:
@@ -500,7 +500,6 @@ def institute_signup(request):
 ####################################
 def submit_institute_signup(request):
     try:
-        print(request.session['emailverified'])
         if str(request.session['emailverified']) == 'true':
             del request.session['emailverified']
         else:
@@ -559,6 +558,16 @@ def student_signup(request):
 
 ####################################
 def submit_student_signup(request):
+    try:
+        if str(request.session['emailverified']) == 'true':
+            del request.session['emailverified']
+        else:
+            msg = { 'success': False }
+            return JsonResponse(msg)
+    except KeyError:
+        msg = { 'success': False }
+        return JsonResponse(msg)
+
     if request.method == 'POST':
         profile = request.FILES.get('profile')
         backprof = request.FILES.get('backprof')
@@ -877,3 +886,12 @@ def clearsession(request):
 
 def errorcode404(request):
     return render(request, '404.html')
+
+
+###################### Dashboard #######################
+@login_required(login_url='signin')
+def dashboard(request):
+    data = {
+        'messages': Contact.objects.all().order_by('-date')
+    }
+    return render(request, 'dashboard.html', data)

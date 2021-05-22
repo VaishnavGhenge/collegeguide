@@ -1,3 +1,4 @@
+from math import nan
 from django.urls import path
 from . import views
 
@@ -39,6 +40,8 @@ urlpatterns = [
     path('sendotp/', views.sendOTP, name='sendotp'),
     path('checkotp/', views.checkotp, name='checkotp'),
     path('clearsession/', views.clearsession, name='clearsession'),
+
+    path('dashboard/', views.dashboard, name='dashboard'),
 
     path('404/', views.errorcode404, name='404'),
 ]

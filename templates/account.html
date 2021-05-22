@@ -577,8 +577,8 @@
                   </div>
                   <div class="d-flex flex-row">
                     {% for course in college_courses %}
-                    {% if review.courseId_id == course.courseId %}
-                    <div class="rating-course">{{course}}</div>
+                    {% if review.courseId_id == course.courseId_id %}
+                    <div class="rating-course">{{course.courseId}}</div>
                     {% endif %}
                     {% endfor %}
                     <div class="rating-date">{{ review.date|date:"M d, Y" }}</div>

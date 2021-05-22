@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -10,6 +10,7 @@ class Contact(models.Model):
     email = models.EmailField()
     subject = models.CharField(max_length=200)
     message = models.CharField(max_length=300)
+    date = models.DateTimeField(null=True)
 
 class Email(models.Model):
     email = models.EmailField()
