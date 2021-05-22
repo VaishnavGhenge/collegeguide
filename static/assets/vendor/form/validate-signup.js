@@ -150,49 +150,48 @@
         this_form.find('.error-message').slideDown().html('The form action property is not set!');
         return false;
       }
-      
+
       this_form.find('.sent-message').slideUp();
       this_form.find('.error-message').slideUp();
       this_form.find('.loading').slideDown();
-  
+    
       if ( $(this).data('recaptcha-site-key') ) {
         var recaptcha_site_key = $(this).data('recaptcha-site-key');
         var data = new FormData(this);
         grecaptcha.ready(function() {
           grecaptcha.execute(recaptcha_site_key, {action: 'form_submit'}).then(function(token) {
-            signup_submit(this_form, action, data + '&recaptcha-response=' + token);
+             signup_submit(this_form, action, data + '&recaptcha-response=' + token);
           });
         });
       } else {
         var data = new FormData(this);
         signup_submit(this_form, action, data);
       }
-      return true;
   });
 
-    function signup_submit(this_form, action, data)
-    {
-      console.log(data);
-        $.ajax({
-            type: "POST",
-            url: action,
-            data: data,
-            timeout: 40000,
-            cache: false,
-            contentType: false,
-            processData: false
-        }).done(function(msg){
-            if(msg.success) {
-                this_form.find('.loading').slideUp();
-                this_form.find('.sent-message').slideDown();
-                console.log('True');
-            }
-            else {
-                this_form.find('.loading').slideUp();
-                this_form.find('.error-message').html('Form submission failed and with error message: Please recheck form input values and try again <br>');
-                this_form.find('.error-message').slideDown();
-            }
-        });
-    }
+  function signup_submit(this_form, action, data)
+  {
+    console.log(data);
+    $.ajax({
+      type: "POST",
+      url: action,
+      data: data,
+      timeout: 40000,
+      cache: false,
+      contentType: false,
+      processData: false
+    }).done(function(msg) {
+      if(msg.success) {
+        this_form.find('.loading').slideUp();
+        this_form.find('.sent-message').slideDown();
+        console.log('True');
+      }
+      else {
+        this_form.find('.loading').slideUp();
+        this_form.find('.error-message').html('Form submission failed and with error message: Please recheck form input values and try again <br>');
+        this_form.find('.error-message').slideDown();
+      }
+    });
+  }
 
 })(jQuery);

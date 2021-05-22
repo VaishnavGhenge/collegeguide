@@ -2221,6 +2221,42 @@ section {
   }
 }
 
+.btn-verify {
+  border-radius: 50px;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.hide {
+  display: none;
+}
+
+.otp-input {
+  border-radius: 4px;
+  box-shadow: none;
+  font-size: 14px;
+}
+
+.otp-input:focus {
+  border-width: 1px;
+  border-color: #224abe;
+  box-shadow: none;
+}
+
+.btn-confirm {
+  border-radius: 50px;
+  font-size: 13px;
+  background-color: #224abe;
+  border-color: #224abe;
+  color: #fff;
+}
+
+.btn-confirm:hover {
+  background-color: #4e73df;
+  border-color: #4e73df;
+  color: #fff;
+}
+
 .signup-form .validate {
   display: none;
   color: red;

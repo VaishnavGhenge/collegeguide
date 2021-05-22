@@ -132,7 +132,8 @@
         <div class="col-md-6 form-group">
           <label for="id_email">Email</label>
           <input type="email" id="id_email" name="email" class="form-control" checkurl="{% url 'check-email' %}">
-          <div class="validate"></div>
+          <div class="validate" id="email-validate"></div>
+          <button type="button" id="btn-verify" class="btn btn-warning btn-sm btn-verify">Verify email</button>&nbsp;&nbsp;<button type="button" id="btn-resend" class="btn btn-warning btn-sm btn-verify hide">Resend</button>
         </div>
       </div>
       <div class="form-row justify-content-center">
@@ -250,6 +251,28 @@
   <a href="#" class="back-to-top"><i class="bx bx-up-arrow-alt"></i></a>
   <div id="preloader"></div>
 
+  <!-- OTP Form Modal -->
+  <div class="modal fade" id="otpform" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="otp-form" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="otpform-title"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="otp">Enter OTP</label>
+            <input type="number" name="otp" id="otp" class="form-control otp-input">
+            <div class="validate" id="otp-validate"></div>
+          </div>
+          <button type="button" class="btn btn-confirm">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Vendor JS Files -->
   <script src="{% static 'assets/vendor/jquery/jquery.min.js' %}"></script>
   <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
@@ -267,6 +290,7 @@
   <script src="{% static 'assets/vendor/form/validate-email.js' %}"></script>
   <script src="{% static 'assets/vendor/form/validate-signup.js' %}"></script>
   <script src="{% static 'assets/js/signup.js' %}"></script>
+  <script src="{% static 'assets/js/verify-email.js' %}"></script>
   <script>
     sp = '-';
     today = new Date();

@@ -1,3 +1,6 @@
+from django.core import mail
+from django.core.mail.message import EmailMultiAlternatives
+from django.http.response import HttpResponse, HttpResponseBase
 from collegeapp.decorators import unauthenticated_user
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
@@ -10,6 +13,9 @@ import re
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from itertools import chain
+import random
+from django.core.mail import BadHeaderError, send_mail
+
 ################################## Website Home Views ########################################
 # Home page
 def index(request):
@@ -493,6 +499,17 @@ def institute_signup(request):
 
 ####################################
 def submit_institute_signup(request):
+    try:
+        print(request.session['emailverified'])
+        if str(request.session['emailverified']) == 'true':
+            del request.session['emailverified']
+        else:
+            msg = { 'success': False }
+            return JsonResponse(msg)
+    except KeyError:
+        msg = { 'success': False }
+        return JsonResponse(msg)
+
     if request.method == 'POST' and request.FILES['idproof']:
         profile = request.FILES.get('profile')
         backprof = request.FILES.get('backprof')
@@ -522,7 +539,7 @@ def submit_institute_signup(request):
                 collegeuser = CollegeUser(collegeId=user, username=username, name=name, profileImage=profile,
                 backgroundImage=backprof, profileDescription=description, profileWebsite=website,
                 city=city, postalcode=pin, college_type=collegeType, college_foundation_date=foundation,
-                email=email)
+                email=email, verified=True)
 
                 collegeuser.save()
                 msg = { 'success': True }
@@ -794,6 +811,67 @@ def check_email(request):
         'counerror': False,
     }
     return JsonResponse(data)
+
+##################################
+def makesession(request, name, value):
+    request.session[str(name)] = str(value)
+    return HttpResponse("created")
+
+def deletesession(request):
+    try:
+        del request.session['emailverified']
+        msg = 'success'
+        return HttpResponse(msg)
+    except:
+        msg = 'error'
+        return HttpResponse(msg)
+    
+##################################
+def sendOTP(request):
+    range_start = 10**(6-1)
+    range_end = (10**6)-1
+    otp = int(random.randint(range_start, range_end))
+    mailto = str(request.GET.get('mailto', '')).strip()
+    if mailto:
+        try:
+            subject, from_email, to = 'Confirmation email', 'gpaonline9@gmail.com', mailto
+            text_content = "Don't share this one time passoword with anyone"
+            html_content = "<p><strong style='color: #ffc107;'>Warning</strong><br>Don't share this one time password with anyone<br>Your OTP is "+str(otp)+"</p>"
+            msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
+            respose = makesession(request, 'otp', otp)
+            print(request.session['otp'])
+            msg = { 'success': True, }
+            return JsonResponse(msg)
+        except BadHeaderError:
+            msg = { 'success': False, }
+            return JsonResponse(msg)
+
+#############################
+def checkotp(request):
+    otp = request.GET.get('otp', '')
+    if otp:
+        if str(otp) == str(request.session['otp']):
+            response = makesession(request, 'emailverified', 'true')
+            del request.session['otp']
+            msg = { 'success': True, }
+            return JsonResponse(msg)
+        else:
+            msg = { 'success': False, }
+            return JsonResponse(msg)
+    else:
+        msg = { 'success': False, }
+        return JsonResponse(msg)
+
+def clearsession(request):
+    try:
+        res = deletesession(request)
+        msg = {'success': True}
+        return JsonResponse(msg)
+    except:
+        msg = {'success': False}
+        return JsonResponse(msg)
 
 ############################# End of Institute Views ######################################
 

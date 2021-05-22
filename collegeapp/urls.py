@@ -36,6 +36,9 @@ urlpatterns = [
     
     path('check/', views.check, name='check'),
     path('check-email/', views.check_email, name='check-email'),
+    path('sendotp/', views.sendOTP, name='sendotp'),
+    path('checkotp/', views.checkotp, name='checkotp'),
+    path('clearsession/', views.clearsession, name='clearsession'),
 
     path('404/', views.errorcode404, name='404'),
 ]
