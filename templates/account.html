@@ -1,7 +1,10 @@
 {% extends 'account-base.html' %}
 {% load static %}
 
-{% block title %}Institute Account{% endblock title %}
+{% block title %}
+{% if group == 'college' %}Institute Account{%endif%}
+{% if group == 'student' %}Student Account{%endif%}
+{% endblock title %}
 
 {% block extra-css %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
@@ -122,7 +125,7 @@
             {% if user.totalRating %}
             <div class="rating">
               <div class="star">
-                <div style="width: 110px;" tabindex="0" id="star">
+                <div style="width: 110px;" tabindex="0" id="star" college="{{user.username}}">
                   {% if user.totalRating == 1 %}
                   <i class="fa fa-star" aria-hidden="true"></i>
                   <i class="fa fa-star-o" aria-hidden="true"></i>

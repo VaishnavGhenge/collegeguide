@@ -40,6 +40,7 @@ urlpatterns = [
     path('sendotp/', views.sendOTP, name='sendotp'),
     path('checkotp/', views.checkotp, name='checkotp'),
     path('clearsession/', views.clearsession, name='clearsession'),
+    path('getratingstats/', views.getratingstats, name='getratingstats'),
 
     path('dashboard/', views.dashboard, name='dashboard'),
 

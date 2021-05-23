@@ -1,7 +1,10 @@
 {% extends 'account-base.html' %}
 {% load static %}
 
-{% block title %}Institute Account{% endblock title %}
+{% block title %}
+{% if type == 'college' %}Institute Account{%endif%}
+{% if type == 'student' %}Student Account{%endif%}
+{% endblock title %}
 
 {% block extra-css %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
@@ -136,7 +139,7 @@
             {% if user.totalRating %}
             <div class="rating">
               <div class="star">
-                <div style="width: 110px;" tabindex="0" id="star">
+                <div style="width: 110px;" tabindex="0" id="star" college="{{user.username}}">
                   {% if user.totalRating == 1 %}
                   <i class="fa fa-star" aria-hidden="true"></i>
                   <i class="fa fa-star-o" aria-hidden="true"></i>
@@ -444,9 +447,10 @@
               <form action="{% url 'submit-course-review' %}" method="POST" autocomplete="off" class="course-review">
                 {% csrf_token %}
                 <input type="text" name="userid" value="{{user.email}}" hidden>
-                <div class="col-6 col-sm-12">
+                <div class="col-lg-6 col-sm-12">
                   <label for="select-course">Select course</label>
                   <select name="select-course" id="select-course" placeholder="Select course" class="review-textarea">
+                    <option value="">Select course</option>
                     {% for course in college_courses %}
                     <option value="{{course.courseId}}">{{course.courseName}}</option>
                     {% endfor %}
@@ -687,9 +691,9 @@
                   {% endfor %}
                 </div>
                 <div class="d-flex flex-row">
-                  {% for course in college_courses %}
-                  {% if review.courseId_id == course.courseId %}
-                  <div class="rating-course">{{course}}</div>
+                  {% for course in courses %}
+                  {% if review.courseId == course %}
+                  <div class="rating-course">{{course.courseId}}</div>
                   {% endif %}
                   {% endfor %}
                   <div class="rating-date">{{ review.date|date:"M d, Y" }}</div>

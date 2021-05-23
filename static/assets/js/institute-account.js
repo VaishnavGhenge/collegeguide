@@ -6,8 +6,8 @@ $(document).ready(function () {
         '</div>'].join('');
 
     var content = ['<div>',
-    '<div class="rating-header">4.3 out of 5</div>',
-    '<div>567 total ratings</div><br>',
+    '<div class="rating-header">4 out of 5</div>',
+    '<div id="rating-total">2 total ratings</div><br>',
     '<div class="row txt-center">',
       '<div class="col-2">5 star</div>',
       '<div class="col-4">',
@@ -51,7 +51,7 @@ $(document).ready(function () {
           '<div id="1" class="progress-bar rating-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>',
         '</div>',
       '</div>',
-      '<div id="2-per" class="col-2"></div>',
+      '<div id="1-per" class="col-2"></div>',
     '</div>',
     '</div>', ].join('');
 
@@ -77,21 +77,40 @@ $("#post-image").on('change', function(e) {
 
 $('#star').hover(mouseEnter, mouseLeave);
 function mouseEnter() {
-    $('#star').popover('show');
-    $('#5').attr('style', 'width: 75%');
-    $('#5-per').text('75%');
+  var college = $('#star').attr('college');
+  $.ajax({
+      type: "GET",
+      url: '/getratingstats/',
+      data: {
+        'college': college,
+      },
+      dataType: 'json',
+      timeout: 40000
+  }).done(function(msg) {
+    if(msg.success) {
+        $('#star').popover('show');
+        $('.rating-header').html(msg.avg+' out of 5');
+        $('#rating-total').html(msg.total+' total ratings');
 
-    $('#4').attr('style', 'width: 8%');
-    $('#4-per').text('8%');
-
-    $('#3').attr('style', 'width: 5%');
-    $('#3-per').text('5%');
-
-    $('#2').attr('style', 'width: 2%');
-    $('#2-per').text('2%');
-
-    $('#1').attr('style', 'width: 10%');
-    $('#1-per').text('10%');
+        $('#5').attr('style', 'width: '+msg.fiveper+'%');
+        $('#5-per').text(msg.fiveper+'%');
+      
+        $('#4').attr('style', 'width: '+msg.fourper+'%');
+        $('#4-per').text(msg.fourper+'%');
+      
+        $('#3').attr('style', 'width: '+msg.threeper+'%');
+        $('#3-per').text(msg.threeper+'%');
+      
+        $('#2').attr('style', 'width: '+msg.twoper+'%');
+        $('#2-per').text(msg.twoper+'%');
+      
+        $('#1').attr('style', 'width: '+msg.oneper+'%');
+        $('#1-per').text(msg.oneper+'%');
+    }
+    else {
+        console.log("error");
+    }
+  });
 };
 
 function mouseLeave() {

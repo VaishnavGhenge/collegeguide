@@ -1,10 +1,11 @@
 from django.core import mail
 from django.core.mail.message import EmailMultiAlternatives
 from django.http.response import HttpResponse, HttpResponseBase
+from django.utils.translation import to_language
 from collegeapp.decorators import unauthenticated_user
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
-from . models import (Cities, CollegeCourses, CollegeReview, Contact, CourseReview, Courses, Email, Followers, ImageLikes, Images, Like, StudentUser, )
+from . models import (Cities, CollegeCourses, CollegeReview, Contact, CourseReview, Courses, Email, Followers, ImageLikes, Images, Like, PLatformStatistics, StudentUser, )
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from .models import CollegeUser
@@ -15,20 +16,44 @@ from datetime import datetime
 from itertools import chain
 import random
 from django.core.mail import BadHeaderError, send_mail
+import math
 
 ################################## Website Home Views ########################################
 # Home page
 def index(request):
+    stat = PLatformStatistics.objects.get(id=1)
+    count = stat.platformVisitors
+    count += 1
+    PLatformStatistics.objects.filter(id=1).update(platformVisitors=count)
+
+    students = StudentUser.objects.all().count()
+    colleges = CollegeUser.objects.all().count()
+    courses = Courses.objects.all().count()
+    PLatformStatistics.objects.filter(id=1).update(platformVisitors=count, studentUsers=students, collegeUsers=colleges, totalCourses=courses)
+
+    stat = PLatformStatistics.objects.get(id=1)
     nirf_colleges = CollegeUser.objects.exclude(nirfRanking=0).order_by('nirfRanking')
-    data = { 'nirf_colleges': nirf_colleges, }
+    all_courses = Courses.objects.all()
+
+    data = { 'nirf_colleges': nirf_colleges, 'stat': stat, 'courses': all_courses, }
     return render(request, 'index.html', data)
 
 # About page
 def about(request):
+    stat = PLatformStatistics.objects.get(id=1)
+    count = stat.platformVisitors
+    count += 1
+    PLatformStatistics.objects.filter(id=1).update(platformVisitors=count)
+
     return render(request, 'about.html')
 
 # Contact page
 def contact(request):
+    stat = PLatformStatistics.objects.get(id=1)
+    count = stat.platformVisitors
+    count += 1
+    PLatformStatistics.objects.filter(id=1).update(platformVisitors=count)
+
     return render(request, 'contact.html')
 
 # Contact form submission (form action view)
@@ -66,6 +91,11 @@ def submit_email(request):
 # Sign in page
 @unauthenticated_user
 def signin(request):
+    stat = PLatformStatistics.objects.get(id=1)
+    count = stat.platformVisitors
+    count += 1
+    PLatformStatistics.objects.filter(id=1).update(platformVisitors=count)
+
     return render(request, 'signin.html')
 
 # Sign in form submission (form action view)
@@ -108,6 +138,11 @@ def user_logout(request):
 ############################# Acount Views ######################################
 @login_required(login_url='signin')
 def home(request):
+    stat = PLatformStatistics.objects.get(id=1)
+    count = stat.platformVisitors
+    count += 1
+    PLatformStatistics.objects.filter(id=1).update(platformVisitors=count)
+
     group = None
     if request.user.groups.exists():
         group = request.user.groups.all()[0].name
@@ -148,6 +183,11 @@ def home(request):
 ###################################
 @login_required(login_url='signin')
 def search(request):
+    stat = PLatformStatistics.objects.get(id=1)
+    count = stat.platformVisitors
+    count += 1
+    PLatformStatistics.objects.filter(id=1).update(platformVisitors=count)
+
     search_response = None
     followed_colleges = None
     liked_colleges = None
@@ -204,6 +244,11 @@ def search(request):
 ####################################
 @login_required(login_url='signin')
 def account(request):
+    stat = PLatformStatistics.objects.get(id=1)
+    count = stat.platformVisitors
+    count += 1
+    PLatformStatistics.objects.filter(id=1).update(platformVisitors=count)
+
     group = None
     if request.user.groups.exists():
         group = request.user.groups.all()[0].name
@@ -276,6 +321,11 @@ def account(request):
 
 @login_required(login_url='signin')
 def view_account(request, group, username):
+    stat = PLatformStatistics.objects.get(id=1)
+    count = stat.platformVisitors
+    count += 1
+    PLatformStatistics.objects.filter(id=1).update(platformVisitors=count)
+
     username = str(username)
     group = str(group)
 
@@ -305,6 +355,7 @@ def view_account(request, group, username):
             college_courses = list()
             for course in courses:
                 college_courses = college_courses + list(chain(Courses.objects.filter(courseId=course.get('courseId_id'))))
+            courses = CollegeCourses.objects.filter(userId=user)
 
             posts = Images.objects.filter(userId=college.id).order_by('-imageId')
             postCount = Images.objects.filter(userId=college.id).count()
@@ -345,6 +396,7 @@ def view_account(request, group, username):
                 'followed': followed,
                 'user': user,
                 'college_courses': college_courses,
+                'courses': courses,
                 'type': 'college',
                 'posts': posts,
                 'postCount': postCount,
@@ -492,6 +544,11 @@ def follow_unfollow(request):
 
 ##############################
 def institute_signup(request):
+    stat = PLatformStatistics.objects.get(id=1)
+    count = stat.platformVisitors
+    count += 1
+    PLatformStatistics.objects.filter(id=1).update(platformVisitors=count)
+
     data = {
         'cities': Cities.objects.all(),
     }
@@ -509,7 +566,7 @@ def submit_institute_signup(request):
         msg = { 'success': False }
         return JsonResponse(msg)
 
-    if request.method == 'POST' and request.FILES['idproof']:
+    if request.method == 'POST':
         profile = request.FILES.get('profile')
         backprof = request.FILES.get('backprof')
         name = request.POST.get('collegeName')
@@ -521,7 +578,7 @@ def submit_institute_signup(request):
         foundation = request.POST.get('foundation')
         idproof = request.FILES.get('idproof')
         username = request.POST.get('username')
-        email = request.POST.get('email')
+        email = request.session.get('email', '')
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
 
@@ -539,8 +596,12 @@ def submit_institute_signup(request):
                 backgroundImage=backprof, profileDescription=description, profileWebsite=website,
                 city=city, postalcode=pin, college_type=collegeType, college_foundation_date=foundation,
                 email=email, verified=True)
-
                 collegeuser.save()
+
+                try:
+                    del request.session['email']
+                except:
+                    pass
                 msg = { 'success': True }
                 return JsonResponse(msg)
             except (ValidationError):
@@ -549,6 +610,11 @@ def submit_institute_signup(request):
 
 ##############################
 def student_signup(request):
+    stat = PLatformStatistics.objects.get(id=1)
+    count = stat.platformVisitors
+    count += 1
+    PLatformStatistics.objects.filter(id=1).update(platformVisitors=count)
+
     data = {
         'cities': Cities.objects.all(),
         'courses': Courses.objects.all(),
@@ -578,7 +644,7 @@ def submit_student_signup(request):
         location = request.POST.get('location')
         courses = request.POST.getlist('courses')
         username = request.POST.get('username')
-        email = request.POST.get('email')
+        email = request.session.get('email', '')
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
 
@@ -611,7 +677,10 @@ def submit_student_signup(request):
                 backgroundImage=backprof, profileDescription=description, prefLocation=location, prefCourse1=course1,
                 prefCourse2=course2, prefCourse3=course3, email=email, username=username)
                 studentuser.save()
-
+                try:
+                    del request.session['email']
+                except:
+                    pass
                 msg = { 'success': True }
                 return JsonResponse(msg)
             except (ValidationError):
@@ -667,7 +736,7 @@ def submit_college_review(request):
         college = CollegeUser.objects.get(email=userid)
         student = StudentUser.objects.get(email=request.user.email)
         try:
-            total_rating = int((campus_rating+library_rating)/2)
+            total_rating = int(math.ceil((campus_rating+library_rating)/2))
 
             CollegeReview(studentId=student, collegeId=college, message=text,
             campusRating=campus_rating, libraryRating=library_rating, date=datetime.now(), totalRating=total_rating).save()
@@ -690,7 +759,7 @@ def submit_college_review(request):
 
                 totalsum = campus + library
                 totalcount = 2
-                total = int(totalsum / totalcount)
+                total = int(math.ceil(totalsum / totalcount))
             elif campus is None and library is None and total is not None or campus == 0 and library == 0 and total != 0:
                 campus = int(campus_rating)
                 campussum = campus
@@ -700,16 +769,16 @@ def submit_college_review(request):
                  
                 totalsum = int(totalsum + (campus + library))
                 totalcount = totalcount + 2
-                total = int(totalsum / totalcount)
+                total = int(math.ceil(totalsum / totalcount))
             elif campus is not None and library is not None or campus != 0 and library != 0:
                 campussum = campussum + campus
                 reviewcount = reviewcount + 1
-                campus = int(campussum / reviewcount)
+                campus = int(math.ceil(campussum / reviewcount))
                 librarysum = librarysum + library
-                library = int(librarysum / reviewcount)
+                library = int(math.ceil(librarysum / reviewcount))
                 totalsum = int(totalsum + (campus + library))
                 totalcount = totalcount + 2
-                total = int(totalsum / totalcount)
+                total = int(math.ceil(totalsum / totalcount))
             else:
                 raise ValidationError
 
@@ -724,20 +793,24 @@ def submit_college_review(request):
 @login_required(login_url='signin')
 def submit_course_review(request):
     if request.method == 'POST':
-        courseid = int(request.POST.get('select-course'))
+        courseid = request.POST.get('select-course')
+        if courseid is None or courseid == '':
+            msg = { 'success': False, }
+            return JsonResponse(msg)
         text = str(request.POST.get('course-review-text'))
         staff_rating = int(request.POST.get('staff-input'))
         curriculum_rating = int(request.POST.get('curriculum-input'))
         userid = str(request.POST.get('userid'))
 
-        course = CollegeCourses.objects.get(collegecourseId=courseid)
         college = CollegeUser.objects.get(email=userid)
         student = StudentUser.objects.get(email=request.user.email)
+        _course = Courses.objects.get(courseId=courseid)
+        course = CollegeCourses.objects.get(courseId=_course, userId=college)
         try:
-            total_rating = int((staff_rating+curriculum_rating)/2)
+            total_rating = int(math.ceil((staff_rating+curriculum_rating)/2))
 
             CourseReview(courseId=course, collegeId=college, studentId=student, message=text,
-            staffRating = staff_rating, curriculumRating=staff_rating, date=datetime.now(), totalRating=total_rating).save()
+            staffRating = staff_rating, curriculumRating=curriculum_rating, date=datetime.now(), totalRating=total_rating).save()
 
             staff = college.staffRating
             staffsum = college.staffSum
@@ -758,7 +831,7 @@ def submit_course_review(request):
 
                 totalsum = staff + curriculum
                 totalcount = 2
-                total = int(totalsum / totalcount)
+                total = int(math.ceil(totalsum / totalcount))
             elif staff is None and curriculum is None and total is not None or staff == 0 and curriculum == 0 and total != 0:
                 staff = int(staff_rating)
                 staffsum = staff
@@ -768,23 +841,25 @@ def submit_course_review(request):
 
                 totalsum = int(totalsum + (staff + curriculum))
                 totalcount = totalcount + 2
-                total = int(totalsum / totalcount)
+                total = int(math.ceil(totalsum / totalcount))
             elif staff is not None and curriculum is not None or staff !=0 and curriculum != 0:
                 staffsum = staffsum + staff
                 reviewcount = reviewcount + 1
-                staff = int(staffsum / reviewcount)
+                staff = int(math.ceil(staffsum / reviewcount))
                 curriculumsum = curriculumsum + curriculum
-                curriculum = int(curriculumsum / reviewcount)
+                curriculum = int(math.ceil(curriculumsum / reviewcount))
                 totalsum = int(totalsum + (staff + curriculum))
                 totalcount = totalcount + 2
-                total = int(totalsum / totalcount)
+                total = int(math.ceil(totalsum / totalcount))
             else:
                 raise ValidationError
 
-            CollegeCourses.objects.all().update(staffRating=staff, CurriculumRating=curriculum)
+            print('curriculum: ', curriculum)
+            print('staf: ', staff)
+            CollegeCourses.objects.filter(courseId=_course, userId=college).update(staffRating=staff, CurriculumRating=curriculum)
             count = CollegeReview.objects.filter(collegeId_id=college).count() + CourseReview.objects.filter(collegeId_id=college).count()
             CollegeUser.objects.filter(email=userid).update(reviewCount=count, totalRating=total, staffRating=staff,
-            curriculumRating=curriculum, courseReviewCount=reviewcount, staffSum=staffsum, curriculumSum=curriculumsum)
+            curriculumRating=curriculum, courseReviewCount=reviewcount, staffSum=staffsum, curriculumSum=curriculumsum, totalSum=totalsum, totalCount=totalcount)
 
             msg = { 'success': True, }
         except ValidationError:
@@ -829,6 +904,7 @@ def makesession(request, name, value):
 def deletesession(request):
     try:
         del request.session['emailverified']
+        del request.session['email']
         msg = 'success'
         return HttpResponse(msg)
     except:
@@ -850,6 +926,7 @@ def sendOTP(request):
             msg.attach_alternative(html_content, "text/html")
             msg.send()
             respose = makesession(request, 'otp', otp)
+            respose = makesession(request, 'email', mailto)
             print(request.session['otp'])
             msg = { 'success': True, }
             return JsonResponse(msg)
@@ -882,15 +959,105 @@ def clearsession(request):
         msg = {'success': False}
         return JsonResponse(msg)
 
+def getratingstats(request):
+    username = request.GET.get('college', '')
+    if username != '':
+        college = CollegeUser.objects.get(username=username)
+        college_reviews = CollegeReview.objects.filter(collegeId=college)
+        course_reviews = CourseReview.objects.filter(collegeId=college)
+
+        total = college.reviewCount
+        avg = college.totalRating
+        onestar = 0
+        twostar = 0
+        threestar = 0
+        fourstar = 0
+        fivestar = 0
+        for review in college_reviews:
+            if int(review.campusRating) == 5:
+                fivestar += 1
+            if int(review.libraryRating) == 5:
+                fivestar += 1
+            if int(review.campusRating) == 4:
+                fourstar += 1
+            if int(review.libraryRating) == 4:
+                fourstar += 1
+            if int(review.campusRating) == 3:
+                threestar += 1
+            if int(review.libraryRating) == 3:
+                threestar += 1
+            if int(review.campusRating) == 2:
+                twostar += 1
+            if int(review.libraryRating) == 2:
+                twostar += 1
+            if int(review.campusRating) == 1:
+                onestar += 1
+            if int(review.libraryRating) == 1:
+                onestar += 1
+
+        for review in course_reviews:
+            if int(review.staffRating) == 5:
+                fivestar += 1
+            if int(review.curriculumRating) == 5:
+                fivestar += 1
+            if int(review.staffRating) == 4:
+                fourstar += 1
+            if int(review.curriculumRating) == 4:
+                fourstar += 1
+            if int(review.staffRating) == 3:
+                threestar += 1
+            if int(review.curriculumRating) == 3:
+                threestar += 1
+            if int(review.staffRating) == 2:
+                twostar += 1
+            if int(review.curriculumRating) == 2:
+                twostar += 1
+            if int(review.staffRating) == 1:
+                onestar += 1
+            if int(review.curriculumRating) == 1:
+                onestar += 1
+
+        totalstars = onestar + twostar + threestar + fourstar + fivestar
+        fiveper = round((fivestar/totalstars)*100, 1)
+        fourper = round((fourstar/totalstars)*100, 1)
+        threeper = round((threestar/totalstars)*100, 1)
+        twoper = round((twostar/totalstars)*100, 1)
+        oneper = round((onestar/totalstars)*100, 1)
+            
+        msg = { 
+            'success': True, 
+            'fiveper': fiveper, 
+            'fourper': fourper,
+            'threeper': threeper,
+            'twoper': twoper,
+            'oneper': oneper,
+            'total': total,
+            'avg': avg,
+        }
+        return JsonResponse(msg)
+    else:
+        msg = { 'success': False, }
+        return JsonResponse(msg)
+
 ############################# End of Institute Views ######################################
 
 def errorcode404(request):
+    stat = PLatformStatistics.objects.get(id=1)
+    count = stat.platformVisitors
+    count += 1
+    PLatformStatistics.objects.filter(id=1).update(platformVisitors=count)
+
     return render(request, '404.html')
 
 
 ###################### Dashboard #######################
 @login_required(login_url='signin')
 def dashboard(request):
+    stat = PLatformStatistics.objects.get(id=1)
+    count = stat.platformVisitors
+    count += 1
+    PLatformStatistics.objects.filter(id=1).update(platformVisitors=count)
+
     data = {
         'messages': Contact.objects.all().order_by('-date')
     }

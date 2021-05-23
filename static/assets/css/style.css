@@ -760,6 +760,8 @@ section {
 .colleges .college-item {
   border-radius: 5px;
   border: 1px solid rgba(0,0,0,.1);
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .colleges .college-item:hover {
@@ -2035,6 +2037,7 @@ section {
 .reviews-div .review .helful-div .btn-yes-no:focus {
   box-shadow: none;
   background-color: #e9eefb;
+  border-color: #e9eefb;
 }
 
 .reviews-div .post {

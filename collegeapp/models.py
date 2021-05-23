@@ -175,7 +175,8 @@ class CourseReview(models.Model):
 ################################################################################################
 # Website Statistics Models
 class PLatformStatistics(models.Model):
+    id = models.AutoField(primary_key=True)
     platformVisitors = models.IntegerField(default=0)
     studentUsers = models.IntegerField(default=0)
     collegeUsers = models.IntegerField(default=0)
-    totalReviews = models.IntegerField(default=0)
+    totalCourses = models.IntegerField(default=0)
