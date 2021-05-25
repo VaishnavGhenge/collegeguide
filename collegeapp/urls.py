@@ -28,10 +28,12 @@ urlpatterns = [
     path('institute-signup/', views.institute_signup, name='institute-signup'),
     path('submit-institute-signup/', views.submit_institute_signup,
          name='submit-institute-signup'),
+    path('institute-edit/', views.institute_edit, name='institute-edit'),
 
     path('student-signup/', views.student_signup, name='student-signup'),
     path('submit-student-signup/', views.submit_student_signup,
          name='submit-student-signup'),
+    path('student-edit/', views.student_edit, name='student-edit'),
 
     path('courses_submit/', views.courses_submit, name='courses_submit'),
     path('submit-institute-post/', views.submit_institute_post,

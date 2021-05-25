@@ -16,6 +16,7 @@ from itertools import chain
 import random
 from django.core.mail import BadHeaderError
 import math
+import os
 
 ################################## Website Home Views ########################################
 # Home page
@@ -696,7 +697,46 @@ def submit_institute_signup(request):
             except (ValidationError):
                 msg = {'success': False}
                 return JsonResponse(msg)
+###########################################
 
+
+def institute_edit(request):
+    if request.method == 'POST':
+        user = CollegeUser.objects.get(collegeId=request.user)
+        profile = request.FILES.get('profile')
+        back = request.FILES.get('backprof')
+        name = request.POST.get('collegeName')
+        website = request.POST.get('profileWebsite')
+        description = request.POST.get('profileDescription')
+
+        if profile is None or profile == '':
+            profile = user.profileImage
+        else:
+            image_path = user.profileImage.path
+            if os.path.exists(image_path):
+                os.remove(image_path)
+        if back is None or back == '':
+            back = user.backgroundImage
+        else:
+            image_path = user.backgroundImage.path
+            if os.path.exists(image_path):
+                os.remove(image_path)
+        try:
+            user.profileImage = profile
+            user.backgroundImage = back
+            user.name = name
+            user.profileWebsite = website
+            user.profileDescription = description
+            user.save()
+            msg = {'success': True, }
+            return JsonResponse(msg)
+        except ValidationError:
+            msg = {'success': False, }
+            return JsonResponse(msg)
+    data = {
+        'user': CollegeUser.objects.get(collegeId=request.user)
+    }
+    return render(request, 'institute-edit-details.html', data)
 ##############################
 
 
@@ -777,6 +817,46 @@ def submit_student_signup(request):
                 msg = {'success': False}
                 return JsonResponse(msg)
 
+
+
+
+def student_edit(request):
+    if request.method == 'POST':
+        user = StudentUser.objects.get(studentId=request.user)
+        profile = request.FILES.get('profile')
+        back = request.FILES.get('backprof')
+        name = request.POST.get('firstname')
+        surname = request.POST.get('lastname')
+        description = request.POST.get('profileDescription')
+
+        if profile is None or profile == '':
+            profile = user.profileImage
+        else:
+            image_path = user.profileImage.path
+            if os.path.exists(image_path):
+                os.remove(image_path)
+        if back is None or back == '':
+            back = user.backgroundImage
+        else:
+            image_path = user.backgroundImage.path
+            if os.path.exists(image_path):
+                os.remove(image_path)
+        try:
+            user.profileImage = profile
+            user.backgroundImage = back
+            user.name = name
+            user.surname = surname
+            user.profileDescription = description
+            user.save()
+            msg = {'success': True, }
+            return JsonResponse(msg)
+        except ValidationError:
+            msg = {'success': False, }
+            return JsonResponse(msg)
+    data = {
+        'user': StudentUser.objects.get(studentId=request.user)
+    }
+    return render(request, 'student-edit-details.html', data)
 ######################################
 
 

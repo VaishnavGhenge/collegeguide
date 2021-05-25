@@ -21,8 +21,6 @@
     aria-expanded="false">Account</button>
   <div class="dropdown-menu shadow" style="border: none;">
     <a class="dropdown-item" href="{% url 'account' %}">My Profile</a>
-    <a class="dropdown-item" href="#">Edit Profile</a>
-    <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
   </div>
 </div>
@@ -93,7 +91,12 @@
               <a href="{{user.profileWebsite}}" target="_blank">{{user.profileWebsite}}</a>
               <br><br>
               <div class="edit-button-div">
-                <button type="button" class="edit-button">Edit Profile</button>
+                {% if group == 'student' %}
+                <a href="{% url 'student-edit' %}" class="edit-button">Edit Profile</a>
+                {% endif %}
+                {% if group == 'college' %}
+                <a href="{% url 'institute-edit' %}" class="edit-button">Edit Profile</a>
+                {% endif %}
               </div>
             </div>
           </div>
