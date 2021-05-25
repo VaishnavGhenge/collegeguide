@@ -551,12 +551,29 @@
                     </div>
                   </div>
                   <div class="helful-div mt-2">
-                    <small>Till {{review.helpfulCount}} people found this useful</small>
+                    <small id="{{review.reviewId}}-colhcount">{{review.helpfulCount}} people found this useful</small><br>
+                    <small id="{{review.reviewId}}-colncount">{{review.notHelpfulCount}} people not found this useful</small>
                     <div class="row">
                       <div class="col-lg-4"><p>Was this review helpful?</p></div>
                       <div class="col-lg-4">
-                        <button type="button" class="btn btn-yes-no">Yes</button>
-                        <button type="button" class="btn btn-yes-no">No</button>
+                        {% if review.helpfulCount == 0 %}
+                          {% if review.notHelpfulCount == 0 %}
+                            <button type="button" id="{{review.reviewId}}-colyes" class="btn btn-yes-no" college="{{user.username}}" btn="yes" review="{{review.reviewId}}" rtype="college">Yes</button>
+                            <button type="button" id="{{review.reviewId}}-colno" class="btn btn-yes-no" college="{{user.username}}" btn="no" review="{{review.reviewId}}" rtype="college">No</button>
+                          {% endif %}
+                        {% endif %}
+                        {% for rating in college_helpfuls %}
+                          {% if review == rating.reviewid %}
+                            {% if rating.purpose == 'yes' %}
+                              <button type="button" id="{{review.reviewId}}-colyes" class="btn yes-no-focus" college="{{user.username}}" btn="yes" review="{{review.reviewId}}" rtype="college">Yes</button>
+                              <button type="button" id="{{review.reviewId}}-colno" class="btn btn-yes-no" college="{{user.username}}" btn="no" review="{{review.reviewId}}" rtype="college">No</button>
+                            {% endif %}
+                            {% if rating.purpose == 'no' %}
+                              <button type="button" id="{{review.reviewId}}-colyes" class="btn btn-yes-no" college="{{user.username}}" btn="yes" review="{{review.reviewId}}" rtype="college">Yes</button>
+                              <button type="button" id="{{review.reviewId}}-colno" class="btn yes-no-focus" college="{{user.username}}" btn="no" review="{{review.reviewId}}" rtype="college">No</button>
+                            {% endif %}
+                          {% endif %}
+                        {% endfor %}
                       </div>
                     </div>
                   </div>
@@ -674,12 +691,29 @@
                     </div>
                   </div>
                   <div class="helful-div mt-2">
-                    <small>Till {{review.helpfulCount}} people found this useful</small>
+                    <small id="{{review.reviewId}}-coshcount">{{review.helpfulCount}} people found this useful</small><br>
+                    <small id="{{review.reviewId}}-cosncount">{{review.notHelpfulCount}} people not found this useful</small>
                     <div class="row">
                       <div class="col-lg-4"><p>Was this review helpful?</p></div>
                       <div class="col-lg-4">
-                        <button type="button" class="btn btn-yes-no">Yes</button>
-                        <button type="button" class="btn btn-yes-no">No</button>
+                        {% if review.helpfulCount == 0 %}
+                          {% if review.notHelpfulCount == 0 %}
+                            <button type="button" id="{{review.reviewId}}-cosyes" class="btn btn-yes-no" college="{{user.username}}" btn="yes" review="{{review.reviewId}}" rtype="course">Yes</button>
+                            <button type="button" id="{{review.reviewId}}-cosno" class="btn btn-yes-no" college="{{user.username}}" btn="no" review="{{review.reviewId}}" rtype="course">No</button>
+                          {% endif %}
+                        {% endif %}
+                        {% for rating in course_helpfuls %}
+                          {% if review == rating.reviewid %}
+                            {% if rating.purpose == 'yes' %}
+                              <button type="button" id="{{review.reviewId}}-cosyes" class="btn yes-no-focus" college="{{user.username}}" btn="yes" review="{{review.reviewId}}" rtype="course">Yes</button>
+                              <button type="button" id="{{review.reviewId}}-cosno" class="btn btn-yes-no" college="{{user.username}}" btn="no" review="{{review.reviewId}}" rtype="course">No</button>
+                            {% endif %}
+                            {% if rating.purpose == 'no' %}
+                              <button type="button" id="{{review.reviewId}}-cosyes" class="btn btn-yes-no" college="{{user.username}}" btn="yes" review="{{review.reviewId}}" rtype="course">Yes</button>
+                              <button type="button" id="{{review.reviewId}}-cosno" class="btn yes-no-focus" college="{{user.username}}" btn="no" review="{{review.reviewId}}" rtype="course">No</button>
+                            {% endif %}
+                          {% endif %}
+                        {% endfor %}
                       </div>
                     </div>
                   </div>

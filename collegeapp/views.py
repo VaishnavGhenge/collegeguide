@@ -1,11 +1,14 @@
 from django.core import mail
+from django.core.mail import message
 from django.core.mail.message import EmailMultiAlternatives
 from django.http.response import HttpResponse, HttpResponseBase
+from django.utils import tree
 from django.utils.translation import to_language
 from collegeapp.decorators import unauthenticated_user
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
-from . models import (Cities, CollegeCourses, CollegeReview, Contact, CourseReview, Courses, Email, Followers, ImageLikes, Images, Like, PLatformStatistics, StudentUser, )
+from . models import (Cities, CollegeCourses, CollegeReview, Collegehelpful, Contact, CourseReview, Coursehelpful, Courses, Email, Followers,
+ImageLikes, Images, Like, PLatformStatistics, StudentUser, )
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from .models import CollegeUser
@@ -284,6 +287,9 @@ def account(request):
                 course_reviewed_users = course_reviewed_users + list(chain(StudentUser.objects.filter(studentId=review.get('studentId_id'))))
                 student_list.append(review.get('studenId'))
 
+        college_helpfuls = Collegehelpful.objects.filter(userid=request.user, college=user_obj)
+        course_helpfuls = Coursehelpful.objects.filter(userid=request.user, college=user_obj)
+
         data = {
             'college_courses': CollegeCourses.objects.filter(userId=user_obj),
             'user': user_obj,
@@ -297,6 +303,8 @@ def account(request):
             'CourseReviews': CourseReviews,
             'college_reviewed_users': college_reviewed_users,
             'course_reviewed_users': course_reviewed_users,
+            'college_helpfuls': college_helpfuls,
+            'course_helpfuls': course_helpfuls,
         }
     if group == 'student':
         user_obj = StudentUser.objects.get(email=request.user)
@@ -391,6 +399,9 @@ def view_account(request, group, username):
             if request.user.groups.exists():
                 visiting_user_group = request.user.groups.all()[0].name
 
+            college_helpfuls = Collegehelpful.objects.filter(userid=request.user, college=user)
+            course_helpfuls = Coursehelpful.objects.filter(userid=request.user, college=user)
+
             data = {
                 'liked': liked,
                 'followed': followed,
@@ -406,6 +417,8 @@ def view_account(request, group, username):
                 'college_reviewed_users': college_reviewed_users,
                 'course_reviewed_users': course_reviewed_users,
                 'visiting_user_group': visiting_user_group,
+                'college_helpfuls': college_helpfuls,
+                'course_helpfuls': course_helpfuls,
             }
             return render(request, 'visit-account.html', data)
     elif group == 'student':
@@ -640,7 +653,6 @@ def submit_student_signup(request):
         name = request.POST.get('firstname')
         surname = request.POST.get('lastname')
         description = request.POST.get('profileDescription') 
-        # profileDescription is from student-signup.html (id='profileDescription')
         location = request.POST.get('location')
         courses = request.POST.getlist('courses')
         username = request.POST.get('username')
@@ -1038,6 +1050,136 @@ def getratingstats(request):
     else:
         msg = { 'success': False, }
         return JsonResponse(msg)
+
+######################################
+def helpful_view(request):
+    btn = request.GET.get('btn', '')
+    reviewid = request.GET.get('reviewid', '')
+    type = request.GET.get('rtype', '')
+    username = request.GET.get('college', '')
+
+    if btn != '' and reviewid != '' and type != '' and username != '':
+        college = CollegeUser.objects.get(username=username)
+        if type == 'college':
+            review = CollegeReview.objects.get(reviewId=int(reviewid))
+            if btn == 'yes':
+                rated_review = Collegehelpful.objects.filter(reviewid=review, userid=request.user, purpose='no')
+                if not rated_review:
+                    Collegehelpful(reviewid=review, userid=request.user, college=college, purpose='yes').save()
+                    count = review.helpfulCount
+                    if count is None or count == '':
+                        count = 0
+                    count += 1
+                    CollegeReview.objects.filter(reviewId=int(reviewid)).update(helpfulCount=count)
+
+                    msg = { 'success': True, 'count': count, }
+                    return JsonResponse(msg)
+                else:
+                    # Collegehelpful.objects.filter(reviewid=review, userid=request.user, college=college, purpose='no').delete()
+                    ncount = review.notHelpfulCount
+                    if ncount is None or ncount == '':
+                        ncount = 0
+                    ncount -= 1
+                    CollegeReview.objects.filter(reviewId=int(reviewid)).update(notHelpfulCount=ncount)
+
+                    Collegehelpful.objects.filter(reviewid=review, userid=request.user, college=college, purpose='no').update(purpose='yes')
+                    hcount = review.helpfulCount
+                    if hcount is None or hcount == '':
+                        hcount = 0
+                    hcount += 1
+                    CollegeReview.objects.filter(reviewId=int(reviewid)).update(helpfulCount=hcount)
+
+                    msg = { 'success': True, 'ncount': ncount, 'hcount': hcount, 'update': True, }
+                    return JsonResponse(msg)
+            elif btn == 'no':
+                rated_review = Collegehelpful.objects.filter(reviewid=review, userid=request.user, purpose='yes')
+                if not rated_review:
+                    Collegehelpful(reviewid=review, userid=request.user, college=college, purpose='no').save()
+                    count = review.notHelpfulCount
+                    if count is None or count == '':
+                        count = 0
+                    count += 1
+                    CollegeReview.objects.filter(reviewId=int(reviewid)).update(notHelpfulCount=count)
+
+                    msg = { 'success': True, 'count': count, }
+                    return JsonResponse(msg)
+                else:
+                    # Collegehelpful.objects.filter(reviewid=review, userid=request.user, college=college, purpose='yes').delete()
+                    hcount = review.helpfulCount
+                    if hcount is None or hcount == '':
+                        hcount = 0
+                    hcount -= 1
+                    CollegeReview.objects.filter(reviewId=int(reviewid)).update(helpfulCount=hcount)
+
+                    Collegehelpful.objects.filter(reviewid=review, userid=request.user, college=college, purpose='yes').update(purpose='no')
+                    ncount = review.notHelpfulCount
+                    if ncount is None or ncount == '':
+                        ncount = 0
+                    ncount += 1
+                    CollegeReview.objects.filter(reviewId=int(reviewid)).update(notHelpfulCount=ncount)
+                    msg = { 'success': True, 'ncount': ncount, 'hcount': hcount, 'update': True, }
+                    return JsonResponse(msg)
+        elif type == 'course':
+            review = CourseReview.objects.get(reviewId=int(reviewid))
+            if btn == 'yes':
+                rated_review = Coursehelpful.objects.filter(reviewid=review, userid=request.user, purpose='no')
+                if not rated_review:
+                    Coursehelpful(reviewid=review, userid=request.user, college=college, purpose='yes').save()
+                    count = review.helpfulCount
+                    if count is None or count == '':
+                        count = 0
+                    count += 1
+                    CourseReview.objects.filter(reviewId=int(reviewid)).update(helpfulCount=count)
+
+                    msg = { 'success': True, 'count': count, }
+                    return JsonResponse(msg)
+                else:
+                    # Coursehelpful.objects.filter(reviewid=review, userid=request.user, college=college, purpose='no').delete()
+                    ncount = review.notHelpfulCount
+                    if ncount is None or ncount == '':
+                        ncount = 0
+                    ncount -= 1
+                    CourseReview.objects.filter(reviewId=int(reviewid)).update(notHelpfulCount=ncount)
+
+                    Coursehelpful.objects.filter(reviewid=review, userid=request.user, college=college, purpose='no').update(purpose='yes')
+                    hcount = review.helpfulCount
+                    if hcount is None or hcount == '':
+                        hcount = 0
+                    hcount += 1
+                    CourseReview.objects.filter(reviewId=int(reviewid)).update(helpfulCount=hcount)
+
+                    msg = { 'success': True, 'ncount': ncount, 'hcount': hcount, 'update': True, }
+                    return JsonResponse(msg)
+            elif btn == 'no':
+                rated_review = Coursehelpful.objects.filter(reviewid=review, userid=request.user, purpose='yes')
+                if not rated_review:
+                    Coursehelpful(reviewid=review, userid=request.user, college=college, purpose='no').save()
+                    count = review.notHelpfulCount
+                    if count is None or count == '':
+                        count = 0
+                    count += 1
+                    CourseReview.objects.filter(reviewId=int(reviewid)).update(notHelpfulCount=count)
+
+                    msg = { 'success': True, 'count': count, }
+                    return JsonResponse(msg)
+                else:
+                    # Coursehelpful.objects.filter(reviewid=review, userid=request.user, college=college, purpose='yes').delete()
+                    hcount = review.helpfulCount
+                    if hcount is None or hcount == '':
+                        hcount = 0
+                    hcount -= 1
+                    CourseReview.objects.filter(reviewId=int(reviewid)).update(helpfulCount=hcount)
+
+                    Collegehelpful.objects.filter(reviewid=review, userid=request.user, college=college, purpose='yes').update(purpose='no')
+                    ncount = review.notHelpfulCount
+                    if ncount is None or ncount == '':
+                        ncount = 0
+                    ncount += 1
+                    CourseReview.objects.filter(reviewId=int(reviewid)).update(notHelpfulCount=ncount)
+                    msg = { 'success': True, 'ncount': ncount, 'hcount': hcount, 'update': True, }
+                    return JsonResponse(msg)
+    else:
+        msg = { 'success': False, }
 
 ############################# End of Institute Views ######################################
 

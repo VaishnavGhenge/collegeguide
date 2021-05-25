@@ -153,6 +153,7 @@ class CollegeReview(models.Model):
     campusRating = models.PositiveSmallIntegerField(null=True)
     libraryRating = models.PositiveSmallIntegerField(null=True)
     helpfulCount = models.IntegerField(default=0)
+    notHelpfulCount = models.IntegerField(default=0)
     spamCount = models.IntegerField(default=0)
     inappropriateCount = models.IntegerField(default=0)
     is_alumni = models.BooleanField(default=False)
@@ -168,9 +169,24 @@ class CourseReview(models.Model):
     staffRating = models.PositiveSmallIntegerField(null=True)
     curriculumRating = models.PositiveSmallIntegerField(null=True)
     helpfulCount = models.IntegerField(default=0)
+    notHelpfulCount = models.IntegerField(default=0)
     spamCount = models.IntegerField(default=0)
     inappropriateCount = models.IntegerField(default=0)
     is_alumni = models.BooleanField(default=False)
+
+class Collegehelpful(models.Model):
+    id = models.AutoField(primary_key=True)
+    reviewid = models.ForeignKey(CollegeReview, on_delete=models.CASCADE)
+    userid = models.ForeignKey(User, on_delete=models.CASCADE)
+    college = models.ForeignKey(CollegeUser, on_delete=models.CASCADE, null=True)
+    purpose = models.CharField(max_length=50, null=True)
+
+class Coursehelpful(models.Model):
+    id = models.AutoField(primary_key=True)
+    reviewid = models.ForeignKey(CourseReview, on_delete=models.CASCADE)
+    userid = models.ForeignKey(User, on_delete=models.CASCADE)
+    college = models.ForeignKey(CollegeUser, on_delete=models.CASCADE, null=True)
+    purpose = models.CharField(max_length=50, null=True)
 
 ################################################################################################
 # Website Statistics Models

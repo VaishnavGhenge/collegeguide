@@ -41,6 +41,7 @@ urlpatterns = [
     path('checkotp/', views.checkotp, name='checkotp'),
     path('clearsession/', views.clearsession, name='clearsession'),
     path('getratingstats/', views.getratingstats, name='getratingstats'),
+    path('helpful-action/', views.helpful_view, name='helpful-view'),
 
     path('dashboard/', views.dashboard, name='dashboard'),
 

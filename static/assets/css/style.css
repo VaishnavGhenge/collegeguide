@@ -2036,8 +2036,30 @@ section {
 
 .reviews-div .review .helful-div .btn-yes-no:focus {
   box-shadow: none;
+  /* background-color: #e9eefb;
+  border-color: #e9eefb; */
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,.1);
+}
+
+.yes-no-focus {
+  box-shadow: none;
+  background-color: #e9eefb;
+  font-size: 11px;
+  border: 1px solid #e9eefb;
+  border-radius: 50px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 1px;
+  padding-top: 1px;
+}
+
+.yes-no-focus:focus {
   background-color: #e9eefb;
   border-color: #e9eefb;
+  box-shadow: none;
 }
 
 .reviews-div .post {

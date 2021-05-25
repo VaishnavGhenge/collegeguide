@@ -334,3 +334,74 @@ $('.rate').click(function() {
     $('#'+tagid[0]+'-5').attr('class', 'fa fa-star rate');
   }
 });
+
+$(document).on('click', '.btn-yes-no', function() {
+  var btn = String($(this).attr('btn')),
+  reviewid = String($(this).attr('review')),
+  rtype = String($(this).attr('rtype')),
+  college = String($(this).attr('college'));
+
+  $.ajax({
+    type: "GET",
+    url: '/helpful-action/',
+    data: { 
+      'btn': btn, 
+      'reviewid': reviewid,
+      'rtype': rtype,
+      'college': college,
+    },
+    dataType: 'json',
+    timeout: 40000 
+  }).done(function(msg) {
+    if(msg.success) {
+      if(rtype == 'college') {
+        if(btn == 'yes') {
+          if(msg.update) {
+            $('#'+reviewid+'-colno').attr('class', 'btn btn-yes-no');
+            $('#'+reviewid+'-colyes').attr('class', 'btn yes-no-focus');
+            $('#'+reviewid+'-colhcount').text(+msg.hcount+' people found this useful');
+            $('#'+reviewid+'-colncount').text(msg.ncount+' people not found this useful');
+          } else {
+            $('#'+reviewid+'-colyes').attr('class', 'btn yes-no-focus');
+            $('#'+reviewid+'-colhcount').text(+msg.count+' people found this useful');
+          }
+        } else if(btn == 'no') {
+          if(msg.update) {
+            $('#'+reviewid+'-colyes').attr('class', 'btn btn-yes-no');
+            $('#'+reviewid+'-colno').attr('class', 'btn yes-no-focus');
+            $('#'+reviewid+'-colhcount').text(+msg.hcount+' people found this useful');
+            $('#'+reviewid+'-colncount').text(msg.ncount+' people not found this useful');
+          } else {
+            $('#'+reviewid+'-colno').attr('class', 'btn yes-no-focus');
+            $('#'+reviewid+'-colncount').text(+msg.count+' people found this useful');
+          }
+        }
+      } else if(rtype == 'course') {
+        if(btn == 'yes') {
+          if(msg.update) {
+            $('#'+reviewid+'-cosno').attr('class', 'btn btn-yes-no');
+            $('#'+reviewid+'-cosyes').attr('class', 'btn yes-no-focus');
+            $('#'+reviewid+'-coshcount').text(+msg.hcount+' people found this useful');
+            $('#'+reviewid+'-cosncount').text(msg.ncount+' people not found this useful');
+          } else {
+            $('#'+reviewid+'-cosyes').attr('class', 'btn yes-no-focus');
+            $('#'+reviewid+'-coshcount').text(+msg.count+' people found this useful');
+          }
+        } else if(btn == 'no') {
+          if(msg.update) {
+            $('#'+reviewid+'-cosyes').attr('class', 'btn btn-yes-no');
+            $('#'+reviewid+'-cosno').attr('class', 'btn yes-no-focus');
+            $('#'+reviewid+'-coshcount').text(+msg.hcount+' people found this useful');
+            $('#'+reviewid+'-cosncount').text(msg.ncount+' people not found this useful');
+          } else {
+            $('#'+reviewid+'-cosno').attr('class', 'btn yes-no-focus');
+            $('#'+reviewid+'-cosncount').text(+msg.count+' people found this useful');
+          }
+        }
+      }
+    }
+    else {
+        alert("Something went wrong!");
+    }
+  });
+});
