@@ -1,9 +1,5 @@
-from django.core import mail
-from django.core.mail import message
 from django.core.mail.message import EmailMultiAlternatives
-from django.http.response import HttpResponse, HttpResponseBase
-from django.utils import tree
-from django.utils.translation import to_language
+from django.http.response import HttpResponse
 from collegeapp.decorators import unauthenticated_user
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
@@ -18,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from itertools import chain
 import random
-from django.core.mail import BadHeaderError, send_mail
+from django.core.mail import BadHeaderError
 import math
 
 ################################## Website Home Views ########################################
