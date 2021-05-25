@@ -10,265 +10,272 @@
 {% endblock menu %}
 
 {% block body %}
-  <!-- ======= Hero Section ======= -->
-  <section id="hero" class="d-flex justify-content-center align-items-center">
-    <div class="container position-relative" data-aos="zoom-in" data-aos-delay="100">
-      <h1>Change Your Life.<br>Start Here.</h1>
-      <h2>Know about your favourite institute and many more...</h2>
-      <a href="{% url 'signin' %}" class="btn-get-started">Sign-in</a>
+<!-- ======= Hero Section ======= -->
+<section id="hero" class="d-flex justify-content-center align-items-center">
+  <div class="container position-relative" data-aos="zoom-in" data-aos-delay="100">
+    <h1>Change Your Life.<br>Start Here.</h1>
+    <h2>Know about your favourite institute and many more...</h2>
+    <a href="{% url 'signin' %}" class="btn-get-started">Sign-in</a>
+  </div>
+</section><!-- End Hero -->
+
+<main id="main">
+
+  <!-- ======= Nirf Colleges Section ======= -->
+  <section id="popular-colleges" class="colleges">
+    <div class="container" data-aos="fade-up">
+
+      <div class="section-title">
+        <h2>Nirf Raking Colleges</h2>
+        <p>Popular colleges</p>
+      </div>
+
+      <div class="row" data-aos="zoom-in" data-aos-delay="100">
+        {% for college in nirf_colleges %}
+        <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+          <!-- College item -->
+          <div class="college-item">
+            <img src="{{college.backgroundImage.url}}" class="img-fluid college-img" alt="">
+            <div class="college-content">
+
+              <div class="d-flex justify-content-start mb-3">
+                <div class="rating">
+                  {% if college.totalCount != 0 %}
+                  <p>Rating</p>
+                  <p class="star">
+                    {% if college.totalRating == 1 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if college.totalRating == 2 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if college.totalRating == 3 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if college.totalRating == 4 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if college.totalRating == 5 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    {% endif %}
+                  </p>
+                  {% endif %}
+                </div>
+              </div>
+
+              <h3>
+                <a href="/account/college/{{college.username}}/">{{college.name}}</a>
+                <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
+                <span class="badge badge-warning">#{{college.nirfRanking}}</span>
+              </h3>
+
+              <div class="college d-flex justify-content-between align-items-center">
+                <div class="college-profile d-flex align-items-center">
+                  <img src="{{college.profileImage.url}}" class="img-fluid" alt="">
+                  <span>{{college.username}}</span>
+                </div>
+                <div class="college-rank d-flex align-items-center">
+                  {% if college in liked_colleges %}
+                  <i class="fa fa-heart heart-fill like" id="{{college.username}}-like-nirf"
+                    userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="dislike"
+                    aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count-nirf" style="margin-top: 15px;">
+                    {{college.profileLikes}}</p>
+                  {% else %}
+                  <i class="fa fa-heart-o heart-o like" id="{{college.username}}-like-nirf"
+                    userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="like"
+                    aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count-nirf" style="margin-top: 15px;">
+                    {{college.profileLikes}}</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- End College Item-->
+        {% endfor %}
+      </div>
+
     </div>
-  </section><!-- End Hero -->
+  </section><!-- End Collges Section -->
 
-  <main id="main">
+  <!-- ======= Popular Courses Section ======= -->
+  <section id="features" class="features">
+    <div class="container" data-aos="fade-up">
 
-        <!-- ======= Nirf Colleges Section ======= -->
-        <section id="popular-colleges" class="colleges">
-          <div class="container" data-aos="fade-up">
-    
-            <div class="section-title">
-              <h2>Nirf Raking Colleges</h2>
-              <p>Popular colleges</p>
-            </div>
-    
-            <div class="row" data-aos="zoom-in" data-aos-delay="100">
-              {% for college in nirf_colleges %}
-              <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
-                <!-- College item -->
-                <div class="college-item">
-                  <img src="{{college.backgroundImage.url}}" class="img-fluid college-img" alt="">
-                  <div class="college-content">
-    
-                    <div class="d-flex justify-content-start mb-3">
-                      <div class="rating">
-                        {% if college.totalCount != 0 %}
-                        <p>Rating</p>
-                        <p class="star">
-                          {% if college.totalRating == 1 %}
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star-o" aria-hidden="true"></i>
-                          <i class="fa fa-star-o" aria-hidden="true"></i>
-                          <i class="fa fa-star-o" aria-hidden="true"></i>
-                          <i class="fa fa-star-o" aria-hidden="true"></i>
-                          {% endif %}
-                          {% if college.totalRating == 2 %}
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star-o" aria-hidden="true"></i>
-                          <i class="fa fa-star-o" aria-hidden="true"></i>
-                          <i class="fa fa-star-o" aria-hidden="true"></i>
-                          {% endif %}
-                          {% if college.totalRating == 3 %}
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star-o" aria-hidden="true"></i>
-                          <i class="fa fa-star-o" aria-hidden="true"></i>
-                          {% endif %}
-                          {% if college.totalRating == 4 %}
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star-o" aria-hidden="true"></i>
-                          {% endif %}
-                          {% if college.totalRating == 5 %}
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          {% endif %}
-                        </p>
-                        {% endif %}
-                      </div>
-                    </div>
-    
-                    <h3>
-                      <a href="/account/college/{{college.username}}/">{{college.name}}</a> 
-                        <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
-                        <span class="badge badge-warning">#{{college.nirfRanking}}</span>
-                    </h3>
-                    
-                    <div class="college d-flex justify-content-between align-items-center">
-                      <div class="college-profile d-flex align-items-center">
-                        <img src="{{college.profileImage.url}}" class="img-fluid" alt="">
-                        <span>{{college.username}}</span>
-                      </div>
-                      <div class="college-rank d-flex align-items-center">
-                        {% if college in liked_colleges %}
-                        <i class="fa fa-heart heart-fill like" id="{{college.username}}-like-nirf" userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="dislike" aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count-nirf" style="margin-top: 15px;">{{college.profileLikes}}</p>
-                        {% else %}
-                        <i class="fa fa-heart-o heart-o like" id="{{college.username}}-like-nirf" userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="like" aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count-nirf" style="margin-top: 15px;">{{college.profileLikes}}</p>
-                        {% endif %}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div> <!-- End College Item-->
-              {% endfor %}
-            </div>
-    
+      <div class="section-title">
+        <h2>Courses</h2>
+        <p>Popular courses</p>
+      </div>
+
+      <div class="row" data-aos="zoom-in" data-aos-delay="100">
+        {% for course in courses %}
+        <div class="col-lg-3 col-md-4 mt-4">
+          <div class="icon-box">
+            <i class="ri-price-tag-2-line" style="color: #4233ff;"></i>
+            <h3><a href="#{{course.courseId}})">{{course.courseName}}</a></h3>
           </div>
-        </section><!-- End Collges Section -->
-
-    <!-- ======= Popular Courses Section ======= -->
-    <section id="features" class="features">
-      <div class="container" data-aos="fade-up">
-
-        <div class="section-title">
-          <h2>Courses</h2>
-          <p>Popular courses</p>
         </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section><!-- End Features Section -->
 
-        <div class="row" data-aos="zoom-in" data-aos-delay="100">
-          {% for course in courses %}
-          <div class="col-lg-3 col-md-4 mt-4">
-            <div class="icon-box">
-              <i class="ri-price-tag-2-line" style="color: #4233ff;"></i>
-              <h3><a href="#{{course.courseId}})">{{course.courseName}}</a></h3>
-            </div>
-          </div>
-          {% endfor %}
+  <!-- ======= About Section ======= -->
+  <section id="about" class="about">
+    <div class="container" data-aos="fade-up">
+
+      <div class="section-title">
+        <h2>About</h2>
+        <p>About Us</p>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left" data-aos-delay="100">
+          <img src="{% static 'assets/img/about.jpg' %}" class="img-fluid" alt="">
+        </div>
+        <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1 content">
+          <h3>We help students from getting them know about their favourite institutes.</h3>
+          <p class="font-italic">
+            If you are searching for best institutes then this website is for you. You're just few tap away from it.
+          </p>
+          <ul>
+            <li><i class="icofont-check-circled"></i> Best colleges from all over india.</li>
+            <li><i class="icofont-check-circled"></i> Personalized teqniques for identification of institutes.</li>
+            <li><i class="icofont-check-circled"></i> Help other students by contributing reviews to this platform. So
+              other users can also get benefit from it.</li>
+          </ul>
+          <p>
+            Contribute to this college-guide community to help others.
+          </p>
+          <a href="{% url 'about' %}" class="learn-more-btn">Learn More</a>
         </div>
       </div>
-    </section><!-- End Features Section -->
 
-    <!-- ======= About Section ======= -->
-    <section id="about" class="about">
-      <div class="container" data-aos="fade-up">
+    </div>
+  </section><!-- End About Section -->
 
-        <div class="section-title">
-          <h2>About</h2>
-          <p>About Us</p>
+  <!-- ======= Counts Section ======= -->
+  <section id="counts" class="counts section-bg">
+    <div class="container">
+
+      <div class="row counters">
+
+        <div class="col-lg-3 col-6 text-center">
+          <span data-toggle="counter-up">{{stat.studentUsers}}</span>
+          <p>Students</p>
         </div>
 
-        <div class="row">
-          <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left" data-aos-delay="100">
-            <img src="{% static 'assets/img/about.jpg' %}" class="img-fluid" alt="">
-          </div>
-          <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1 content">
-            <h3>We help students from getting them know about their favourite institutes.</h3>
-            <p class="font-italic">
-              If you are searching for best institutes then this website is for you. You're just few tap away from it.
-            </p>
-            <ul>
-              <li><i class="icofont-check-circled"></i> Best colleges from all over india.</li>
-              <li><i class="icofont-check-circled"></i> Personalized teqniques for identification of institutes.</li>
-              <li><i class="icofont-check-circled"></i> Help other students by contributing reviews to this platform. So other users can also get benefit from it.</li>
-            </ul>
-            <p>
-              Contribute to this college-guide community to help others.
-            </p>
-            <a href="{% url 'about' %}" class="learn-more-btn">Learn More</a>
-          </div>
+        <div class="col-lg-3 col-6 text-center">
+          <span data-toggle="counter-up">{{stat.collegeUsers}}</span>
+          <p>Institutions</p>
+        </div>
+
+        <div class="col-lg-3 col-6 text-center">
+          <span data-toggle="counter-up">{{stat.totalCourses}}</span>
+          <p>Courses</p>
+        </div>
+
+        <div class="col-lg-3 col-6 text-center">
+          <span data-toggle="counter-up">{{stat.platformVisitors}}</span>
+          <p>Site visitors</p>
         </div>
 
       </div>
-    </section><!-- End About Section -->
 
-    <!-- ======= Counts Section ======= -->
-    <section id="counts" class="counts section-bg">
-      <div class="container">
+    </div>
+  </section><!-- End Counts Section -->
 
-        <div class="row counters">
+  <section id="founders" class="founders">
+    <div class="container" data-aos="fade-up">
 
-          <div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">{{stat.studentUsers}}</span>
-            <p>Students</p>
-          </div>
-
-          <div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">{{stat.collegeUsers}}</span>
-            <p>Institutions</p>
-          </div>
-
-          <div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">{{stat.totalCourses}}</span>
-            <p>Courses</p>
-          </div>
-
-          <div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">{{stat.platformVisitors}}</span>
-            <p>Site visitors</p>
-          </div>
-
-        </div>
-
+      <div class="section-title">
+        <h2>Creators</h2>
+        <p>Website Founders</p>
       </div>
-    </section><!-- End Counts Section -->
 
-    <section id="founders" class="founders">
-      <div class="container" data-aos="fade-up">
-
-        <div class="section-title">
-          <h2>Creators</h2>
-          <p>Website Founders</p>
-        </div>
-
-        <div class="row" data-aos="zoom-in" data-aos-delay="100">
-          <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
-            <div class="member">
-              <img src="{% static 'assets/img/trainers/siddhesh2.jpg' %}" class="img-fluid" alt="">
-              <div class="member-content">
-                <h4>Siddhesh Sambe</h4>
-                <span>Group Leader</span>
-                <p>
-                  Join us to contribute to this great community and also get benefits of being in this community
-                </p>
-                <div class="social">
-                  <a href="#"><i class="icofont-twitter"></i></a>
-                  <a href="#"><i class="icofont-facebook"></i></a>
-                  <a href="#"><i class="icofont-instagram"></i></a>
-                  <a href="#"><i class="icofont-linkedin"></i></a>
-                </div>
+      <div class="row" data-aos="zoom-in" data-aos-delay="100">
+        <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
+          <div class="member">
+            <img src="{% static 'assets/img/trainers/siddhesh2.jpg' %}" class="img-fluid" alt="">
+            <div class="member-content">
+              <h4>Siddhesh Sambe</h4>
+              <span>Group Leader</span>
+              <p>
+                Join us to contribute to this great community and also get benefits of being in this community
+              </p>
+              <div class="social">
+                <a href="#"><i class="icofont-twitter"></i></a>
+                <a href="#"><i class="icofont-facebook"></i></a>
+                <a href="#"><i class="icofont-instagram"></i></a>
+                <a href="#"><i class="icofont-linkedin"></i></a>
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
-            <div class="member">
-              <img src="{% static 'assets/img/trainers/vaishnav2.jpeg' %}" class="img-fluid" alt="">
-              <div class="member-content">
-                <h4>Vaishnav Ghenge</h4>
-                <span>Group Member</span>
-                <p>
-                  Join us to contribute to this great community and also get benefits of being in this community
-                </p>
-                <div class="social">
-                  <a href="#"><i class="icofont-twitter"></i></a>
-                  <a href="#"><i class="icofont-facebook"></i></a>
-                  <a href="#"><i class="icofont-instagram"></i></a>
-                  <a href="#"><i class="icofont-linkedin"></i></a>
-                </div>
+        <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
+          <div class="member">
+            <img src="{% static 'assets/img/trainers/vaishnav2.jpeg' %}" class="img-fluid" alt="">
+            <div class="member-content">
+              <h4>Vaishnav Ghenge</h4>
+              <span>Group Member</span>
+              <p>
+                Join us to contribute to this great community and also get benefits of being in this community
+              </p>
+              <div class="social">
+                <a href="#"><i class="icofont-twitter"></i></a>
+                <a href="#"><i class="icofont-facebook"></i></a>
+                <a href="#"><i class="icofont-instagram"></i></a>
+                <a href="#"><i class="icofont-linkedin"></i></a>
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
-            <div class="member">
-              <img src="{% static 'assets/img/trainers/parth2.jpg' %}" class="img-fluid" alt="">
-              <div class="member-content">
-                <h4>Parth Bamnote</h4>
-                <span>Group Member</span>
-                <p>
-                  Join us to contribute to this great community and also get benefits of being in this community
-                </p>
-                <div class="social">
-                  <a href="#"><i class="icofont-twitter"></i></a>
-                  <a href="#"><i class="icofont-facebook"></i></a>
-                  <a href="#"><i class="icofont-instagram"></i></a>
-                  <a href="#"><i class="icofont-linkedin"></i></a>
-                </div>
+        <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
+          <div class="member">
+            <img src="{% static 'assets/img/trainers/parth2.jpg' %}" class="img-fluid" alt="">
+            <div class="member-content">
+              <h4>Parth Bamnote</h4>
+              <span>Group Member</span>
+              <p>
+                Join us to contribute to this great community and also get benefits of being in this community
+              </p>
+              <div class="social">
+                <a href="#"><i class="icofont-twitter"></i></a>
+                <a href="#"><i class="icofont-facebook"></i></a>
+                <a href="#"><i class="icofont-instagram"></i></a>
+                <a href="#"><i class="icofont-linkedin"></i></a>
               </div>
             </div>
           </div>
-
         </div>
 
       </div>
-    </section><!-- End Founders Section -->
 
-  </main><!-- End #main -->
+    </div>
+  </section><!-- End Founders Section -->
+
+</main><!-- End #main -->
 
 {% endblock body %}
 

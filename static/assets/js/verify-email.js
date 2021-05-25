@@ -1,8 +1,8 @@
-$(document).on("click", ".btn-verify" , function() {
+$(document).on("click", ".btn-verify", function () {
     var email_pattern = /^[^\s()<>@,;:\/]+@\w[\w\.-]+\.[a-z]{2,}$/i,
-    email = $("#id_email").val();
+        email = $("#id_email").val();
 
-    if(!email_pattern.test(email)) {
+    if (!email_pattern.test(email)) {
         $("#email-validate").html("Please enter valid email");
         $("#email-validate").slideDown();
         return false;
@@ -21,11 +21,11 @@ $(document).on("click", ".btn-verify" , function() {
             },
             dataType: 'json',
             timeout: 40000
-          }).done(function(msg) {
-            if(msg.success) {
+        }).done(function (msg) {
+            if (msg.success) {
                 btn.text("Sent");
                 $("#btn-resend").slideDown();
-                $("#otpform-title").text("OTP sent on "+email);
+                $("#otpform-title").text("OTP sent on " + email);
                 sessionStorage.setItem("email", email);
                 $("#otpform").modal("show");
             }
@@ -40,10 +40,10 @@ $(document).on("click", ".btn-verify" , function() {
     }
 });
 
-$(document).on("click", ".btn-confirm", function() {
+$(document).on("click", ".btn-confirm", function () {
     var otp = $("#otp").val();
 
-    if(otp.length != 6) {
+    if (otp.length != 6) {
         $("#otp-validate").html("Please enter valid OTP");
         $("#otp-validate").slideDown();
         return false;
@@ -57,8 +57,8 @@ $(document).on("click", ".btn-confirm", function() {
             },
             dataType: 'json',
             timeout: 40000
-          }).done(function(msg) {
-            if(msg.success) {
+        }).done(function (msg) {
+            if (msg.success) {
                 $("#otpform").modal("hide");
                 $("#btn-verify").text("Verified");
                 $("#btn-resend").slideUp();
@@ -81,8 +81,8 @@ window.addEventListener('beforeunload', function (e) {
         type: "GET",
         url: '/clearsession/',
         timeout: 40000
-      }).done(function(msg) {
-        if(msg.success) {
+    }).done(function (msg) {
+        if (msg.success) {
             console.log("cleared..");
         }
         else {

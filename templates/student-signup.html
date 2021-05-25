@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -14,7 +15,9 @@
   <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
 
   <!-- Vendor CSS Files -->
   <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -26,7 +29,8 @@
   <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.css' %}">
   <!-- bootstrap-select additional library -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.17/css/bootstrap-select.min.css" />
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.17/css/bootstrap-select.min.css" />
 
 
   <!-- Template Main CSS File -->
@@ -37,13 +41,15 @@
 <body>
   <br>
   <div class="container">
-    <form action="{% url 'submit-student-signup' %}" method="post" role="form" class="signup-form" enctype="multipart/form-data" autocomplete="off">
+    <form action="{% url 'submit-student-signup' %}" method="post" role="form" class="signup-form"
+      enctype="multipart/form-data" autocomplete="off">
       {% csrf_token %}
       <h1 class="h3 mb-3 font-weight-normal">Student Signup Form</h1>
       <div class="form-group">
         <label for="profile-picture">Select profile picture (click on icon)</label>
         <div class="image-container">
-          <img src="{% static 'images\avatar.png' %}" alt="profile picture" class="profile-picture" id="profile-picture">
+          <img src="{% static 'images\avatar.png' %}" alt="profile picture" class="profile-picture"
+            id="profile-picture">
           <div class="overlay"><i class="fa fa-camera" aria-hidden="true" id="profile-upload"></i></div>
         </div>
         <input type="file" accept="image/*" hidden id="profile-input" class="form-control" name="profile">
@@ -51,7 +57,8 @@
       <div class="form-group">
         <label for="backprofile">Select background profile picture (click on icon)</label>
         <div class="background-container">
-          <img src="{% static 'images/default-back.jpeg' %}" alt="background image" class="backprofile" id="backprofile-picture">
+          <img src="{% static 'images/default-back.jpeg' %}" alt="background image" class="backprofile"
+            id="backprofile-picture">
           <div class="back-overlay"><i class="fa fa-camera" aria-hidden="true" id="backprof-upload"></i></div>
         </div>
         <input type="file" accept="image/*" hidden id="backprof-input" class="form-control" name="backprof">
@@ -59,24 +66,28 @@
       <div class="form-row">
         <div class="col-md-6 form-group">
           <label for="firstname">First Name</label>
-          <input type="text" name="firstname" class="form-control" id="firstname" data-rule="minlen:2" data-msg="Please enter at least 2 chars"/>
+          <input type="text" name="firstname" class="form-control" id="firstname" data-rule="minlen:2"
+            data-msg="Please enter at least 2 chars" />
           <div class="validate"></div>
         </div>
         <div class="col-md-6 form-group">
           <label for="lastname">Last Name</label>
-          <input type="text" name="lastname" class="form-control" id="lastname" data-rule="minlen:2" data-msg="Please enter at least 2 chars">
+          <input type="text" name="lastname" class="form-control" id="lastname" data-rule="minlen:2"
+            data-msg="Please enter at least 2 chars">
           <div class="validate"></div>
         </div>
       </div>
       <div class="form-group">
         <label for="profileDescription">Describe Yourself</label>
-        <textarea class="form-control" name="profileDescription" id="profileDescription" rows="5" data-rule="required" data-msg="Please write description"></textarea>
+        <textarea class="form-control" name="profileDescription" id="profileDescription" rows="5" data-rule="required"
+          data-msg="Please write description"></textarea>
         <div class="validate"></div>
       </div>
       <div class="form-row">
         <div class="col-md-6 form-group">
           <label for="location">Select city name</label>
-          <select class="form-control selectpicker select-city" name="city" id="city" data-live-search="true" data-rule="required"  data-msg="Please write location here" title="Select prefered city">
+          <select class="form-control selectpicker select-city" name="city" id="city" data-live-search="true"
+            data-rule="required" data-msg="Please write location here" title="Select prefered city">
             {% for city in cities %}
             <option data-tokens="{{city.cityName}}">{{city.cityName}}</option>
             {% endfor %}
@@ -85,7 +96,9 @@
         </div>
         <div class="col-md-6 form-group">
           <label for="courses">Courses</label><br>
-          <select class="form-control selectpicker" name="courses" id="courses" data-live-search="true" data-rule="required" data-msg="Please select city" multiple title="Select prefered courses" data-max-options="3">
+          <select class="form-control selectpicker" name="courses" id="courses" data-live-search="true"
+            data-rule="required" data-msg="Please select city" multiple title="Select prefered courses"
+            data-max-options="3">
             {% for course in courses %}
             <option data-tokens="{{course.courseId}}">{{course.courseName}}</option>
             {% endfor %}
@@ -106,13 +119,17 @@
           <label for="id_email">Email</label>
           <input type="email" id="id_email" name="email" class="form-control" checkurl="{% url 'check-email' %}">
           <div class="validate" id="email-validate"></div>
-          <button type="button" id="btn-verify" class="btn btn-warning btn-sm btn-verify">Verify email</button>&nbsp;&nbsp;<button type="button" id="btn-resend" class="btn btn-warning btn-sm btn-verify hide">Resend</button>
+          <button type="button" id="btn-verify" class="btn btn-warning btn-sm btn-verify">Verify
+            email</button>&nbsp;&nbsp;<button type="button" id="btn-resend"
+            class="btn btn-warning btn-sm btn-verify hide">Resend</button>
         </div>
       </div>
       <div class="form-row justify-content-center">
         <div class="col-md-6 form-group">
           <label for="id_password1">Create password</label>
-          <input type="password" id="id_password1" name="password1" class="form-control" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" data-rule="minlen:8" data-msg="Password must contain atleast 8 characters">
+          <input type="password" id="id_password1" name="password1" class="form-control"
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" data-rule="minlen:8"
+            data-msg="Password must contain atleast 8 characters">
           <div class="validate-pass" id="validate-pass">
             <p>Password must contain the following:</p>
             <p id="letter" class="invalid-pass">A <b>lowercase</b> letter</p>
@@ -126,7 +143,9 @@
       <div class="form-row justify-content-center">
         <div class="col-md-6 form-group">
           <label for="id_password2">Password (again)</label>
-          <input type="password" id="id_password2" name="password2" class="form-control" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" data-rule="minlen:8" data-msg="Password must contain atleast 8 characters">
+          <input type="password" id="id_password2" name="password2" class="form-control"
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" data-rule="minlen:8"
+            data-msg="Password must contain atleast 8 characters">
           <div class="validate"></div>
         </div>
       </div>
@@ -139,7 +158,8 @@
       <div class="mt-3">
         <div class="loading">Loading</div>
         <div class="error-message"></div>
-        <div class="sent-message">Account created successfully, to login <a href="{% url 'signin' %}" id="login-link">click here</a></div>
+        <div class="sent-message">Account created successfully, to login <a href="{% url 'signin' %}"
+            id="login-link">click here</a></div>
       </div>
     </form>
   </div>
@@ -191,7 +211,8 @@
               {% block email-form-token %}
               {% csrf_token %}
               {% endblock email-form-token %}
-              <input type="email" name="email" class="emailinput" data-rule="email" data-msg="Please enter a valid email">
+              <input type="email" name="email" class="emailinput" data-rule="email"
+                data-msg="Please enter a valid email">
               <input type="submit" value="Subscribe">
             </form>
             <div id="vld" class="validate" style="margin-left: 20px;"></div>
@@ -215,7 +236,7 @@
         <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
         <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
         <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-        <a href="#" class="google-plus"><i class="bx bxl-skype"></i><EGE/a>
+        <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
         <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
       </div>
     </div>
@@ -225,7 +246,8 @@
   <div id="preloader"></div>
 
   <!-- OTP Form Modal -->
-  <div class="modal fade" id="otpform" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="otp-form" aria-hidden="true">
+  <div class="modal fade" id="otpform" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="otp-form"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -268,15 +290,15 @@
     sp = '-';
     today = new Date();
     var dd = today.getDate();
-    var mm = today.getMonth()+1; //As January is 0.
+    var mm = today.getMonth() + 1; //As January is 0.
     var yyyy = today.getFullYear();
 
-    if(dd<10) dd='0'+dd;
-    if(mm<10) mm='0'+mm;
-    $('#foundation').attr('max', yyyy+sp+mm+sp+dd);
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+    $('#foundation').attr('max', yyyy + sp + mm + sp + dd);
 
-    $(document).ready(function() {
-      var readURL = function(input) {
+    $(document).ready(function () {
+      var readURL = function (input) {
         if (input.files && input.files[0]) {
           var reader = new FileReader();
 
@@ -287,7 +309,7 @@
         }
       }
 
-      var readBackURL = function(input) {
+      var readBackURL = function (input) {
         if (input.files && input.files[0]) {
           var reader = new FileReader();
 
@@ -298,37 +320,35 @@
         }
       }
 
-      $("#profile-input").on('change', function(){
+      $("#profile-input").on('change', function () {
         readURL(this);
       });
 
-      $("#backprof-input").on('change', function() {
+      $("#backprof-input").on('change', function () {
         readBackURL(this);
       });
 
-      $("#profile-upload").on('click', function() {
+      $("#profile-upload").on('click', function () {
         $("#profile-input").click();
       });
 
-      $("#backprof-upload").on('click', function() {
+      $("#backprof-upload").on('click', function () {
         $("#backprof-input").click();
       });
     });
 
-    function show_pass()
-      {
-        var p1 = document.getElementById('id_password1');
-        var p2 = document.getElementById('id_password2');
-        if(p1.type === 'password' && p2.type === 'password')
-        {
-          p1.type = 'text';
-          p2.type = 'text';
-        }
-        else{
-          p1.type = 'password';
-          p2.type = 'password';
-        }
+    function show_pass() {
+      var p1 = document.getElementById('id_password1');
+      var p2 = document.getElementById('id_password2');
+      if (p1.type === 'password' && p2.type === 'password') {
+        p1.type = 'text';
+        p2.type = 'text';
       }
+      else {
+        p1.type = 'password';
+        p2.type = 'password';
+      }
+    }
   </script>
 
 </body>

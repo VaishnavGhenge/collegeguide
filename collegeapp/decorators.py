@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect
 
+
 def unauthenticated_user(view_func):
     def wrapper_func(request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -10,7 +11,7 @@ def unauthenticated_user(view_func):
 
                 if group == 'college' or group == 'student':
                     return redirect('home')
-            
+
                 if group == 'admin':
                     return redirect('admin')
         else:

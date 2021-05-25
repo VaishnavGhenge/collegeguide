@@ -14,13 +14,14 @@
 
 {% block your-account %}
 <div class="btn-group">
-    <button class="btn-account dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</button>
-    <div class="dropdown-menu shadow" style="border: none;">
-      <a class="dropdown-item" href="{% url 'account' %}">My Profile</a>
-      <a class="dropdown-item" href="#">Edit Profile</a>
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-    </div>
+  <button class="btn-account dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+    aria-expanded="false">Account</button>
+  <div class="dropdown-menu shadow" style="border: none;">
+    <a class="dropdown-item" href="{% url 'account' %}">My Profile</a>
+    <a class="dropdown-item" href="#">Edit Profile</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+  </div>
 </div>
 {% endblock your-account %}
 
@@ -28,301 +29,328 @@
 <br><br><br>
 <main id="main">
 
-      {% if liked_colleges %}
-      <!-- ======= Liked Colleges Section ======= -->
-      <section id="liked-colleges" class="colleges">
-        <div class="container" data-aos="fade-up">
-  
-          <div class="section-title">
-            <h2>Recent Liked Colleges</h2>
-          </div>
-  
-          <div class="row" data-aos="zoom-in" data-aos-delay="100">
+  {% if liked_colleges %}
+  <!-- ======= Liked Colleges Section ======= -->
+  <section id="liked-colleges" class="colleges">
+    <div class="container" data-aos="fade-up">
 
-            {% for college in liked_colleges %}
-            <div id="first" class="col-lg-3 col-md-6 d-flex align-items-stretch">
-              <!-- College item -->
-              <div class="college-item active">
-                <img src="{{college.backgroundImage.url}}" class="img-fluid college-img" alt="">
-                <div class="college-content">
-  
-                  <div class="d-flex justify-content-around align-items-center mb-3">
-                    {% if college.collegeId == request.user %}
-                    <a href="#disabled" class="btn btn-follow-disabled btn-sm">Self</a>
-                    {% else %}
-                      {% if college not in followed_colleges %}
-                      <button type="button" collegeid="{{college.collegeId}}" id="{{college.username}}-follow-followed" purpose="follow" action="{% url 'follow_unfollow' %}" class="btn btn-follow btn-sm">Follow</button>
-                      {% else %}
-                      <button type="button" collegeid="{{college.collegeId}}" id="{{college.username}}-follow-liked" purpose="unfollow" action="{% url 'follow_unfollow' %}" class="btn btn-follow btn-sm">Following</button>
-                      {% endif %}
+      <div class="section-title">
+        <h2>Recent Liked Colleges</h2>
+      </div>
+
+      <div class="row" data-aos="zoom-in" data-aos-delay="100">
+
+        {% for college in liked_colleges %}
+        <div id="first" class="col-lg-3 col-md-6 d-flex align-items-stretch">
+          <!-- College item -->
+          <div class="college-item active">
+            <img src="{{college.backgroundImage.url}}" class="img-fluid college-img" alt="">
+            <div class="college-content">
+
+              <div class="d-flex justify-content-around align-items-center mb-3">
+                {% if college.collegeId == request.user %}
+                <a href="#disabled" class="btn btn-follow-disabled btn-sm">Self</a>
+                {% else %}
+                {% if college not in followed_colleges %}
+                <button type="button" collegeid="{{college.collegeId}}" id="{{college.username}}-follow-followed"
+                  purpose="follow" action="{% url 'follow_unfollow' %}" class="btn btn-follow btn-sm">Follow</button>
+                {% else %}
+                <button type="button" collegeid="{{college.collegeId}}" id="{{college.username}}-follow-liked"
+                  purpose="unfollow" action="{% url 'follow_unfollow' %}"
+                  class="btn btn-follow btn-sm">Following</button>
+                {% endif %}
+                {% endif %}
+                <div class="rating">
+                  {% if college.totalCount != 0 %}
+                  <p>Rating</p>
+                  <p class="star">
+                    {% if college.totalRating == 1 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
                     {% endif %}
-                    <div class="rating">
-                      {% if college.totalCount != 0 %}
-                      <p>Rating</p>
-                      <p class="star">
-                        {% if college.totalRating == 1 %}
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        {% endif %}
-                        {% if college.totalRating == 2 %}
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        {% endif %}
-                        {% if college.totalRating == 3 %}
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        {% endif %}
-                        {% if college.totalRating == 4 %}
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        {% endif %}
-                        {% if college.totalRating == 5 %}
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        {% endif %}
-                      </p>
-                      {% endif %}
-                    </div>
-                  </div>
-  
-                  <h3>
-                    <a href="/account/college/{{college.username}}/">{{college.name}}</a> 
-                      <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
-                  </h3>
-                  
-                  <div class="college d-flex justify-content-between align-items-center">
-                    <div class="college-profile d-flex align-items-center">
-                      <img src="{{college.profileImage.url}}" class="img-fluid" alt="">
-                      <span>{{college.username}}</span>
-                    </div>
-                    <div class="college-rank d-flex align-items-center">
-                      {% if college in liked_colleges %}
-                      <i class="fa fa-heart heart-fill like" id="{{college.username}}-like-liked" userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="dislike" aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count-liked" style="margin-top: 15px;">{{college.profileLikes}}</p>
-                      {% else %}
-                      <i class="fa fa-heart-o heart-o like" id="{{college.username}}-like-liked" userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="like" aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count-liked" style="margin-top: 15px;">{{college.profileLikes}}</p>
-                      {% endif %}
-                    </div>
-                  </div>
+                    {% if college.totalRating == 2 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if college.totalRating == 3 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if college.totalRating == 4 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if college.totalRating == 5 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    {% endif %}
+                  </p>
+                  {% endif %}
                 </div>
               </div>
-            </div> <!-- End College Item-->
-            {% endfor %}
-        </div>
-      </section><!-- End Collges Section -->
-      {% endif %}
 
-      {% if followed_colleges %}
-      <!-- ======= Followed Colleges Section ======= -->
-      <section id="followed-colleges" class="colleges">
-        <div class="container" data-aos="fade-up">
-  
-          <div class="section-title">
-            <h2>Recent Followed Colleges</h2>
-          </div>
-  
-          <div class="row" data-aos="zoom-in" data-aos-delay="100">
+              <h3>
+                <a href="/account/college/{{college.username}}/">{{college.name}}</a>
+                <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
+              </h3>
 
-            {% for college in followed_colleges %}
-            <div id="first" class="col-lg-3 col-md-6 d-flex align-items-stretch">
-              <!-- College item -->
-              <div class="college-item active">
-                <img src="{{college.backgroundImage.url}}" class="img-fluid college-img" alt="">
-                <div class="college-content">
-  
-                  <div class="d-flex justify-content-around align-items-center mb-3">
-                    {% if college.collegeId == request.user %}
-                    <a href="#disabled" class="btn btn-follow-disabled btn-sm">Self</a>
-                    {% else %}
-                      {% if college not in followed_colleges %}
-                      <button type="button" collegeid="{{college.collegeId}}" id="{{college.username}}-follow-followed" purpose="follow" action="{% url 'follow_unfollow' %}" class="btn btn-follow btn-sm">Follow</button>
-                      {% else %}
-                      <button type="button" collegeid="{{college.collegeId}}" id="{{college.username}}-follow-followed" purpose="unfollow" action="{% url 'follow_unfollow' %}" class="btn btn-follow btn-sm">Following</button>
-                      {% endif %}
-                    {% endif %}
-
-                    <div class="rating">
-                      {% if college.totalCount != 0 %}
-                      <p>Rating</p>
-                      <p class="star">
-                        {% if college.totalRating == 1 %}
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        {% endif %}
-                        {% if college.totalRating == 2 %}
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        {% endif %}
-                        {% if college.totalRating == 3 %}
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        {% endif %}
-                        {% if college.totalRating == 4 %}
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        {% endif %}
-                        {% if college.totalRating == 5 %}
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        {% endif %}
-                      </p>
-                      {% endif %}
-                    </div>
-                  </div>
-  
-                  <h3>
-                    <a href="/account/college/{{college.username}}/">{{college.name}}</a> 
-                      <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
-                  </h3>
-                  
-                  <div class="college d-flex justify-content-between align-items-center">
-                    <div class="college-profile d-flex align-items-center">
-                      <img src="{{college.profileImage.url}}" class="img-fluid" alt="">
-                      <span>{{college.username}}</span>
-                    </div>
-                    <div class="college-rank d-flex align-items-center">
-                      {% if college in liked_colleges %}
-                      <i class="fa fa-heart heart-fill like" id="{{college.username}}-like-followed" userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="dislike" aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count-followed" style="margin-top: 15px;">{{college.profileLikes}}</p>
-                      {% else %}
-                      <i class="fa fa-heart-o heart-o like" id="{{college.username}}-like-followed" userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="like" aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count-followed" style="margin-top: 15px;">{{college.profileLikes}}</p>
-                      {% endif %}
-                    </div>
-                  </div>
+              <div class="college d-flex justify-content-between align-items-center">
+                <div class="college-profile d-flex align-items-center">
+                  <img src="{{college.profileImage.url}}" class="img-fluid" alt="">
+                  <span>{{college.username}}</span>
+                </div>
+                <div class="college-rank d-flex align-items-center">
+                  {% if college in liked_colleges %}
+                  <i class="fa fa-heart heart-fill like" id="{{college.username}}-like-liked"
+                    userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="dislike"
+                    aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count-liked" style="margin-top: 15px;">
+                    {{college.profileLikes}}</p>
+                  {% else %}
+                  <i class="fa fa-heart-o heart-o like" id="{{college.username}}-like-liked"
+                    userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="like"
+                    aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count-liked" style="margin-top: 15px;">
+                    {{college.profileLikes}}</p>
+                  {% endif %}
                 </div>
               </div>
-            </div> <!-- End College Item-->
-            {% endfor %}
-        </div>
-      </section><!-- End Collges Section -->
-      {% endif %}
-
-        <!-- ======= Nirf Colleges Section ======= -->
-        <section id="popular-colleges" class="colleges">
-          <div class="container" data-aos="fade-up">
-    
-            <div class="section-title">
-              <h2>Nirf Raking Colleges</h2>
             </div>
-    
-            <div class="row" data-aos="zoom-in" data-aos-delay="100">
-              {% for college in nirf_colleges %}
-              <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
-                <!-- College item -->
-                <div class="college-item">
-                  <img src="{{college.backgroundImage.url}}" class="img-fluid college-img" alt="">
-                  <div class="college-content">
-    
-                    <div class="d-flex justify-content-around align-items-center mb-3">
-                      {% if college.collegeId == request.user %}
-                      <a href="#disabled" class="btn btn-follow-disabled btn-sm">Self</a>
-                      {% else %}
-                        {% if college not in followed_colleges %}
-                        <button type="button" collegeid="{{college.collegeId}}" id="{{college.username}}-follow-nirf" purpose="follow" action="{% url 'follow_unfollow' %}" class="btn btn-follow btn-sm">Follow</button>
-                        {% else %}
-                        <button type="button" collegeid="{{college.collegeId}}" id="{{college.username}}-follow-nirf" purpose="unfollow" action="{% url 'follow_unfollow' %}" class="btn btn-follow btn-sm">Following</button>
-                        {% endif %}
-                      {% endif %}
-
-                      <div class="rating">
-                        {% if college.totalCount != 0 %}
-                        <p>Rating</p>
-                        <p class="star">
-                          {% if college.totalRating == 1 %}
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star-o" aria-hidden="true"></i>
-                          <i class="fa fa-star-o" aria-hidden="true"></i>
-                          <i class="fa fa-star-o" aria-hidden="true"></i>
-                          <i class="fa fa-star-o" aria-hidden="true"></i>
-                          {% endif %}
-                          {% if college.totalRating == 2 %}
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star-o" aria-hidden="true"></i>
-                          <i class="fa fa-star-o" aria-hidden="true"></i>
-                          <i class="fa fa-star-o" aria-hidden="true"></i>
-                          {% endif %}
-                          {% if college.totalRating == 3 %}
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star-o" aria-hidden="true"></i>
-                          <i class="fa fa-star-o" aria-hidden="true"></i>
-                          {% endif %}
-                          {% if college.totalRating == 4 %}
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star-o" aria-hidden="true"></i>
-                          {% endif %}
-                          {% if college.totalRating == 5 %}
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          <i class="fa fa-star" aria-hidden="true"></i>
-                          {% endif %}
-                        </p>
-                        {% endif %}
-                      </div>
-                    </div>
-    
-                    <h3>
-                      <a href="/account/college/{{college.username}}/">{{college.name}}</a> 
-                        <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
-                        <span class="badge badge-warning">#{{college.nirfRanking}}</span>
-                    </h3>
-                    
-                    <div class="college d-flex justify-content-between align-items-center">
-                      <div class="college-profile d-flex align-items-center">
-                        <img src="{{college.profileImage.url}}" class="img-fluid" alt="">
-                        <span>{{college.username}}</span>
-                      </div>
-                      <div class="college-rank d-flex align-items-center">
-                        {% if college in liked_colleges %}
-                        <i class="fa fa-heart heart-fill like" id="{{college.username}}-like-nirf" userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="dislike" aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count-nirf" style="margin-top: 15px;">{{college.profileLikes}}</p>
-                        {% else %}
-                        <i class="fa fa-heart-o heart-o like" id="{{college.username}}-like-nirf" userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="like" aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count-nirf" style="margin-top: 15px;">{{college.profileLikes}}</p>
-                        {% endif %}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div> <!-- End College Item-->
-              {% endfor %}
-            </div>
-    
           </div>
-        </section><!-- End Collges Section -->
+        </div> <!-- End College Item-->
+        {% endfor %}
+      </div>
+  </section><!-- End Collges Section -->
+  {% endif %}
+
+  {% if followed_colleges %}
+  <!-- ======= Followed Colleges Section ======= -->
+  <section id="followed-colleges" class="colleges">
+    <div class="container" data-aos="fade-up">
+
+      <div class="section-title">
+        <h2>Recent Followed Colleges</h2>
+      </div>
+
+      <div class="row" data-aos="zoom-in" data-aos-delay="100">
+
+        {% for college in followed_colleges %}
+        <div id="first" class="col-lg-3 col-md-6 d-flex align-items-stretch">
+          <!-- College item -->
+          <div class="college-item active">
+            <img src="{{college.backgroundImage.url}}" class="img-fluid college-img" alt="">
+            <div class="college-content">
+
+              <div class="d-flex justify-content-around align-items-center mb-3">
+                {% if college.collegeId == request.user %}
+                <a href="#disabled" class="btn btn-follow-disabled btn-sm">Self</a>
+                {% else %}
+                {% if college not in followed_colleges %}
+                <button type="button" collegeid="{{college.collegeId}}" id="{{college.username}}-follow-followed"
+                  purpose="follow" action="{% url 'follow_unfollow' %}" class="btn btn-follow btn-sm">Follow</button>
+                {% else %}
+                <button type="button" collegeid="{{college.collegeId}}" id="{{college.username}}-follow-followed"
+                  purpose="unfollow" action="{% url 'follow_unfollow' %}"
+                  class="btn btn-follow btn-sm">Following</button>
+                {% endif %}
+                {% endif %}
+
+                <div class="rating">
+                  {% if college.totalCount != 0 %}
+                  <p>Rating</p>
+                  <p class="star">
+                    {% if college.totalRating == 1 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if college.totalRating == 2 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if college.totalRating == 3 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if college.totalRating == 4 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if college.totalRating == 5 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    {% endif %}
+                  </p>
+                  {% endif %}
+                </div>
+              </div>
+
+              <h3>
+                <a href="/account/college/{{college.username}}/">{{college.name}}</a>
+                <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
+              </h3>
+
+              <div class="college d-flex justify-content-between align-items-center">
+                <div class="college-profile d-flex align-items-center">
+                  <img src="{{college.profileImage.url}}" class="img-fluid" alt="">
+                  <span>{{college.username}}</span>
+                </div>
+                <div class="college-rank d-flex align-items-center">
+                  {% if college in liked_colleges %}
+                  <i class="fa fa-heart heart-fill like" id="{{college.username}}-like-followed"
+                    userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="dislike"
+                    aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count-followed" style="margin-top: 15px;">
+                    {{college.profileLikes}}</p>
+                  {% else %}
+                  <i class="fa fa-heart-o heart-o like" id="{{college.username}}-like-followed"
+                    userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="like"
+                    aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count-followed" style="margin-top: 15px;">
+                    {{college.profileLikes}}</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- End College Item-->
+        {% endfor %}
+      </div>
+  </section><!-- End Collges Section -->
+  {% endif %}
+
+  <!-- ======= Nirf Colleges Section ======= -->
+  <section id="popular-colleges" class="colleges">
+    <div class="container" data-aos="fade-up">
+
+      <div class="section-title">
+        <h2>Nirf Raking Colleges</h2>
+      </div>
+
+      <div class="row" data-aos="zoom-in" data-aos-delay="100">
+        {% for college in nirf_colleges %}
+        <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+          <!-- College item -->
+          <div class="college-item">
+            <img src="{{college.backgroundImage.url}}" class="img-fluid college-img" alt="">
+            <div class="college-content">
+
+              <div class="d-flex justify-content-around align-items-center mb-3">
+                {% if college.collegeId == request.user %}
+                <a href="#disabled" class="btn btn-follow-disabled btn-sm">Self</a>
+                {% else %}
+                {% if college not in followed_colleges %}
+                <button type="button" collegeid="{{college.collegeId}}" id="{{college.username}}-follow-nirf"
+                  purpose="follow" action="{% url 'follow_unfollow' %}" class="btn btn-follow btn-sm">Follow</button>
+                {% else %}
+                <button type="button" collegeid="{{college.collegeId}}" id="{{college.username}}-follow-nirf"
+                  purpose="unfollow" action="{% url 'follow_unfollow' %}"
+                  class="btn btn-follow btn-sm">Following</button>
+                {% endif %}
+                {% endif %}
+
+                <div class="rating">
+                  {% if college.totalCount != 0 %}
+                  <p>Rating</p>
+                  <p class="star">
+                    {% if college.totalRating == 1 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if college.totalRating == 2 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if college.totalRating == 3 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if college.totalRating == 4 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if college.totalRating == 5 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    {% endif %}
+                  </p>
+                  {% endif %}
+                </div>
+              </div>
+
+              <h3>
+                <a href="/account/college/{{college.username}}/">{{college.name}}</a>
+                <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
+                <span class="badge badge-warning">#{{college.nirfRanking}}</span>
+              </h3>
+
+              <div class="college d-flex justify-content-between align-items-center">
+                <div class="college-profile d-flex align-items-center">
+                  <img src="{{college.profileImage.url}}" class="img-fluid" alt="">
+                  <span>{{college.username}}</span>
+                </div>
+                <div class="college-rank d-flex align-items-center">
+                  {% if college in liked_colleges %}
+                  <i class="fa fa-heart heart-fill like" id="{{college.username}}-like-nirf"
+                    userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="dislike"
+                    aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count-nirf" style="margin-top: 15px;">
+                    {{college.profileLikes}}</p>
+                  {% else %}
+                  <i class="fa fa-heart-o heart-o like" id="{{college.username}}-like-nirf"
+                    userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="like"
+                    aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count-nirf" style="margin-top: 15px;">
+                    {{college.profileLikes}}</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- End College Item-->
+        {% endfor %}
+      </div>
+
+    </div>
+  </section><!-- End Collges Section -->
 
 </main>
 
@@ -343,7 +371,8 @@
 {% if group == 'college' %}
 {% if is_first %}
 <!-- Modal for course addition -->
-<div class="modal fade" id="course-form" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="course-form" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -359,7 +388,8 @@
           </select>
         </div>
         <div class="modal-footer">
-          {% comment %} <button type="submit" class="btn btn-secondary" data-dismiss="modal">Close</button> {% endcomment %}
+          {% comment %} <button type="submit" class="btn btn-secondary" data-dismiss="modal">Close</button> {%
+          endcomment %}
           <button type="submit" class="btn btn-save-changes">Save changes</button>
         </div>
       </form>
@@ -382,15 +412,15 @@
 {% block extra-js %}
 <script>
   {% if is_first %}
-    $('#course-form').modal('show');
+  $('#course-form').modal('show');
   {% endif %}
 
-  $(document).ready(function() {
+  $(document).ready(function () {
     var multipleCancelButton = new Choices('#select-courses', {
-    removeItemButton: true,
-    maxItemCount:50,
-    searchResultLimit:5,
-    renderChoiceLimit:5
+      removeItemButton: true,
+      maxItemCount: 50,
+      searchResultLimit: 5,
+      renderChoiceLimit: 5
     });
   });
 </script>

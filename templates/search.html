@@ -9,10 +9,11 @@
   .drop-search:focus {
     box-shadow: none;
   }
+
   .autocomplete-items {
     position: absolute;
     background-color: #fff;
-    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
     z-index: 1000 !important;
     /*position the autocomplete items to be the same width as the container:*/
     top: 100%;
@@ -37,13 +38,13 @@
 
   /*when hovering an item:*/
   .autocomplete-items div:hover {
-    background-color: #e9e9e9; 
+    background-color: #e9e9e9;
   }
 
   /*when navigating through the items using the arrow keys:*/
   .autocomplete-active {
-    background-color: #4e73df !important; 
-    color: #ffffff; 
+    background-color: #4e73df !important;
+    color: #ffffff;
   }
 </style>
 
@@ -58,13 +59,14 @@
 
 {% block your-account %}
 <div class="btn-group">
-    <button class="btn-account dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</button>
-    <div class="dropdown-menu shadow" style="border: none;">
-      <a class="dropdown-item" href="{% url 'account' %}">My Profile</a>
-      <a class="dropdown-item" href="#">Edit Profile</a>
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-    </div>
+  <button class="btn-account dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+    aria-expanded="false">Account</button>
+  <div class="dropdown-menu shadow" style="border: none;">
+    <a class="dropdown-item" href="{% url 'account' %}">My Profile</a>
+    <a class="dropdown-item" href="#">Edit Profile</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+  </div>
 </div>
 {% endblock your-account %}
 
@@ -75,142 +77,150 @@
       <h2>Search Institutes</h2>
       <br>
       <form autocomplete="off" method="GET">
-      <div class="d-flex justify-content-center row">
+        <div class="d-flex justify-content-center row">
 
-        <div class="col-lg-8 col-md-8 col-sm-12" style="color: #000; text-align: start; margin-bottom: 20px;">
-          <select id="select-city" name="select-city" placeholder="Select city">
-            <option value="">Select city</option>
-            {% for city in cities %}
-            <option value="{{city.cityName}}">{{city.cityName}}</option>
-            {% endfor %}
-          </select>
-        </div>
+          <div class="col-lg-8 col-md-8 col-sm-12" style="color: #000; text-align: start; margin-bottom: 20px;">
+            <select id="select-city" name="select-city" placeholder="Select city">
+              <option value="">Select city</option>
+              {% for city in cities %}
+              <option value="{{city.cityName}}">{{city.cityName}}</option>
+              {% endfor %}
+            </select>
+          </div>
 
-        <div class="col-lg-8 col-md-8 col-sm-12" style="color: #000; text-align: start; margin-bottom: 20px;">
-          <select id="select-stream" name="select-stream" placeholder="Select stream">
-            <option value="">Select stream</option>
-            {% for stream in streams %}
-            <option value="{{stream.courseId}}">{{stream.courseName}}</option>
-            {% endfor %}
-          </select>
-        </div>
+          <div class="col-lg-8 col-md-8 col-sm-12" style="color: #000; text-align: start; margin-bottom: 20px;">
+            <select id="select-stream" name="select-stream" placeholder="Select stream">
+              <option value="">Select stream</option>
+              {% for stream in streams %}
+              <option value="{{stream.courseId}}">{{stream.courseName}}</option>
+              {% endfor %}
+            </select>
+          </div>
 
-        <div class="col-lg-8 col-md-8 col-sm-12" style="color: #000; text-align: start; margin-bottom: 20px;">
-          <select id="select-college" name="select-college" placeholder="Select colege">
-            <option value="">Select college</option>
-            {% for college in colleges %}
-            <option value="{{college.email}}">{{college.name}}</option>
-            {% endfor %}
-          </select>
+          <div class="col-lg-8 col-md-8 col-sm-12" style="color: #000; text-align: start; margin-bottom: 20px;">
+            <select id="select-college" name="select-college" placeholder="Select colege">
+              <option value="">Select college</option>
+              {% for college in colleges %}
+              <option value="{{college.email}}">{{college.name}}</option>
+              {% endfor %}
+            </select>
+          </div>
         </div>
-      </div>
-      <br><br>
-      <center>
-        <div class="col-lg-3 col-md-6 col-sm-12 mt-3">
-          <button type="submit" name="btn-search" class="btn btn-search"><i class="fa fa-search"></i>&nbsp;&nbsp;Search</button>
-        </div>
-      </center>
+        <br><br>
+        <center>
+          <div class="col-lg-3 col-md-6 col-sm-12 mt-3">
+            <button type="submit" name="btn-search" class="btn btn-search"><i
+                class="fa fa-search"></i>&nbsp;&nbsp;Search</button>
+          </div>
+        </center>
       </form>
     </div>
     <br><br>
   </div><!-- End Breadcrumbs -->
   <div id="down-search" class="">
-      <!-- ======= Based on personal choices Colleges Section ======= -->
-      <section id="choices-colleges" class="colleges">
-        <div class="container" data-aos="fade-up">
-  
-          <!-- <div class="section-title">
+    <!-- ======= Based on personal choices Colleges Section ======= -->
+    <section id="choices-colleges" class="colleges">
+      <div class="container" data-aos="fade-up">
+
+        <!-- <div class="section-title">
             <h2>Based on Personal Choices</h2>
           </div> -->
-  
-          <div class="row" data-aos="zoom-in" data-aos-delay="100">
 
-            {% for college in search_response %}
-            <div id="first" class="col-lg-3 col-md-6 d-flex align-items-stretch">
-              <!-- College item -->
-              <div class="college-item active">
-                <img src="{{college.backgroundImage.url}}" class="img-fluid college-img" alt="">
-                <div class="college-content">
-  
-                  <div class="d-flex justify-content-around align-items-center mb-3">
-                    {% if college.collegeId == request.user %}
-                    <a href="#disabled" class="btn btn-follow-disabled btn-sm">Self</a>
-                    {% else %}
-                      {% if college not in followed_colleges %}
-                      <button type="button" userid="{{college.collegeId}}" id="{{college.username}}-follow" purpose="follow" action="{% url 'follow_unfollow' %}" class="btn btn-follow btn-sm">Follow</button>
-                      {% else %}
-                      <button type="button" userid="{{college.collegeId}}" id="{{college.username}}-follow" purpose="unfollow" action="{% url 'follow_unfollow' %}" class="btn btn-follow btn-sm">Following</button>
+        <div class="row" data-aos="zoom-in" data-aos-delay="100">
+
+          {% for college in search_response %}
+          <div id="first" class="col-lg-3 col-md-6 d-flex align-items-stretch">
+            <!-- College item -->
+            <div class="college-item active">
+              <img src="{{college.backgroundImage.url}}" class="img-fluid college-img" alt="">
+              <div class="college-content">
+
+                <div class="d-flex justify-content-around align-items-center mb-3">
+                  {% if college.collegeId == request.user %}
+                  <a href="#disabled" class="btn btn-follow-disabled btn-sm">Self</a>
+                  {% else %}
+                  {% if college not in followed_colleges %}
+                  <button type="button" userid="{{college.collegeId}}" id="{{college.username}}-follow" purpose="follow"
+                    action="{% url 'follow_unfollow' %}" class="btn btn-follow btn-sm">Follow</button>
+                  {% else %}
+                  <button type="button" userid="{{college.collegeId}}" id="{{college.username}}-follow"
+                    purpose="unfollow" action="{% url 'follow_unfollow' %}"
+                    class="btn btn-follow btn-sm">Following</button>
+                  {% endif %}
+                  {% endif %}
+
+                  <div class="rating">
+                    {% if college.totalCount != 0 %}
+                    <p>Rating</p>
+                    <p class="star">
+                      {% if college.totalRating == 1 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
                       {% endif %}
+                      {% if college.totalRating == 2 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      {% endif %}
+                      {% if college.totalRating == 3 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      {% endif %}
+                      {% if college.totalRating == 4 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star-o" aria-hidden="true"></i>
+                      {% endif %}
+                      {% if college.totalRating == 5 %}
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      <i class="fa fa-star" aria-hidden="true"></i>
+                      {% endif %}
+                    </p>
                     {% endif %}
-
-                    <div class="rating">
-                      {% if college.totalCount != 0 %}
-                      <p>Rating</p>
-                      <p class="star">
-                        {% if college.totalRating == 1 %}
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        {% endif %}
-                        {% if college.totalRating == 2 %}
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        {% endif %}
-                        {% if college.totalRating == 3 %}
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        {% endif %}
-                        {% if college.totalRating == 4 %}
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star-o" aria-hidden="true"></i>
-                        {% endif %}
-                        {% if college.totalRating == 5 %}
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        {% endif %}
-                      </p>
-                      {% endif %}
-                    </div>
                   </div>
-  
-                  <h3>
-                    <a href="/account/college/{{college.username}}/">{{college.name}}</a>  
-                      <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
-                  </h3>
-                  
-                  <div class="college d-flex justify-content-between align-items-center">
-                    <div class="college-profile d-flex align-items-center">
-                      <img src="{{college.profileImage.url}}" class="img-fluid" alt="">
-                      <span>{{college.username}}</span>
-                    </div>
-                    <div class="college-rank d-flex align-items-center">
-                      {% if college in liked_colleges %}
-                      <i class="fa fa-heart heart-fill like" id="{{college.username}}-like" userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="dislike" aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count" style="margin-top: 15px;">{{college.profileLikes}}</p>
-                      {% else %}
-                      <i class="fa fa-heart-o heart-o like" id="{{college.username}}-like" userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="like" aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count" style="margin-top: 15px;">{{college.profileLikes}}</p>
-                      {% endif %}
-                    </div>
+                </div>
+
+                <h3>
+                  <a href="/account/college/{{college.username}}/">{{college.name}}</a>
+                  <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
+                </h3>
+
+                <div class="college d-flex justify-content-between align-items-center">
+                  <div class="college-profile d-flex align-items-center">
+                    <img src="{{college.profileImage.url}}" class="img-fluid" alt="">
+                    <span>{{college.username}}</span>
+                  </div>
+                  <div class="college-rank d-flex align-items-center">
+                    {% if college in liked_colleges %}
+                    <i class="fa fa-heart heart-fill like" id="{{college.username}}-like" userid="{{college.collegeId}}"
+                      action="{% url 'likedislike' %}" purpose="dislike" aria-hidden="true"></i>&nbsp;<p
+                      id="{{college.username}}-count" style="margin-top: 15px;">{{college.profileLikes}}</p>
+                    {% else %}
+                    <i class="fa fa-heart-o heart-o like" id="{{college.username}}-like" userid="{{college.collegeId}}"
+                      action="{% url 'likedislike' %}" purpose="like" aria-hidden="true"></i>&nbsp;<p
+                      id="{{college.username}}-count" style="margin-top: 15px;">{{college.profileLikes}}</p>
+                    {% endif %}
                   </div>
                 </div>
               </div>
-            </div> <!-- End College Item-->
-            {% endfor %}
+            </div>
+          </div> <!-- End College Item-->
+          {% endfor %}
         </div>
-      </section><!-- End Recent Collges Section -->
+    </section><!-- End Recent Collges Section -->
   </div>
 </main>
 {% endblock body %}
@@ -221,21 +231,21 @@
 
 {% block extra-js %}
 <script>
-    $(document).ready(function() {
+  $(document).ready(function () {
     var city = new Choices('#select-city', {
-    removeItemButton: true,
-    searchResultLimit:5,
-    renderChoiceLimit:5
+      removeItemButton: true,
+      searchResultLimit: 5,
+      renderChoiceLimit: 5
     });
     var stream = new Choices('#select-stream', {
-    removeItemButton: true,
-    searchResultLimit:5,
-    renderChoiceLimit:5
+      removeItemButton: true,
+      searchResultLimit: 5,
+      renderChoiceLimit: 5
     });
     var stream = new Choices('#select-college', {
-    removeItemButton: true,
-    searchResultLimit:5,
-    renderChoiceLimit:5
+      removeItemButton: true,
+      searchResultLimit: 5,
+      renderChoiceLimit: 5
     });
   });
 </script>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,17 +11,20 @@
     <!-- Favicons -->
     <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
     <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
-    
+
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
 
     <!-- Vendor CSS Files -->
     <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.css' %}">
 
     <!-- Template Main CSS File -->
-   <link rel="stylesheet" href="{% static 'assets/css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/dashboard.css' %}">
 </head>
+
 <body>
     <div class="wrapper">
         <!-- Sidebar  -->
@@ -53,7 +57,9 @@
                         <i class="fa fa-bars" aria-hidden="true"></i>
                         <span>Toggle Sidebar</span>
                     </button>
-                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
                         <i class="fas fa-align-justify"></i>
                     </button>
 
@@ -71,16 +77,16 @@
             <div class="card-columns">
                 {% for message in messages %}
                 <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">{{message.name}}</h5>
-                    <p class="card-text">{{message.subject}}</p>
-                    <p class="card-text">{{message.message}}</p>
-                    <p class="card-text"><small class="text-muted">{{ message.date|date:"M d, Y" }}</small></p>
-                    <a href="mailto:{{message.email}}" class="btn btn-toggle">Reply</a>
-                  </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{message.name}}</h5>
+                        <p class="card-text">{{message.subject}}</p>
+                        <p class="card-text">{{message.message}}</p>
+                        <p class="card-text"><small class="text-muted">{{ message.date|date:"M d, Y" }}</small></p>
+                        <a href="mailto:{{message.email}}" class="btn btn-toggle">Reply</a>
+                    </div>
                 </div>
                 {% endfor %}
-              </div>
+            </div>
         </div>
     </div>
 
@@ -98,4 +104,5 @@
         });
     </script>
 </body>
+
 </html>

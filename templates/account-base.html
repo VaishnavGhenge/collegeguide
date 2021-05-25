@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -14,7 +15,9 @@
   <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
 
   <!-- Vendor CSS Files -->
   <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -38,7 +41,7 @@
   <!-- ======= Header ======= -->
   <header id="header" class="fixed-top">
     <div class="container d-flex align-items-center">
-      
+
 
       <h1 class="logo mr-auto"><a href="{% url 'index' %}">collegeguide</a></h1>
       <!-- Uncomment below if you prefer to use an image logo -->
@@ -47,7 +50,7 @@
       <nav class="nav-menu d-none d-lg-block">
         <ul>
           {% block menu %}
-          
+
           {% endblock menu %}
         </ul>
       </nav><!-- .nav-menu -->
@@ -110,7 +113,8 @@
               {% block email-form-token %}
               {% csrf_token %}
               {% endblock email-form-token %}
-              <input type="email" name="email" class="emailinput" data-rule="email" data-msg="Please enter a valid email">
+              <input type="email" name="email" class="emailinput" data-rule="email"
+                data-msg="Please enter a valid email">
               <input type="submit" value="Subscribe">
             </form>
             <div id="vld" class="validate" style="margin-left: 20px;"></div>
@@ -134,8 +138,9 @@
         <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
         <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
         <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-        <a href="#" class="google-plus"><i class="bx bxl-skype"></i><EGE/a>
-        <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+        <a href="#" class="google-plus"><i class="bx bxl-skype"></i>
+          <EGE /a>
+            <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
       </div>
     </div>
   </footer><!-- End Footer -->

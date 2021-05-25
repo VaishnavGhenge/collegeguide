@@ -1,121 +1,119 @@
 {% load static %}
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="{% static 'assets/img/favicon.png' %}">
 
-    <title>Login</title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="{% static 'assets/img/favicon.png' %}">
 
-    <link rel="canonical" href="{% url 'signin' %}">
+  <title>Login</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link rel="canonical" href="{% url 'signin' %}">
 
-    <!-- Custom styles for this template -->
-    <link href="{% static 'assets/css/login.css' %}" rel="stylesheet">
-  </head>
+  <!-- Bootstrap core CSS -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
-  <body class="text-center">
-    <form action="{% url 'submit-signin' %}" class="form-signin" method="POST">
-      {% csrf_token %}
-      <img class="mb-4" src="{% static 'assets/img/apple-touch-icon.png' %}" alt="" width="72" height="72">
-      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-      <div class="form-group">
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email address" data-rule="email" data-msg="Please enter valid email" required autofocus>
-        <div class="validate"></div>
+  <!-- Custom styles for this template -->
+  <link href="{% static 'assets/css/login.css' %}" rel="stylesheet">
+</head>
+
+<body class="text-center">
+  <form action="{% url 'submit-signin' %}" class="form-signin" method="POST">
+    {% csrf_token %}
+    <img class="mb-4" src="{% static 'assets/img/apple-touch-icon.png' %}" alt="" width="72" height="72">
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <div class="form-group">
+      <label for="inputEmail" class="sr-only">Email address</label>
+      <input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email address"
+        data-rule="email" data-msg="Please enter valid email" required autofocus>
+      <div class="validate"></div>
+    </div>
+    <div class="form-group">
+      <label for="inputPassword" class="sr-only">Password</label>
+      <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Password"
+        required>
+      <div class="checkbox mt-2 d-flex justify-content-start">
+        <label>
+          <input type="checkbox" onclick="show_pass();">&nbsp;&nbsp;Show password
+        </label>
       </div>
-      <div class="form-group">
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Password" required>
-        <div class="checkbox mt-2 d-flex justify-content-start">
-          <label>
-            <input type="checkbox" onclick="show_pass();">&nbsp;&nbsp;Show password
-          </label>
+    </div>
+    <button class="btn-signin mt-3" type="submit">Sign in</button>
+    <div class="mb-3 mt-3">
+      <div class="loading">Loading</div>
+      <div class="error-message">This division is empty</div>
+    </div>
+    <div class="mt-4">
+      <small>Forgot your password <a href="#">click here</a></small>
+      <br>
+      <small>Not registered? <a href="#" onclick="triggerchoose();">Sign up</a></small>
+    </div>
+    <p class="mt-5 mb-3 text-muted">&copy; 2021</p>
+  </form>
+
+  <!-- Modal -->
+  <div class="modal fade" id="choose" tabindex="-1" role="dialog" aria-labelledby="choose" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Choose account type</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-      </div>
-      <button class="btn-signin mt-3" type="submit">Sign in</button>
-      <div class="mb-3 mt-3">
-        <div class="loading">Loading</div>
-        <div class="error-message">This division is empty</div>
-      </div>
-      <div class="mt-4">
-        <small>Forgot your password <a href="#">click here</a></small>
-        <br>
-        <small>Not registered? <a href="#" onclick="triggerchoose();">Sign up</a></small>
-      </div>
-      <p class="mt-5 mb-3 text-muted">&copy; 2021</p>
-    </form>
+        <div class="modal-body">
+          <div class="d-flex justify-content-center">
+            <div class="col-lg-3 col-md-4 col-sm-6">
+              <img src="{% static 'images/college.jpeg' %}" onclick="choose('college');" class="choose-image">
+              <p>College</p>
+            </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="choose" tabindex="-1" role="dialog" aria-labelledby="choose" aria-hidden=
-    "true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Choose account type</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="d-flex justify-content-center">
-              <div class="col-lg-3 col-md-4 col-sm-6">
-                <img src="{% static 'images/college.jpeg' %}" onclick="choose('college');" class="choose-image">
-                <p>College</p>
-              </div>
-
-              <div class="col-lg-3 col-md-4 col-sm-6">
-                <img src="{% static 'images/student.jpeg' %}" onclick="choose('student');" class="choose-image">
-                <p>Student</p>
-              </div>             
+            <div class="col-lg-3 col-md-4 col-sm-6">
+              <img src="{% static 'images/student.jpeg' %}" onclick="choose('student');" class="choose-image">
+              <p>Student</p>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Vendor JS Files -->
-    <script src="{% static 'assets/vendor/jquery/jquery.min.js' %}"></script>
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/jquery/jquery.min.js' %}"></script>
 
-    <!-- Sign in Form Validation JS File -->
-    <script src="{% static 'assets/vendor/form/validate-signin.js' %}"></script>
+  <!-- Sign in Form Validation JS File -->
+  <script src="{% static 'assets/vendor/form/validate-signin.js' %}"></script>
 
-    <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
-    <!-- Show password JS script -->
-    <script>
-      function show_pass()
-      {
-        var x = document.getElementById('inputPassword');
-        if(x.type === 'password')
-        {
-          x.type = 'text';
-        }
-        else{
-          x.type = 'password';
-        }
+  <!-- Show password JS script -->
+  <script>
+    function show_pass() {
+      var x = document.getElementById('inputPassword');
+      if (x.type === 'password') {
+        x.type = 'text';
       }
-
-      function triggerchoose()
-      {
-        $('#choose').modal('show');
+      else {
+        x.type = 'password';
       }
+    }
 
-      function choose(type)
-      {
-        if(type == 'college')
-        {
-          window.location.replace('/institute-signup/');
-        }
-        else if(type == 'student')
-          window.location.replace('/student-signup/');
+    function triggerchoose() {
+      $('#choose').modal('show');
+    }
+
+    function choose(type) {
+      if (type == 'college') {
+        window.location.replace('/institute-signup/');
       }
+      else if (type == 'student')
+        window.location.replace('/student-signup/');
+    }
 
-    </script>
-  </body>
+  </script>
+</body>
+
 </html>
