@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{course}}{% endblock title %}
+
+{% block menu %}
+<li class="active"><a href="{% url 'index' %}">Home</a></li>
+<li><a href="{% url 'about' %}">About</a></li>
+<li><a href="{% url 'contact' %}">Contact</a></li>
+{% endblock menu %}
+
+{% block body %}
+<br><br><br>
+  <!-- ======= Course Colleges Section ======= -->
+  <section id="course-colleges" class="colleges">
+    <div class="container" data-aos="fade-up">
+
+      <div class="section-title">
+        <p>{{course}}</p>
+      </div>
+
+      <div class="row" data-aos="zoom-in" data-aos-delay="100">
+        {% for college in colleges %}
+        <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+          <!-- College item -->
+          <div class="college-item">
+            <img src="{{college.backgroundImage.url}}" class="img-fluid college-img" alt="">
+            <div class="college-content">
+
+              <div class="d-flex justify-content-start mb-3">
+                <div class="rating">
+                  {% if college.totalCount != 0 %}
+                  <p>Rating</p>
+                  <p class="star">
+                    {% if college.totalRating == 1 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if college.totalRating == 2 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if college.totalRating == 3 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if college.totalRating == 4 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                    {% endif %}
+                    {% if college.totalRating == 5 %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    {% endif %}
+                  </p>
+                  {% endif %}
+                </div>
+              </div>
+
+              <h3>
+                <a href="/account/college/{{college.username}}/">{{college.name}}</a>
+                <i class="fa fa-check-circle text-primary" aria-hidden="true"></i>
+                {% if college.nirfRanking %}
+                <span class="badge badge-warning">#{{college.nirfRanking}}</span>
+                {% endif %}
+              </h3>
+
+              <div class="college d-flex justify-content-between align-items-center">
+                <div class="college-profile d-flex align-items-center">
+                  <img src="{{college.profileImage.url}}" class="img-fluid" alt="">
+                  <span>{{college.username}}</span>
+                </div>
+                <div class="college-rank d-flex align-items-center">
+                  {% if college in liked_colleges %}
+                  <i class="fa fa-heart heart-fill like" id="{{college.username}}-like-nirf"
+                    userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="dislike"
+                    aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count-nirf" style="margin-top: 15px;">
+                    {{college.profileLikes}}</p>
+                  {% else %}
+                  <i class="fa fa-heart-o heart-o like" id="{{college.username}}-like-nirf"
+                    userid="{{college.collegeId}}" action="{% url 'likedislike' %}" purpose="like"
+                    aria-hidden="true"></i>&nbsp;<p id="{{college.username}}-count-nirf" style="margin-top: 15px;">
+                    {{college.profileLikes}}</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- End College Item-->
+        {% endfor %}
+      </div>
+
+    </div>
+  </section><!-- End Collges Section -->
+{% endblock body %}
+
+{% block email-form-token %}
+{% csrf_token %}
+{% endblock email-form-token %}

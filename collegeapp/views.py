@@ -1452,6 +1452,23 @@ def helpful_view(request):
     else:
         msg = {'success': False, }
 
+
+def courseview_pre(request, course):
+    try:
+        course = int(course)
+        course_obj = Courses.objects.get(courseId=course)
+        college_courses = CollegeCourses.objects.filter(courseId=course_obj)
+        college_list = list()
+        for course in college_courses:
+            college_list.append(course.userId)
+    except:
+        return HttpResponse('Please stop playing with urls..')
+    data = {
+        'colleges': college_list,
+        'course': course_obj.courseName,
+    }
+    return render(request, 'view-course-pre.html', data)
+
 ############################# End of Institute Views ######################################
 
 

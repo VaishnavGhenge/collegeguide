@@ -51,6 +51,8 @@ urlpatterns = [
     path('getratingstats/', views.getratingstats, name='getratingstats'),
     path('helpful-action/', views.helpful_view, name='helpful-view'),
 
+    path('page/<str:course>/', views.courseview_pre, name='courseview-pre'),
+
     path('dashboard/', views.dashboard, name='dashboard'),
 
     path('404/', views.errorcode404, name='404'),
