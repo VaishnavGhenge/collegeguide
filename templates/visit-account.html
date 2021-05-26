@@ -695,14 +695,13 @@
                       <p>Was this review helpful?</p>
                     </div>
                     <div class="col-lg-4">
-                      {% if review.helpfulCount == 0 %}
-                      {% if review.notHelpfulCount == 0 %}
+                      {% if review not in col_not_helped %}
                       <button type="button" id="{{review.reviewId}}-colyes" class="btn btn-yes-no"
                         college="{{user.username}}" btn="yes" review="{{review.reviewId}}" rtype="college">Yes</button>
                       <button type="button" id="{{review.reviewId}}-colno" class="btn btn-yes-no"
                         college="{{user.username}}" btn="no" review="{{review.reviewId}}" rtype="college">No</button>
                       {% endif %}
-                      {% endif %}
+                        
                       {% for rating in college_helpfuls %}
                       {% if review == rating.reviewid %}
                       {% if rating.purpose == 'yes' %}
@@ -845,14 +844,13 @@
                       <p>Was this review helpful?</p>
                     </div>
                     <div class="col-lg-4">
-                      {% if review.helpfulCount == 0 %}
-                      {% if review.notHelpfulCount == 0 %}
+                      {% if review not in cos_not_helped %}
                       <button type="button" id="{{review.reviewId}}-cosyes" class="btn btn-yes-no"
                         college="{{user.username}}" btn="yes" review="{{review.reviewId}}" rtype="course">Yes</button>
                       <button type="button" id="{{review.reviewId}}-cosno" class="btn btn-yes-no"
                         college="{{user.username}}" btn="no" review="{{review.reviewId}}" rtype="course">No</button>
                       {% endif %}
-                      {% endif %}
+
                       {% for rating in course_helpfuls %}
                       {% if review == rating.reviewid %}
                       {% if rating.purpose == 'yes' %}

@@ -52,7 +52,8 @@ def about(request):
     count += 1
     PLatformStatistics.objects.filter(id=1).update(platformVisitors=count)
 
-    return render(request, 'about.html')
+    data = {'stat': stat,  }
+    return render(request, 'about.html', data)
 
 # Contact page
 
@@ -297,20 +298,23 @@ def account(request):
         for like in liked:
             ids.append(like.get('imageId_id'))
 
-        collegeReviews = CollegeReview.objects.filter(
-            collegeId=user_obj).order_by('-date')
-        collegeReviews_tmp = CollegeReview.objects.filter(
-            collegeId=user_obj).values()
+        collegeReviews = CollegeReview.objects.filter(collegeId=user_obj).order_by('-date')
+        collegeReviews_tmp = CollegeReview.objects.filter(collegeId=user_obj).values()
         college_reviewed_users = list()
         student_list = list()
         for review in collegeReviews_tmp:
-            if review.get('studentId') in student_list:
+            if review.get('studentId_id') in student_list:
                 continue
             else:
                 college_reviewed_users = college_reviewed_users + \
                     list(chain(StudentUser.objects.filter(
                         studentId=review.get('studentId_id'))))
-                student_list.append(review.get('studentId'))
+                student_list.append(review.get('studentId_id'))
+        col_reviewed = Collegehelpful.objects.filter(userid=request.user, college=user_obj)
+
+        colnot = []
+        for help in col_reviewed:
+            colnot.append(help.reviewid)
 
         CourseReviews = CourseReview.objects.filter(
             collegeId=user_obj).order_by('-date')
@@ -319,13 +323,18 @@ def account(request):
         course_reviewed_users = list()
         student_list = list()
         for review in courseReviews_tmp:
-            if review.get('studenId') in student_list:
+            if review.get('studenId_id') in student_list:
                 continue
             else:
                 course_reviewed_users = course_reviewed_users + \
                     list(chain(StudentUser.objects.filter(
                         studentId=review.get('studentId_id'))))
-                student_list.append(review.get('studenId'))
+                student_list.append(review.get('studenId_id'))
+        cos_reviewed = Coursehelpful.objects.filter(userid=request.user, college=user_obj)
+
+        cosnot = []
+        for help in cos_reviewed:
+            cosnot.append(help.reviewid)
 
         college_helpfuls = Collegehelpful.objects.filter(
             userid=request.user, college=user_obj)
@@ -347,6 +356,8 @@ def account(request):
             'course_reviewed_users': course_reviewed_users,
             'college_helpfuls': college_helpfuls,
             'course_helpfuls': course_helpfuls,
+            'colhelped': colnot,
+            'coshelped': cosnot,
         }
     if group == 'student':
         user_obj = StudentUser.objects.get(email=request.user)
@@ -426,13 +437,18 @@ def view_account(request, group, username):
             college_reviewed_users = list()
             student_list = list()
             for review in collegeReviews_tmp:
-                if review.get('studentId') in student_list:
+                if review.get('studentId_id') in student_list:
                     continue
                 else:
                     college_reviewed_users = college_reviewed_users + \
                         list(chain(StudentUser.objects.filter(
                             studentId=review.get('studentId_id'))))
-                    student_list.append(review.get('studentId'))
+                    student_list.append(review.get('studentId_id'))
+            col_reviewed = Collegehelpful.objects.filter(userid=request.user, college=user)
+
+            colnot = []
+            for help in col_reviewed:
+                colnot.append(help.reviewid)
 
             CourseReviews = CourseReview.objects.filter(
                 collegeId=college.id).order_by('-date')
@@ -441,13 +457,19 @@ def view_account(request, group, username):
             course_reviewed_users = list()
             student_list = list()
             for review in courseReviews_tmp:
-                if review.get('studenId') in student_list:
+                if review.get('studentId_id') in student_list:
                     continue
                 else:
                     course_reviewed_users = course_reviewed_users + \
                         list(chain(StudentUser.objects.filter(
                             studentId=review.get('studentId_id'))))
-                    student_list.append(review.get('studenId'))
+                    student_list.append(review.get('studentId_id'))
+            cos_reviewed = Coursehelpful.objects.filter(userid=request.user, college=user)
+
+            cosnot = []
+            for help in cos_reviewed:
+                cosnot.append(help.reviewid)
+            print(cosnot)
 
             visiting_user_group = None
             if request.user.groups.exists():
@@ -475,6 +497,8 @@ def view_account(request, group, username):
                 'visiting_user_group': visiting_user_group,
                 'college_helpfuls': college_helpfuls,
                 'course_helpfuls': course_helpfuls,
+                'col_not_helped': colnot,
+                'cos_not_helped': cosnot,
             }
             return render(request, 'visit-account.html', data)
     elif group == 'student':
@@ -1111,8 +1135,7 @@ def sendOTP(request):
         try:
             subject, from_email, to = 'Confirmation email', 'gpaonline9@gmail.com', mailto
             text_content = "Don't share this one time passoword with anyone"
-            html_content = "<p><strong style='color: #ffc107;'>Warning</strong><br>Don't share this one time password with anyone<br>Your OTP is " + \
-                str(otp)+"</p>"
+            html_content = "<p><strong style='color: #ffc107;'>Warning</strong><br>Don't share this one time password with anyone<br>Your OTP is <b>" + str(otp)+"</b></p>"
             msg = EmailMultiAlternatives(
                 subject, text_content, from_email, [to])
             msg.attach_alternative(html_content, "text/html")
