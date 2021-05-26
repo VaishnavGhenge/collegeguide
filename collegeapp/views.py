@@ -972,11 +972,12 @@ def submit_college_review(request):
                 totalcount = totalcount + 2
                 total = int(math.ceil(totalsum / totalcount))
             elif campus is not None and library is not None or campus != 0 and library != 0:
-                campussum = campussum + campus
+                campussum = campussum + int(campus_rating)
                 reviewcount = reviewcount + 1
                 campus = int(math.ceil(campussum / reviewcount))
-                librarysum = librarysum + library
+                librarysum = librarysum + int(library_rating)
                 library = int(math.ceil(librarysum / reviewcount))
+
                 totalsum = int(totalsum + (campus + library))
                 totalcount = totalcount + 2
                 total = int(math.ceil(totalsum / totalcount))
@@ -1046,10 +1047,10 @@ def submit_course_review(request):
                 totalcount = totalcount + 2
                 total = int(math.ceil(totalsum / totalcount))
             elif staff is not None and curriculum is not None or staff != 0 and curriculum != 0:
-                staffsum = staffsum + staff
+                staffsum = staffsum + int(staff_rating)
                 reviewcount = reviewcount + 1
                 staff = int(math.ceil(staffsum / reviewcount))
-                curriculumsum = curriculumsum + curriculum
+                curriculumsum = curriculumsum + int(curriculum_rating)
                 curriculum = int(math.ceil(curriculumsum / reviewcount))
                 totalsum = int(totalsum + (staff + curriculum))
                 totalcount = totalcount + 2
