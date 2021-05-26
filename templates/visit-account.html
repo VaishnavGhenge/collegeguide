@@ -452,6 +452,11 @@
                     <input type="number" name="library-input" id="library-input" value="0" hidden>
                   </div>
                 </div>
+                <div class="col-6 col-sm-8 mt-3">
+                  <div class="form-group">
+                    <div class="g-recaptcha" data-sitekey="6Lf8DPEaAAAAAD9oNdiYDsWVxb4hhpdgTYOMgsjy"></div>
+                  </div>
+                </div>
                 <div class="col-lg-9 col-sm-4 mt-3">
                   <button type="submit" class="btn btn-post">Post</button>
                 </div>
@@ -465,7 +470,7 @@
               <form action="{% url 'submit-course-review' %}" method="POST" autocomplete="off" class="course-review">
                 {% csrf_token %}
                 <input type="text" name="userid" value="{{user.email}}" hidden>
-                <div class="col-lg-6 col-sm-12">
+                <div class="col-lg-12 col-sm-12">
                   <label for="select-course">Select course</label>
                   <select name="select-course" id="select-course" placeholder="Select course" class="review-textarea">
                     <option value="">Select course</option>
@@ -505,6 +510,11 @@
                     </div>
                   </div>
                   <input type="number" name="curriculum-input" id="curriculum-input" value="0" hidden>
+                </div>
+                <div class="col-6 col-sm-8 mt-3">
+                  <div class="form-group">
+                    <div class="g-recaptcha" data-sitekey="6Lf8DPEaAAAAAD9oNdiYDsWVxb4hhpdgTYOMgsjy"></div>
+                  </div>
                 </div>
                 <div class="col-lg-9 col-sm-4 mt-3">
                   <button type="submit" class="btn btn-post">Post</button>
@@ -976,4 +986,5 @@
 <script src="{% static 'assets/js/account.js' %}"></script>
 <script src="{% static 'assets/vendor/form/validate-review.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 {% endblock extra-js %}

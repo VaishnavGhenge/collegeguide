@@ -138,22 +138,14 @@
     $('#review-error').slideUp();
     $('#review-loading').slideDown();
 
-    if ( $(this).data('recaptcha-site-key') ) {
-      var recaptcha_site_key = $(this).data('recaptcha-site-key');
-      grecaptcha.ready(function() {
-        grecaptcha.execute(recaptcha_site_key, {action: 'form_submit'}).then(function(token) {
-          review_submit(this_form, action, this_form.serialize() + '&recaptcha-response=' + token);
-        });
-      });
-    } else {
-      review_submit(this_form, action, this_form.serialize());
-    }
+    review_submit(this_form, action, this_form.serialize());
+
     return true;
 });
 
 function review_submit(this_form, action, data)
 {
-  console.log("Sending request..")
+  console.log(data)
   $.ajax({
     type: "POST",
     url: action,

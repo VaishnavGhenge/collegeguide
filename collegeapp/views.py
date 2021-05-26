@@ -1,3 +1,4 @@
+import json
 from django.core.mail.message import EmailMultiAlternatives
 from django.http.response import HttpResponse
 from collegeapp.decorators import unauthenticated_user
@@ -17,6 +18,7 @@ import random
 from django.core.mail import BadHeaderError
 import math
 import os
+import requests
 
 ################################## Website Home Views ########################################
 # Home page
@@ -469,7 +471,6 @@ def view_account(request, group, username):
             cosnot = []
             for help in cos_reviewed:
                 cosnot.append(help.reviewid)
-            print(cosnot)
 
             visiting_user_group = None
             if request.user.groups.exists():
@@ -934,6 +935,22 @@ def submit_college_review(request):
         campus_rating = int(request.POST.get('campus-input'))
         library_rating = int(request.POST.get('library-input'))
         userid = str(request.POST.get('userid'))
+        captcha_token = request.POST.get('g-recaptcha-response', '')
+
+        if captcha_token == '':
+            msg = { 'success': False, }
+            return JsonResponse(msg)
+
+        # google recaptcha for human verification
+        cap_url = 'https://www.google.com/recaptcha/api/siteverify'
+        cap_secret = '6Lf8DPEaAAAAAD3BZjper2XlZtYkpAuuZdfj11q4'
+        cap_data = { 'secret': cap_secret, 'response': captcha_token, }
+        cap_server_response = requests.post(url=cap_url, data=cap_data)
+        cap_json = json.loads(cap_server_response.text)
+        if cap_json['success'] == False:
+            msg = { 'success': False, }
+            return JsonResponse(msg)
+
         college = CollegeUser.objects.get(email=userid)
         student = StudentUser.objects.get(email=request.user.email)
         try:
@@ -1001,10 +1018,26 @@ def submit_course_review(request):
         if courseid is None or courseid == '':
             msg = {'success': False, }
             return JsonResponse(msg)
+        
         text = str(request.POST.get('course-review-text'))
         staff_rating = int(request.POST.get('staff-input'))
         curriculum_rating = int(request.POST.get('curriculum-input'))
         userid = str(request.POST.get('userid'))
+        captcha_token = request.POST.get('g-recaptcha-response', '')
+
+        if captcha_token == '':
+            msg = { 'success': False, }
+            return JsonResponse(msg)
+
+        # google recaptcha for human verification
+        cap_url = 'https://www.google.com/recaptcha/api/siteverify'
+        cap_secret = '6Lf8DPEaAAAAAD3BZjper2XlZtYkpAuuZdfj11q4'
+        cap_data = { 'secret': cap_secret, 'response': captcha_token, }
+        cap_server_response = requests.post(url=cap_url, data=cap_data)
+        cap_json = json.loads(cap_server_response.text)
+        if cap_json['success'] == False:
+            msg = { 'success': False, }
+            return JsonResponse(msg)
 
         college = CollegeUser.objects.get(email=userid)
         student = StudentUser.objects.get(email=request.user.email)
