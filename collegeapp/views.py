@@ -1480,6 +1480,14 @@ def errorcode404(request):
 
     return render(request, '404.html')
 
+def errorcode500(request):
+    stat = PLatformStatistics.objects.get(id=1)
+    count = stat.platformVisitors
+    count += 1
+    PLatformStatistics.objects.filter(id=1).update(platformVisitors=count)
+
+    return render(request, '500.html')
+
 
 ###################### Dashboard #######################
 @login_required(login_url='signin')

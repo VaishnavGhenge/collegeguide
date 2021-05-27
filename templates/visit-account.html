@@ -454,7 +454,9 @@
                 </div>
                 <div class="col-6 col-sm-8 mt-3">
                   <div class="form-group">
-                    <div class="g-recaptcha" data-sitekey="6Lf8DPEaAAAAAD9oNdiYDsWVxb4hhpdgTYOMgsjy"></div>
+                    <div class="g-recaptcha" data-sitekey="6Lf8DPEaAAAAAD9oNdiYDsWVxb4hhpdgTYOMgsjy"
+                    style="transform:scale(0.77);-webkit-transform:scale(0.77);transform-origin:0 0;-webkit-transform-origin:0 0;">
+                    </div>
                   </div>
                 </div>
                 <div class="col-lg-9 col-sm-4 mt-3">
@@ -513,7 +515,9 @@
                 </div>
                 <div class="col-6 col-sm-8 mt-3">
                   <div class="form-group">
-                    <div class="g-recaptcha" data-sitekey="6Lf8DPEaAAAAAD9oNdiYDsWVxb4hhpdgTYOMgsjy"></div>
+                    <div class="g-recaptcha" data-sitekey="6Lf8DPEaAAAAAD9oNdiYDsWVxb4hhpdgTYOMgsjy"
+                      style="transform:scale(0.77);-webkit-transform:scale(0.77);transform-origin:0 0;-webkit-transform-origin:0 0;">
+                    </div>
                   </div>
                 </div>
                 <div class="col-lg-9 col-sm-4 mt-3">
@@ -711,7 +715,7 @@
                       <button type="button" id="{{review.reviewId}}-colno" class="btn btn-yes-no"
                         college="{{user.username}}" btn="no" review="{{review.reviewId}}" rtype="college">No</button>
                       {% endif %}
-                        
+
                       {% for rating in college_helpfuls %}
                       {% if review == rating.reviewid %}
                       {% if rating.purpose == 'yes' %}
@@ -982,6 +986,15 @@
       renderChoiceLimit: 5
     });
   });
+  // var width = $('.g-recaptcha').parent().width();
+  // if (width < 302) {
+  //   alert("changing width");
+	//   var scale = width / 302;
+	//   $('.g-recaptcha').css('transform', 'scale(' + scale + ')');
+	//   $('.g-recaptcha').css('-webkit-transform', 'scale(' + scale + ')');
+	//   $('.g-recaptcha').css('transform-origin', '0 0');
+	//   $('.g-recaptcha').css('-webkit-transform-origin', '0 0');
+  // }
 </script>
 <script src="{% static 'assets/js/account.js' %}"></script>
 <script src="{% static 'assets/vendor/form/validate-review.js' %}"></script>

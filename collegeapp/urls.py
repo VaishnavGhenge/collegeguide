@@ -56,4 +56,5 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
 
     path('404/', views.errorcode404, name='404'),
+    path('500/', views.errorcode500, name='500'),
 ]
