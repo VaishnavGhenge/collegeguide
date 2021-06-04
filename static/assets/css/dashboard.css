@@ -153,11 +153,23 @@ a.article:hover {
     color: #fff;
 }
 
-.btn-toggle:focus {
+.btn-del {
+    border-radius: 50px;
+    background-color: #dc3545;
+    border-color: #dc3545;
     box-shadow: none;
-    background-color: #4e73df;
-    border-color: #4e73df;
     color: #fff;
+    font-size: 14px;
+}
+
+.btn-del:hover {
+    background-color: #c82333;
+    border-color: #c82333;
+    color: #fff;
+}
+
+.btn-del:focus {
+    box-shadow: none;
 }
 
 /* ---------------------------------------------------

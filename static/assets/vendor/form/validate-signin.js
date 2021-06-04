@@ -75,7 +75,7 @@
             if(msg.success) {
                 current_form.find('.loading').slideUp();
                 if(msg.group == 'admin') {
-                  window.location.href = "/dashboard/";
+                  window.location.href = "/admin/dashboard/";
                 } else if(msg.group == 'college') {
                   if(next != '') {
                     window.location.href = next;

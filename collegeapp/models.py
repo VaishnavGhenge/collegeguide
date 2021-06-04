@@ -144,8 +144,6 @@ class AlumniStudentCollege():
 class Cities(models.Model):
     citiId = models.AutoField(primary_key=True)
     cityName = models.CharField(max_length=200)
-    nearCity = models.ForeignKey(
-        'self', on_delete=models.PROTECT, null=True, default='')
 
     def __str__(self):
         return self.cityName

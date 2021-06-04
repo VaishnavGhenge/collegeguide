@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Student Signup Form</title>
+    <title>Student Update Form</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -44,7 +44,7 @@
         <form action="{% url 'student-edit' %}" method="post" role="form" class="signup-form"
             enctype="multipart/form-data" autocomplete="off">
             {% csrf_token %}
-            <h1 class="h3 mb-3 font-weight-normal">Student Signup Form</h1>
+            <h1 class="h3 mb-3 font-weight-normal">Student Update Form</h1>
             <div class="form-group">
                 <label for="profile-picture">Select profile picture (click on icon)</label>
                 <div class="image-container">

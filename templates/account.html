@@ -8,6 +8,22 @@
 
 {% block extra-css %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
+<style>
+  .three-dots {
+    position: absolute !important;
+    margin-left: 86%; 
+    padding-top: 15px;
+    color: #495057;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .three-dots:hover {
+    color: #9ea6ae;
+  }
+  .dropdown-item:active {
+    background-color: #4e73df;
+  }
+</style>
 {% endblock extra-css %}
 
 {% block menu %}
@@ -18,9 +34,16 @@
 {% block your-account %}
 <div class="btn-group">
   <button class="btn-account btn-active dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-    aria-expanded="false">Account</button>
+    aria-expanded="false">
+      {% if request.user %}
+      {{request.user.username|truncatechars:8}}
+      {% else %}
+      Anonymous
+      {% endif %}
+    </button>
   <div class="dropdown-menu shadow" style="border: none;">
-    <a class="dropdown-item" href="{% url 'account' %}">My Profile</a>
+    <a class="dropdown-item" href="{% url 'account' %}">My profile</a>
+    <a class="dropdown-item" href="{% url 'password_change' %}">Change password</a>
     <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
   </div>
 </div>
@@ -763,6 +786,12 @@
                 {% for post in posts %}
                 <div class="col-lg-6 col-sm-12">
                   <div class="post shadow-sm">
+                    <div class="dropdown" style="position: absolute; margin-left: 86%;">
+                      <i id="post-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="fa fa-ellipsis-v three-dots" aria-hidden="true"></i>
+                      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="post-dropdown">
+                        <a class="dropdown-item" href="{% url 'account2' post.imageId %}">Delete</a>
+                      </div>
+                    </div>
                     <img src="{{post.image.url}}" alt="post picture" class="img-fluid post-picture">
                     <div class="post-body">
                       <div class="d-flex justify-content-start">
@@ -802,6 +831,12 @@
             {% for post in posts %}
             <div class="col-lg-6 col-sm-12">
               <div class="post shadow-sm">
+                <div class="dropdown" style="position: absolute; margin-left: 86%;">
+                  <i id="post-dropdown dropdown-menu-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="fa fa-ellipsis-v three-dots" aria-hidden="true"></i>
+                  <div class="dropdown-menu" aria-labelledby="post-dropdown">
+                    <a class="dropdown-item" href="{% url 'account2' post.imageId %}">Delete</a>
+                  </div>
+                </div>
                 <img src="{{post.image.url}}" alt="post picture" class="img-fluid post-picture">
                 <div class="post-body">
                   <div class="d-flex justify-content-start">

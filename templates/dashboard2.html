@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+    <!-- Favicons -->
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.css' %}">
+
+    <!-- Template Main CSS File -->
+    <link rel="stylesheet" href="{% static 'assets/css/dashboard.css' %}">
+    <style>
+        .text-inp {
+            height: 44px;
+            border-radius: 4px;
+            box-shadow: none;
+            font-size: 14px;
+        }
+
+        .text-inp:focus {
+            border-width: 1px;
+            border-color: #224abe;
+            box-shadow: none;
+        }
+
+        .btn-add {
+            background-color: #224abe;
+            border-radius: 50px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .btn-add:hover {
+            background-color: #4e73df;
+            color: #fff;
+            box-shadow: none;
+        }
+
+        .college-name:hover {
+            color: #224abe;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>CGUIDE</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <p>Dashboard</p>
+                <li>
+                    <a href="{% url 'dashboard' %}">Messages</a>
+                </li>
+                <li class="active">
+                    <a href="{% url 'admin-forms' %}">Forms</a>
+                </li>
+                <li>
+                    <a href="{% url 'about' %}">About</a>
+                </li>
+                <li>
+                    <a href="{% url 'contact' %}">Contact</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+
+                    <button type="button" id="sidebarCollapse" class="btn btn-toggle">
+                        <i class="fa fa-bars" aria-hidden="true"></i>
+                        <span>Toggle Sidebar</span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fa fa-align-justify" aria-hidden="true"></i>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ml-auto">
+                            <li>
+                                <a class="nav-link" href="#edit-collges">Colleges</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <h2>Forms</h2>
+            <div class="row">
+                <div class="col-lg-7 col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Courses</h5>
+                            <form method="post" class="mb-3">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-lg-10 col-sm-12">
+                                        <input type="text" name="course" id="course" class="form-control text-inp">
+                                    </div>
+                                    <div class="col-lg-2 col-sm-12 mt-1">
+                                        <button type="submit" name="course-add" class="btn btn-add">Add</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Id</th>
+                                            <th scope="col">Course</th>
+                                            <th scope="col">Created</th>
+                                            <th scope="col">Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for course in courses %}
+                                        <tr>
+                                            <th scope="row">{{course.courseId}}</th>
+                                            <td>{{course.courseName}}</td>
+                                            <td>{{course.date}}</td>
+                                            <td>
+                                                <a href="{% url 'admin-forms2' 'course' course.courseId %}">
+                                                    <i class="fa fa-trash" aria-hidden="true"
+                                                        style="color: red; cursor: pointer;"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <th colspan="4">Empty</th>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Cities</h5>
+                            <form method="post" class="mb-3">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-lg-10 col-sm-12">
+                                        <input type="text" name="city" id="city" class="form-control text-inp">
+                                    </div>
+                                    <div class="col-lg-2 col-sm-12 mt-1">
+                                        <button type="submit" name="city-add" class="btn btn-add">Add</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Id</th>
+                                            <th scope="col">City</th>
+                                            <th scope="col">Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for city in cities %}
+                                        <tr>
+                                            <th scope="row">{{city.citiId}}</th>
+                                            <td>{{city.cityName}}</td>
+                                            <td>
+                                                <a href="{% url 'admin-forms2' 'city' city.citiId %}">
+                                                    <i class="fa fa-trash" aria-hidden="true"
+                                                        style="color: red; cursor: pointer;"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <th colspan="3">Empty</th>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card" id="edit-collges">
+                        <div class="card-body">
+                            <h5 class="card-title">Colleges</h5>
+                            <label for="college">Search college here</label>
+                            <input type="text" name="college" id="college" class="form-control text-inp mb-3"
+                                placeholder="Search..">
+                            <form action="{% url 'edit-rank' %}" method="post" class="college-form mb-3">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <input type="text" id="college-id" name="college-id" value="" hidden>
+                                    <div class="col-lg-2 col-sm-6">
+                                        <label for="rank">Enter Rank</label>
+                                        <input type="number" name="rank" id="rank" min="0" class="form-control text-inp"
+                                            disabled required>
+                                    </div>
+                                    <div class="col-lg-10 col-sm-12">
+                                        <button type="submit" name="college-rank" id="college-rank" class="btn btn-add"
+                                            style="margin-top: 35px;" disabled>Update Rank</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Ranking</th>
+                                            <th scope="col">Verified</th>
+                                            <th scope="col">username</th>
+                                            <th scope="col">College Name</th>
+                                            <th scope="col">email</th>
+                                            <th scope="col">Contact</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="collegeTable">
+                                        {% for college in colleges %}
+                                        <tr style="cursor: pointer;" class="college-row" col-id="{{college.collegeId}}"
+                                            col-name="{{college.name}}">
+                                            <td>
+                                                {% if college.nirfRanking != 0 %}
+                                                <span class="badge badge-warning">#{{college.nirfRanking}}</span>
+                                                {% else %}
+                                                Not ranked yet
+                                                {% endif %}
+                                            </td>
+                                            <th scope="row">
+                                                {% if college.verified %}
+                                                <i class="fa fa-check-circle text-primary" aria-hidden="true"
+                                                    style="color: #4e73df;"></i>
+                                                {% else %}
+                                                <i class="fa fa-times-circle" aria-hidden="true"
+                                                    style="color: #dc3545;"></i>
+                                                {% endif %}
+                                            </th>
+                                            <td>{{college.username}}</td>
+                                            <td><a href="/account/college/{{college.username}}/" class="college-name"
+                                                    target="_blank" rel="noopener noreferrer">{{college.name}}</a></td>
+                                            <td>{{college.email}}</td>
+                                            <td><a href="mailto:{{college.email}}"><i class="fa fa-envelope"
+                                                        aria-hidden="true" style="color: #224abe;"></i></a></td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <th colspan="5">Empty</th>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vendor JS Files -->
+    <script src="{% static 'assets/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/jquery.easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/waypoints/jquery.waypoints.min.js' %}"></script>
+    <script src="{% static 'assets/js/admin-forms.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+            $('.college-row').on('click', function () {
+                var id = $(this).attr('col-id');
+                var college = $(this).attr('col-name');
+
+                $('#college-id').attr('value', String(id));
+                $('#rank').prop("disabled", false);
+                $('#college-rank').text("Update Rank of " + college);
+                $('#college-rank').prop("disabled", false);
+            });
+        });
+
+        $(document).ready(function () {
+            $("#college").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#collegeTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -18,12 +18,20 @@
 {% block your-account %}
 <div class="btn-group">
   <button class="btn-account dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-    aria-expanded="false">Account</button>
+    aria-expanded="false">
+      {% if request.user %}
+      {{request.user.username|truncatechars:8}}
+      {% else %}
+      Anonymous
+      {% endif %}
+    </button>
   <div class="dropdown-menu shadow" style="border: none;">
     <a class="dropdown-item" href="{% url 'account' %}">My Profile</a>
     <!-- <a class="dropdown-item" href="#">Edit Profile</a>
     <div class="dropdown-divider"></div> -->
+    <a class="dropdown-item" href="{% url 'password_change' %}">Change password</a>
     <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+
   </div>
 </div>
 {% endblock your-account %}
@@ -118,7 +126,10 @@
               {% endif %}
               <p class="card-text">{{user.profileDescription}}</p>
               <a href="{{user.profileWebsite}}" target="_blank">{{user.profileWebsite}}</a>
-              <br>
+              <div class="d-flex flex-row mt-3" style="margin-bottom: 0px;">
+                <p style="margin-right: 10px;">For contact click</p>
+                <a target="_blank" href="mailto:{{user.email}}"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+              </div>
             </div>
           </div>
         </div>

@@ -36,7 +36,10 @@
             <ul class="list-unstyled components">
                 <p>Dashboard</p>
                 <li class="active">
-                    <a href="#messages">Messages</a>
+                    <a href="">Messages</a>
+                </li>
+                <li>
+                    <a href="{% url 'admin-forms' %}">Forms</a>
                 </li>
                 <li>
                     <a href="{% url 'about' %}">About</a>
@@ -60,7 +63,7 @@
                     <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
-                        <i class="fas fa-align-justify"></i>
+                        <i class="fa fa-align-justify" aria-hidden="true"></i>
                     </button>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -83,7 +86,12 @@
                         <p class="card-text">{{message.message}}</p>
                         <p class="card-text"><small class="text-muted">{{ message.date|date:"M d, Y" }}</small></p>
                         <a href="mailto:{{message.email}}" class="btn btn-toggle">Reply</a>
+                        <a href="{% url 'dashboard2' message.contactId %}" class="btn btn-del">Delete</a>
                     </div>
+                </div>
+                {% empty %}
+                <div class="card" style="padding: 10px;">
+                   <p class="card-text">No message found</p>
                 </div>
                 {% endfor %}
             </div>

@@ -791,6 +791,8 @@ section {
 
 .colleges .college-item .college-img {
   object-fit: cover;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
   width: 100%;
   height: 169px;
 }

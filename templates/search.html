@@ -60,9 +60,16 @@
 {% block your-account %}
 <div class="btn-group">
   <button class="btn-account dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-    aria-expanded="false">Account</button>
+    aria-expanded="false">
+      {% if request.user %}
+      {{request.user.username|truncatechars:8}}
+      {% else %}
+      Anonymous
+      {% endif %}
+    </button>
   <div class="dropdown-menu shadow" style="border: none;">
-    <a class="dropdown-item" href="{% url 'account' %}">My Profile</a>
+    <a class="dropdown-item" href="{% url 'account' %}">My profile</a>
+    <a class="dropdown-item" href="{% url 'password_change' %}">Change password</a>
     <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
   </div>
 </div>

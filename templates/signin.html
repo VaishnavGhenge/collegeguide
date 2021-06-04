@@ -47,9 +47,11 @@
       <div class="error-message">This division is empty</div>
     </div>
     <div class="mt-4">
-      <small><a href="{% url 'index' %}">Home page</a></small>
+      <small>forgot your password? <a href="{% url 'password_reset' %}">click here</a></small>
       <br>
-      <small>Not registered? <a href="#" onclick="triggerchoose();">Sign up</a></small>
+      <small>not registered? <a href="#choose-account" onclick="triggerchoose();">Sign up</a></small>
+      <br>
+      <small>return <a href="{% url 'index' %}">Home page</a></small>
     </div>
     <p class="mt-5 mb-3 text-muted">&copy; 2021</p>
   </form>

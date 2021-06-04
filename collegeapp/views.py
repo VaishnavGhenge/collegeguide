@@ -1,7 +1,8 @@
 import json
 from django.core.mail.message import EmailMultiAlternatives
+from django.db.models.expressions import Col
 from django.http.response import HttpResponse
-from collegeapp.decorators import unauthenticated_user
+from collegeapp.decorators import admin_only, allowed_users, unauthenticated_user
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
 from . models import (Cities, CollegeCourses, CollegeReview, Collegehelpful, Contact, CourseReview, Coursehelpful, Courses, Email, Followers,
@@ -12,7 +13,7 @@ from .models import CollegeUser
 from django.contrib.auth.models import User, Group
 import re
 from django.contrib.auth.decorators import login_required
-from datetime import datetime
+from datetime import date, datetime
 from itertools import chain
 import random
 from django.core.mail import BadHeaderError
@@ -22,8 +23,6 @@ import requests
 
 ################################## Website Home Views ########################################
 # Home page
-
-
 def index(request):
     stat = PLatformStatistics.objects.get(id=1)
     count = stat.platformVisitors
@@ -38,16 +37,17 @@ def index(request):
 
     stat = PLatformStatistics.objects.get(id=1)
     nirf_colleges = CollegeUser.objects.exclude(
-        nirfRanking=0).order_by('nirfRanking')
+        nirfRanking=0).order_by('nirfRanking')[:8]
     all_courses = Courses.objects.all()
 
-    data = {'nirf_colleges': nirf_colleges,
-            'stat': stat, 'courses': all_courses, }
+    data = {
+        'nirf_colleges': nirf_colleges,
+        'stat': stat, 
+        'courses': all_courses, 
+    }
     return render(request, 'index.html', data)
 
 # About page
-
-
 def about(request):
     stat = PLatformStatistics.objects.get(id=1)
     count = stat.platformVisitors
@@ -57,9 +57,8 @@ def about(request):
     data = {'stat': stat,  }
     return render(request, 'about.html', data)
 
+
 # Contact page
-
-
 def contact(request):
     stat = PLatformStatistics.objects.get(id=1)
     count = stat.platformVisitors
@@ -69,8 +68,6 @@ def contact(request):
     return render(request, 'contact.html')
 
 # Contact form submission (form action view)
-
-
 def submit_contact(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -88,8 +85,6 @@ def submit_contact(request):
             return JsonResponse(data)
 
 # Email form submission (form action view)
-
-
 def submit_email(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -106,8 +101,6 @@ def submit_email(request):
 
 ############################# Signin and Logout Views ######################################
 # Sign in page
-
-
 @unauthenticated_user
 def signin(request):
     stat = PLatformStatistics.objects.get(id=1)
@@ -117,9 +110,8 @@ def signin(request):
 
     return render(request, 'signin.html')
 
+
 # Sign in form submission (form action view)
-
-
 @unauthenticated_user
 def submit_signin(request):
     next = request.POST.get('next')
@@ -160,6 +152,7 @@ def user_logout(request):
 
 
 @login_required(login_url='signin')
+@allowed_users(allowed_roles=['college', 'student'])
 def home(request):
     stat = PLatformStatistics.objects.get(id=1)
     count = stat.platformVisitors
@@ -172,10 +165,32 @@ def home(request):
 
     # Check if users first time login or not to show course form
     user = None
+    suggested_collges = None
     if group == 'college':
         user = CollegeUser.objects.get(email=request.user)
+        suggested_collges = CollegeUser.objects.filter(city=user.city).exclude(collegeId=user.collegeId).order_by('totalSum')[:8]
     elif group == 'student':
         user = StudentUser.objects.get(email=request.user)
+        query1 = CollegeUser.objects.filter(city=user.prefLocation).order_by('-totalSum')[:8]
+        # print("all colleges: ", query1)
+        suggested_collges = list()
+        for college in query1:
+            college_courses = CollegeCourses.objects.filter(userId=college)
+            # print("all courses: ", college_courses)
+            for course in college_courses:
+                cos = Courses.objects.get(courseId=course.courseId_id)
+                if str(cos.courseName) == user.prefCourse1:
+                    if college not in suggested_collges:
+                        suggested_collges.append(college)
+                if str(cos.courseName) == user.prefCourse2:
+                    if college not in suggested_collges:
+                        suggested_collges.append(college)
+                if str(cos.courseName) == user.prefCourse3:
+                    if college not in suggested_collges:
+                        suggested_collges.append(college)
+        # print("suggested: ", suggested_collges)
+    elif group == 'admin':
+        return redirect('dashboard')
     is_first = user.is_first
 
     # Get all liked colleges by requesr.user
@@ -195,7 +210,7 @@ def home(request):
 
     # Getting highest ranked colleges by nirf
     nirf_colleges = CollegeUser.objects.exclude(
-        nirfRanking=0).order_by('nirfRanking')
+        nirfRanking=0).order_by('nirfRanking')[:8]
 
     data = {
         'liked_colleges': liked_colleges,
@@ -204,6 +219,7 @@ def home(request):
         'courses': Courses.objects.all(),
         'is_first': is_first,
         'group': group,
+        'suggested_collges': suggested_collges,
     }
     return render(request, 'home.html', data)
 
@@ -234,7 +250,7 @@ def search(request):
             search_response = CollegeUser.objects.filter(
                 email=college, city=city)
         elif city != '' and stream == '' and college == '':
-            search_response = CollegeUser.objects.filter(city=city)
+            search_response = CollegeUser.objects.filter(city=city).order_by('-totalSum')
         elif city != '' and stream != '' and college == '':
             response1 = CollegeCourses.objects.filter(courseId=stream)
             response2 = list()
@@ -254,14 +270,14 @@ def search(request):
                     list(chain(CollegeUser.objects.filter(collegeId=col.userId),))
 
         # Followed colleges
-        followed_col = Followers.objects.filter(user1=request.user)[:4]
+        followed_col = Followers.objects.filter(user1=request.user)
         followed_colleges = list()
         for col in followed_col:
             followed_colleges = followed_colleges + \
                 list(chain(CollegeUser.objects.filter(collegeId=col.user2)))
 
         # Get all liked colleges by requesr.user
-        liked_col = Like.objects.filter(user1=request.user)[:4]
+        liked_col = Like.objects.filter(user1=request.user)
         liked_colleges = list()
         for col in liked_col:
             liked_colleges = liked_colleges + \
@@ -281,7 +297,8 @@ def search(request):
 
 
 @login_required(login_url='signin')
-def account(request):
+@allowed_users(allowed_roles=['college', 'student'])
+def account(request, id=0):
     stat = PLatformStatistics.objects.get(id=1)
     count = stat.platformVisitors
     count += 1
@@ -325,13 +342,13 @@ def account(request):
         course_reviewed_users = list()
         student_list = list()
         for review in courseReviews_tmp:
-            if review.get('studenId_id') in student_list:
+            if review.get('studentId_id') in student_list:
                 continue
             else:
                 course_reviewed_users = course_reviewed_users + \
                     list(chain(StudentUser.objects.filter(
                         studentId=review.get('studentId_id'))))
-                student_list.append(review.get('studenId_id'))
+                student_list.append(review.get('studentId_id'))
         cos_reviewed = Coursehelpful.objects.filter(userid=request.user, college=user_obj)
 
         cosnot = []
@@ -342,6 +359,20 @@ def account(request):
             userid=request.user, college=user_obj)
         course_helpfuls = Coursehelpful.objects.filter(
             userid=request.user, college=user_obj)
+
+        if isinstance(id, int):
+            if id > 0:
+                id = int(id)
+                if Images.objects.filter(imageId=id, userId=request.user).exists():
+                    Images.objects.filter(imageId=id).delete()
+                    count = user_obj.postCount
+                    count -= 1
+                    user_obj.postCount = count
+                    user_obj.save()
+                else:
+                    return redirect('account')
+        else:
+            return redirect('account')
 
         data = {
             'college_courses': CollegeCourses.objects.filter(userId=user_obj),
@@ -369,6 +400,20 @@ def account(request):
         ids = list()
         for like in liked:
             ids.append(like.get('imageId_id'))
+
+        if isinstance(id, int):
+            if id > 0:
+                id = int(id)
+                if Images.objects.filter(imageId=id, userId=request.user).exists():
+                    Images.objects.filter(imageId=id).delete()
+                    count = user_obj.postCount
+                    count -= 1
+                    user_obj.postCount = count
+                    user_obj.save()
+                else:
+                    return redirect('account')
+        else:
+            return redirect('account')
 
         data = {
             'user': user_obj,
@@ -656,7 +701,6 @@ def follow_unfollow(request):
 
 ##############################
 
-
 def institute_signup(request):
     stat = PLatformStatistics.objects.get(id=1)
     count = stat.platformVisitors
@@ -724,7 +768,7 @@ def submit_institute_signup(request):
                 return JsonResponse(msg)
 ###########################################
 
-
+@allowed_users(allowed_roles=['college'])
 def institute_edit(request):
     if request.method == 'POST':
         user = CollegeUser.objects.get(collegeId=request.user)
@@ -796,7 +840,7 @@ def submit_student_signup(request):
         name = request.POST.get('firstname')
         surname = request.POST.get('lastname')
         description = request.POST.get('profileDescription')
-        location = request.POST.get('location')
+        location = request.POST.get('city')
         courses = request.POST.getlist('courses')
         username = request.POST.get('username')
         email = request.session.get('email', '')
@@ -844,7 +888,7 @@ def submit_student_signup(request):
 
 
 
-
+@allowed_users(allowed_roles=['student'])
 def student_edit(request):
     if request.method == 'POST':
         user = StudentUser.objects.get(studentId=request.user)
@@ -886,6 +930,7 @@ def student_edit(request):
 
 
 @login_required(login_url='signin')
+@allowed_users(allowed_roles=['college'])
 def courses_submit(request):
     courses = list()
     courses = request.POST.getlist('select-courses')
@@ -910,6 +955,7 @@ def courses_submit(request):
 
 
 @login_required(login_url='signin')
+@allowed_users(allowed_roles=['college', 'student'])
 def submit_institute_post(request):
     if request.method == 'POST' and request.FILES['post-image']:
         description = request.POST.get('post-text')
@@ -929,6 +975,7 @@ def submit_institute_post(request):
 
 
 @login_required(login_url='signin')
+@allowed_users(allowed_roles=['student'])
 def submit_college_review(request):
     if request.method == 'POST':
         text = request.POST.get('college-review')
@@ -954,7 +1001,7 @@ def submit_college_review(request):
         college = CollegeUser.objects.get(email=userid)
         student = StudentUser.objects.get(email=request.user.email)
         try:
-            total_rating = int(math.ceil((campus_rating+library_rating)/2))
+            total_rating = int(round((campus_rating+library_rating)/2))
 
             CollegeReview(studentId=student, collegeId=college, message=text,
                           campusRating=campus_rating, libraryRating=library_rating, date=datetime.now(), totalRating=total_rating).save()
@@ -977,7 +1024,7 @@ def submit_college_review(request):
 
                 totalsum = campus + library
                 totalcount = 2
-                total = int(math.ceil(totalsum / totalcount))
+                total = int(round(totalsum / totalcount))
             elif campus is None and library is None and total is not None or campus == 0 and library == 0 and total != 0:
                 campus = int(campus_rating)
                 campussum = campus
@@ -987,17 +1034,17 @@ def submit_college_review(request):
 
                 totalsum = int(totalsum + (campus + library))
                 totalcount = totalcount + 2
-                total = int(math.ceil(totalsum / totalcount))
+                total = int(round(totalsum / totalcount))
             elif campus is not None and library is not None or campus != 0 and library != 0:
                 campussum = campussum + int(campus_rating)
                 reviewcount = reviewcount + 1
-                campus = int(math.ceil(campussum / reviewcount))
+                campus = int(round(campussum / reviewcount))
                 librarysum = librarysum + int(library_rating)
-                library = int(math.ceil(librarysum / reviewcount))
+                library = int(round(librarysum / reviewcount))
 
                 totalsum = int(totalsum + (campus + library))
                 totalcount = totalcount + 2
-                total = int(math.ceil(totalsum / totalcount))
+                total = int(round(totalsum / totalcount))
             else:
                 raise ValidationError
 
@@ -1012,6 +1059,7 @@ def submit_college_review(request):
 
 
 @login_required(login_url='signin')
+@allowed_users(allowed_roles=['student'])
 def submit_course_review(request):
     if request.method == 'POST':
         courseid = request.POST.get('select-course')
@@ -1044,7 +1092,7 @@ def submit_course_review(request):
         _course = Courses.objects.get(courseId=courseid)
         course = CollegeCourses.objects.get(courseId=_course, userId=college)
         try:
-            total_rating = int(math.ceil((staff_rating+curriculum_rating)/2))
+            total_rating = int(round((staff_rating+curriculum_rating)/2))
 
             CourseReview(courseId=course, collegeId=college, studentId=student, message=text,
                          staffRating=staff_rating, curriculumRating=curriculum_rating, date=datetime.now(), totalRating=total_rating).save()
@@ -1068,7 +1116,7 @@ def submit_course_review(request):
 
                 totalsum = staff + curriculum
                 totalcount = 2
-                total = int(math.ceil(totalsum / totalcount))
+                total = int(round(totalsum / totalcount))
             elif staff is None and curriculum is None and total is not None or staff == 0 and curriculum == 0 and total != 0:
                 staff = int(staff_rating)
                 staffsum = staff
@@ -1078,16 +1126,16 @@ def submit_course_review(request):
 
                 totalsum = int(totalsum + (staff + curriculum))
                 totalcount = totalcount + 2
-                total = int(math.ceil(totalsum / totalcount))
+                total = int(round(totalsum / totalcount))
             elif staff is not None and curriculum is not None or staff != 0 and curriculum != 0:
                 staffsum = staffsum + int(staff_rating)
                 reviewcount = reviewcount + 1
-                staff = int(math.ceil(staffsum / reviewcount))
+                staff = int(round(staffsum / reviewcount))
                 curriculumsum = curriculumsum + int(curriculum_rating)
-                curriculum = int(math.ceil(curriculumsum / reviewcount))
+                curriculum = int(round(curriculumsum / reviewcount))
                 totalsum = int(totalsum + (staff + curriculum))
                 totalcount = totalcount + 2
-                total = int(math.ceil(totalsum / totalcount))
+                total = int(round(totalsum / totalcount))
             else:
                 raise ValidationError
 
@@ -1167,7 +1215,7 @@ def sendOTP(request):
     mailto = str(request.GET.get('mailto', '')).strip()
     if mailto:
         try:
-            subject, from_email, to = 'Confirmation email', 'gpaonline9@gmail.com', mailto
+            subject, from_email, to = 'Confirmation email', 'clgguide@gmail.com', mailto
             text_content = "Don't share this one time passoword with anyone"
             html_content = "<p><strong style='color: #ffc107;'>Warning</strong><br>Don't share this one time password with anyone<br>Your OTP is <b>" + str(otp)+"</b></p>"
             msg = EmailMultiAlternatives(
@@ -1294,7 +1342,7 @@ def getratingstats(request):
 
 ######################################
 
-
+@login_required(login_url='signin')
 def helpful_view(request):
     btn = request.GET.get('btn', '')
     reviewid = request.GET.get('reviewid', '')
@@ -1491,13 +1539,81 @@ def errorcode500(request):
 
 ###################### Dashboard #######################
 @login_required(login_url='signin')
-def dashboard(request):
-    stat = PLatformStatistics.objects.get(id=1)
-    count = stat.platformVisitors
-    count += 1
-    PLatformStatistics.objects.filter(id=1).update(platformVisitors=count)
+@admin_only
+def dashboard(request, id=0):
+    if id != 0:
+        id = int(id)
+        contact = Contact.objects.filter(contactId=id)
+        if contact.exists():
+            contact.delete()
+        return redirect('dashboard')
+    else:
+        stat = PLatformStatistics.objects.get(id=1)
+        count = stat.platformVisitors
+        count += 1
+        PLatformStatistics.objects.filter(id=1).update(platformVisitors=count)
 
     data = {
         'messages': Contact.objects.all().order_by('-date')
     }
     return render(request, 'dashboard.html', data)
+
+@login_required(login_url='signin')
+@admin_only
+def admin_forms(request, type=None, id=0):
+    if request.method == 'POST':
+        if 'course-add' in request.POST:
+            course = request.POST.get('course')
+            if course != '':
+                if Courses.objects.filter(courseName=course).exists():
+                    return redirect('admin-forms')   
+                Courses(courseName=course, date=datetime.now().date()).save()
+            return redirect('admin-forms')
+        elif 'city-add' in request.POST:
+            city = request.POST.get('city')
+            if city != '':
+                if Cities.objects.filter(cityName=city).exists():
+                    return redirect('admin-forms')  
+                Cities(cityName=city).save()
+            return redirect('admin-forms')
+    elif id != 0 and type is not None:
+        id = int(id)
+        if str(type) == 'course':
+            course = Courses.objects.filter(courseId=id)
+            if course.exists():
+                course.delete()
+        elif str(type) == 'city':
+            city = Cities.objects.filter(citiId=id)
+            if city.exists():
+                city.delete()
+        return redirect('admin-forms')
+    data = {
+        'courses': Courses.objects.all().order_by('courseName'),
+        'cities': Cities.objects.all().order_by('cityName'),
+        'colleges': CollegeUser.objects.all().order_by('nirfRanking'),
+    }
+    return render(request, 'dashboard2.html', data)
+
+@login_required(login_url='signin')
+@admin_only
+def editRank(request):
+    if request.method == 'POST':
+        rank = int(request.POST.get('rank'))
+        id = str(request.POST.get('college-id'))
+        if rank < 0 or id == '':
+            return redirect('admin-forms')
+        else:
+            user = User.objects.get(email=id)
+            if rank == 0:
+                CollegeUser.objects.filter(collegeId=user).update(nirfRanking=rank)
+            if CollegeUser.objects.filter(collegeId=user).exists:
+                prevcollege = CollegeUser.objects.filter(nirfRanking=rank)
+                if prevcollege:
+                    prevcollege.update(nirfRanking=0)
+                    CollegeUser.objects.filter(collegeId=user).update(nirfRanking=rank)
+                else:
+                    CollegeUser.objects.filter(collegeId=user).update(nirfRanking=rank)
+            msg = {'success': True}
+            return JsonResponse(msg)
+    else:
+        return HttpResponse('Please stop playing with our urls gentleman')

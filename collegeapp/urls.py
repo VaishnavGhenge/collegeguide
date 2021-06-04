@@ -1,6 +1,9 @@
-from math import nan
+from os import name
+from re import template
+from django.contrib import auth
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -16,6 +19,7 @@ urlpatterns = [
     path('home/', views.home, name='home'),
     path('search/', views.search, name='search'),
     path('account/', views.account, name='account'),
+    path('account/<int:id>/', views.account, name='account2'),
 
     path('account/<str:group>/<str:username>/',
          views.view_account, name='visit-account'),
@@ -53,7 +57,19 @@ urlpatterns = [
 
     path('page/<str:course>/', views.courseview_pre, name='courseview-pre'),
 
-    path('dashboard/', views.dashboard, name='dashboard'),
+    path('admin/dashboard/', views.dashboard, name='dashboard'),
+    path('admin/dashboard/<int:id>/', views.dashboard, name='dashboard2'),
+    path('admin/forms/', views.admin_forms, name='admin-forms'),
+    path('edit-rank/', views.editRank, name='edit-rank'),
+    path('admin/forms/<str:type>/<int:id>', views.admin_forms, name='admin-forms2'),
+
+    path('change-password/', auth_views.PasswordChangeView.as_view(template_name='change_password.html'), name='password_change'),
+    path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(template_name='password_change_done.html'), name='password_change_done'),
+
+    path('password_reset/', auth_views.PasswordResetView.as_view(template_name='password_reset.html'), name='password_reset'),
+    path('password_reset/sent/', auth_views.PasswordResetDoneView.as_view(template_name='password_reset_sent.html'), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='password_reset_form.html'), name='password_reset_confirm'),
+    path('reset/complete/', auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'), name='password_reset_complete'),
 
     path('404/', views.errorcode404, name='404'),
     path('500/', views.errorcode500, name='500'),
